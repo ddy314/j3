@@ -60,7 +60,9 @@ class HeadwiseRMSNorm(nn.Module):
                 f"HeadwiseRMSNorm expected [..., {self.num_heads}, {self.head_dim}], got {tuple(x.shape)}"
             )
         native = getattr(F, "rms_norm", None)
-        if native is not None:
+        compiler = getattr(torch, "compiler", None)
+        is_compiling = bool(compiler is not None and compiler.is_compiling())
+        if native is not None and not is_compiling:
             # Native RMSNorm supports a [B, T, H, D] input with normalized
             # shape D. Apply the per-channel scale separately because the
             # scale itself is [H, D], which the native kernel does not accept
