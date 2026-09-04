@@ -84,16 +84,19 @@ uv run python scripts/profile_train.py \
 
 The trace is under `artifacts/profile/<mode>/traces/`; the summary includes module ranges and top CUDA/CPU operations. The implemented optimization order is eager → `torch.compile` → profiler. No custom kernel is kept unless a measured stable gain justifies it.
 
-The checked-in benchmark was run on one RTX 4060 Laptop GPU with eight warmup and twenty measured steps per isolated trial. Each compile mode completed successfully; the `seq=1,024, microbatch=16` boundary was OOM, so the next lower microbatch was selected:
+The checked-in benchmark was run on one RTX 4060 Laptop GPU with eight warmup and twenty measured steps per isolated trial. It contains 38 completed/explicit-boundary trials; each compile mode completed successfully. The `seq=1,024, microbatch=16` boundary was OOM, so the next lower microbatch was selected:
 
 | mode | seq 512 best | seq 512 tok/s | seq 512 step | seq 1,024 best | seq 1,024 tok/s | seq 1,024 step |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| eager | 2 | 17,804 | 57.51 ms | 1 | 17,104 | 59.87 ms |
-| `default` | 16 | **43,407** | 188.72 ms | 8 | **40,431** | 202.61 ms |
-| `reduce-overhead` | 16 | 43,163 | 189.79 ms | 8 | 40,295 | 203.30 ms |
-| `max-autotune` | 16 | 43,181 | 189.71 ms | 8 | 40,268 | 203.44 ms |
+| eager | 4 | 16,611 | 123.29 ms | 2 | 16,105 | 127.17 ms |
+| `default` | 16 | **44,342** | 184.74 ms | 8 | **41,306** | 198.33 ms |
+| `reduce-overhead` | 16 | 44,053 | 185.96 ms | 8 | 41,082 | 199.41 ms |
+| `max-autotune` | 16 | 44,316 | 184.86 ms | 8 | 41,331 | 198.20 ms |
 
-At the selected `default` operating points, peak PyTorch allocated VRAM was 4,858.9 MiB, reserved VRAM was 5,134 MiB, NVIDIA-reported memory was 5,314 MiB, and sampled GPU utilization reached 100%. Relative to the best eager point, `default` compile improved throughput by 2.44× at sequence 512 and 2.36× at sequence 1,024. These results are synthetic-token model-step measurements; the mmap input path is separately tested and should be rechecked on the target storage system.
+The formal config keeps `default`; `max-autotune` was only 0.06% faster at
+sequence 1,024 in this scan, below a meaningful stability margin.
+
+At the selected `default` operating points, peak PyTorch allocated VRAM was 4,867.1 MiB, reserved VRAM was 5,142 MiB, NVIDIA-reported memory peaked at 5,322 MiB, and sampled GPU utilization reached 100% (temperature up to 77°C, power about 88–89 W). Relative to the best eager point, `default` compile improved throughput by 2.67× at sequence 512 and 2.56× at sequence 1,024. These results are synthetic-token model-step measurements; the mmap input path is separately tested and should be rechecked on the target storage system.
 
 The compiled profile shows PyTorch flash-attention forward/backward kernels, BF16 Tensor Core GEMMs, compiler-generated Triton fused xIELU/RMSNorm, and fused AdamW. The eager profile identifies MLP/xIELU elementwise work and launch count as the main small-model overhead. Since the compiled path already fuses these operations and max-autotune did not win, no custom CUDA/Triton kernel was added.
 

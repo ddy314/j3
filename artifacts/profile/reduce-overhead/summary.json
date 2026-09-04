@@ -1,5 +1,31 @@
 {
-  "created_at": "2026-09-04T17:52:51+0800",
+  "breakdown": [
+    {
+      "calls": 6,
+      "cpu_ms": 13.177480000000001,
+      "cuda_ms": 0.007677999999956228,
+      "name": "train.backward",
+      "self_cpu_ms": 13.061121000000002,
+      "self_cuda_ms": 0.003838999999978114
+    },
+    {
+      "calls": 3,
+      "cpu_ms": 5.891324000000002,
+      "cuda_ms": 94.19753800000016,
+      "name": "train.forward",
+      "self_cpu_ms": 0.31324300000000266,
+      "self_cuda_ms": 0.0
+    },
+    {
+      "calls": 3,
+      "cpu_ms": 2.775861999999999,
+      "cuda_ms": 17.902149000000033,
+      "name": "train.optimizer",
+      "self_cpu_ms": 0.05172399999999743,
+      "self_cuda_ms": 0.0
+    }
+  ],
+  "created_at": "2026-09-04T21:21:19+0800",
   "device": "cuda",
   "environment": {
     "cuda_available": true,
@@ -17,10 +43,12 @@
       "available": false,
       "error": "No module named 'flash_attn'"
     },
+    "float32_matmul_precision": "high",
+    "git_commit": "4b5e3e23d0b18788619928461580e8b8cae6e6eb",
     "hostname": "xiaArch",
     "nvidia_smi": {
       "available": true,
-      "output": "Fri Sep  4 17:52:51 2026       \n+-----------------------------------------------------------------------------------------+\n| NVIDIA-SMI 610.57.04              KMD Version: 610.57.04     CUDA UMD Version: 13.3     |\n+-----------------------------------------+------------------------+----------------------+\n| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |\n| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |\n|                                         |                        |               MIG M. |\n|=========================================+========================+======================|\n|   0  NVIDIA GeForce RTX 4060 ...    Off |   00000000:01:00.0 Off |                  N/A |\n| N/A   65C    P0             33W /  115W |    5660MiB /   8188MiB |      0%      Default |\n|                                         |                        |                  N/A |\n+-----------------------------------------+------------------------+----------------------+\n\n+-----------------------------------------------------------------------------------------+\n| Processes:                                                                              |\n|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |\n|        ID   ID                                                               Usage      |\n|=========================================================================================|\n|    0   N/A  N/A            1572    C+G   /usr/bin/kwin_wayland                     7MiB |\n|    0   N/A  N/A          321899      C   ...xia/code/j3/.venv/bin/python3       5612MiB |\n+-----------------------------------------------------------------------------------------+\n"
+      "output": "Fri Sep  4 21:21:19 2026       \n+-----------------------------------------------------------------------------------------+\n| NVIDIA-SMI 610.57.04              KMD Version: 610.57.04     CUDA UMD Version: 13.3     |\n+-----------------------------------------+------------------------+----------------------+\n| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |\n| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |\n|                                         |                        |               MIG M. |\n|=========================================+========================+======================|\n|   0  NVIDIA GeForce RTX 4060 ...    Off |   00000000:01:00.0 Off |                  N/A |\n| N/A   61C    P0             58W /  115W |    3290MiB /   8188MiB |      0%      Default |\n|                                         |                        |                  N/A |\n+-----------------------------------------+------------------------+----------------------+\n\n+-----------------------------------------------------------------------------------------+\n| Processes:                                                                              |\n|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |\n|        ID   ID                                                               Usage      |\n|=========================================================================================|\n|    0   N/A  N/A            1572    C+G   /usr/bin/kwin_wayland                     7MiB |\n|    0   N/A  N/A          485571      C   ...xia/code/j3/.venv/bin/python3       3242MiB |\n+-----------------------------------------------------------------------------------------+\n"
     },
     "platform": "Linux-7.1.9-arch1-2-x86_64-with-glibc2.44",
     "python": "3.13.11 (main, Jan 14 2026, 19:38:04) [Clang 21.1.4 ]",
@@ -30,7 +58,7 @@
     "sdpa_mem_efficient_enabled": true,
     "tf32_cudnn": true,
     "tf32_matmul": true,
-    "timestamp": "2026-09-04T17:52:51+0800",
+    "timestamp": "2026-09-04T21:21:19+0800",
     "torch_cuda_version": "13.0",
     "torch_file": "/home/xia/code/j3/.venv/lib/python3.13/site-packages/torch/__init__.py",
     "torch_version": "2.14.0+cu130",
@@ -39,1055 +67,1039 @@
       "version": "3.8.0"
     }
   },
-  "micro_batch_size": 8,
+  "micro_batch_size": 4,
   "mode": "reduce-overhead",
   "optimizer": "AdamW(fused=True)",
-  "peak_vram_allocated_mb": 827.6376953125,
+  "peak_vram_allocated_mb": 702.4501953125,
   "segments": [
     {
-      "calls": 5,
-      "cpu_ms": 11.202346000000018,
-      "cuda_ms": 314.60485599999913,
+      "calls": 6,
+      "cpu_ms": 13.177480000000001,
+      "cuda_ms": 0.007677999999956228,
+      "name": "train.backward",
+      "self_cpu_ms": 13.061121000000002,
+      "self_cuda_ms": 0.003838999999978114
+    },
+    {
+      "calls": 3,
+      "cpu_ms": 5.891324000000002,
+      "cuda_ms": 94.19753800000016,
       "name": "train.forward",
-      "self_cpu_memory_bytes": 0,
-      "self_cpu_ms": 0.7240980000000345,
-      "self_cuda_memory_bytes": 0,
+      "self_cpu_ms": 0.31324300000000266,
       "self_cuda_ms": 0.0
     },
     {
-      "calls": 5,
-      "cpu_ms": 681.8966529999999,
-      "cuda_ms": 0.006497000000148546,
-      "name": "train.backward",
-      "self_cpu_memory_bytes": 0,
-      "self_cpu_ms": 29.291972000000847,
-      "self_cuda_memory_bytes": -2560,
-      "self_cuda_ms": 0.0
-    },
-    {
-      "calls": 5,
-      "cpu_ms": 5.86594599999998,
-      "cuda_ms": 29.992756999999983,
+      "calls": 3,
+      "cpu_ms": 2.775861999999999,
+      "cuda_ms": 17.902149000000033,
       "name": "train.optimizer",
-      "self_cpu_memory_bytes": 0,
-      "self_cpu_ms": 0.1291170000000402,
-      "self_cuda_memory_bytes": 0,
+      "self_cpu_ms": 0.05172399999999743,
       "self_cuda_ms": 0.0
-    },
-    {
-      "calls": 5,
-      "cpu_ms": 0.0,
-      "cuda_ms": 0.006497000000148546,
-      "name": "train.backward",
-      "self_cpu_memory_bytes": 0,
-      "self_cpu_ms": 0.0,
-      "self_cuda_memory_bytes": 0,
-      "self_cuda_ms": 0.006497000000148546
     }
   ],
   "sequence_length": 1024,
   "top_cpu_ops": [
     {
       "calls": 1,
-      "cpu_ms": 710.564751,
+      "cpu_ms": 387.902138,
       "cuda_ms": 0.0,
       "name": "cudaDeviceSynchronize",
       "self_cpu_memory_bytes": 0,
-      "self_cpu_ms": 710.564751,
+      "self_cpu_ms": 387.902138,
       "self_cuda_memory_bytes": 0,
       "self_cuda_ms": 0.0
     },
     {
-      "calls": 10,
-      "cpu_ms": 659.879099,
+      "calls": 3,
+      "cpu_ms": 13.177480000000001,
+      "cuda_ms": 0.003838999999978114,
+      "name": "train.backward",
+      "self_cpu_memory_bytes": 0,
+      "self_cpu_ms": 13.061121000000002,
+      "self_cuda_memory_bytes": -1536,
+      "self_cuda_ms": 0.0
+    },
+    {
+      "calls": 6,
+      "cpu_ms": 3.309856999999999,
       "cuda_ms": 0.0,
       "name": "cudaGraphLaunch",
       "self_cpu_memory_bytes": 0,
-      "self_cpu_ms": 659.879099,
+      "self_cpu_ms": 3.309856999999999,
       "self_cuda_memory_bytes": 0,
       "self_cuda_ms": 0.0
     },
     {
-      "calls": 430,
-      "cpu_ms": 651.9006699999992,
-      "cuda_ms": 0.0,
-      "name": "Command Buffer Full",
+      "calls": 3,
+      "cpu_ms": 5.124339,
+      "cuda_ms": 3.5767500000000583,
+      "name": "## Call CompiledFxGraph f6fc4gh4vi4hy4amwwm7btjsfww5umaakv2os4p45x35am742vc7 ##",
       "self_cpu_memory_bytes": 0,
-      "self_cpu_ms": 651.9006699999992,
-      "self_cuda_memory_bytes": 0,
+      "self_cpu_ms": 2.662116999999998,
+      "self_cuda_memory_bytes": -402653184,
       "self_cuda_ms": 0.0
     },
     {
-      "calls": 5,
-      "cpu_ms": 681.8966529999999,
-      "cuda_ms": 0.006497000000148546,
-      "name": "train.backward",
-      "self_cpu_memory_bytes": 0,
-      "self_cpu_ms": 29.291972000000847,
-      "self_cuda_memory_bytes": -2560,
-      "self_cuda_ms": 0.0
-    },
-    {
-      "calls": 5,
-      "cpu_ms": 663.467157,
-      "cuda_ms": 11.868857999999891,
-      "name": "## Call CompiledFxGraph fqy3w5bg6wxtkxno5qmsqhedqguer4yeog65zpk4brtlze7hmkg3 ##",
-      "self_cpu_memory_bytes": 0,
-      "self_cpu_ms": 5.373202999999976,
-      "self_cuda_memory_bytes": -1342177280,
-      "self_cuda_ms": 0.0
-    },
-    {
-      "calls": 5,
-      "cpu_ms": 5.73682899999994,
-      "cuda_ms": 29.992756999999983,
+      "calls": 3,
+      "cpu_ms": 2.7241380000000017,
+      "cuda_ms": 17.902149000000033,
       "name": "Optimizer.step#AdamW.step",
       "self_cpu_memory_bytes": 0,
-      "self_cpu_ms": 4.739540999999888,
+      "self_cpu_ms": 2.232995,
       "self_cuda_memory_bytes": 0,
       "self_cuda_ms": 0.0
     },
     {
-      "calls": 1940,
-      "cpu_ms": 6.768373000000553,
+      "calls": 1164,
+      "cpu_ms": 3.354783000000013,
       "cuda_ms": 0.0,
       "name": "autograd::engine::evaluate_function: torch::autograd::AccumulateGrad",
       "self_cpu_memory_bytes": 0,
-      "self_cpu_ms": 3.736556000001623,
+      "self_cpu_ms": 1.8606850000000477,
       "self_cuda_memory_bytes": 0,
       "self_cuda_ms": 0.0
     },
     {
-      "calls": 5,
-      "cpu_ms": 5.1932770000000055,
-      "cuda_ms": 0.01695900000014808,
-      "name": "## Call CompiledFxGraph fdyxxji32tura6bcrmq3sxyyvcmptzevjhl5a5dxwft7g66gic3a ##",
-      "self_cpu_memory_bytes": 0,
-      "self_cpu_ms": 3.0239489999999614,
-      "self_cuda_memory_bytes": 0,
-      "self_cuda_ms": 0.0
-    },
-    {
-      "calls": 5,
-      "cpu_ms": 2.5392489999999452,
+      "calls": 3,
+      "cpu_ms": 1.5667169999999995,
       "cuda_ms": 0.0,
       "name": "TorchDynamo Cache Lookup",
       "self_cpu_memory_bytes": 0,
-      "self_cpu_ms": 2.5392489999999452,
+      "self_cpu_ms": 1.5667169999999995,
       "self_cuda_memory_bytes": 0,
       "self_cuda_ms": 0.0
     },
     {
-      "calls": 5,
-      "cpu_ms": 7.052505999999965,
-      "cuda_ms": 314.60485599999913,
-      "name": "CompiledFunction",
+      "calls": 3,
+      "cpu_ms": 2.5770919999999986,
+      "cuda_ms": 0.007199999999982538,
+      "name": "## Call CompiledFxGraph fmkltid6e2qghiyqpk5emrq72355rylzwvbun6dksw4miz2x4ypr ##",
       "self_cpu_memory_bytes": 0,
-      "self_cpu_ms": 1.8592289999999598,
+      "self_cpu_ms": 1.5050359999999943,
       "self_cuda_memory_bytes": 0,
-      "self_cuda_ms": 314.58789699999903
+      "self_cuda_ms": 0.0
     },
     {
-      "calls": 1940,
-      "cpu_ms": 3.0318169999989295,
+      "calls": 3,
+      "cpu_ms": 3.521226000000003,
+      "cuda_ms": 94.19753800000016,
+      "name": "CompiledFunction",
+      "self_cpu_memory_bytes": 0,
+      "self_cpu_ms": 0.9441340000000041,
+      "self_cuda_memory_bytes": 0,
+      "self_cuda_ms": 94.19033800000018
+    },
+    {
+      "calls": 1164,
+      "cpu_ms": 1.4940979999999653,
       "cuda_ms": 0.0,
       "name": "torch::autograd::AccumulateGrad",
       "self_cpu_memory_bytes": 0,
-      "self_cpu_ms": 1.5708329999977941,
+      "self_cpu_ms": 0.7831959999999435,
       "self_cuda_memory_bytes": 0,
       "self_cuda_ms": 0.0
     },
     {
-      "calls": 5,
-      "cpu_ms": 665.347688,
-      "cuda_ms": 673.5805570000077,
+      "calls": 3,
+      "cpu_ms": 5.733243999999997,
+      "cuda_ms": 199.9058950000009,
       "name": "CompiledFunctionBackward",
       "self_cpu_memory_bytes": 0,
-      "self_cpu_ms": 1.2313669999998347,
+      "self_cpu_ms": 0.515262999999999,
       "self_cuda_memory_bytes": 0,
-      "self_cuda_ms": 656.4536860000077
+      "self_cuda_ms": 194.77554000000083
     },
     {
-      "calls": 1940,
-      "cpu_ms": 1.4609840000011354,
+      "calls": 1164,
+      "cpu_ms": 0.7109020000000219,
       "cuda_ms": 0.0,
       "name": "aten::detach",
       "self_cpu_memory_bytes": 0,
-      "self_cpu_ms": 0.9012610000034947,
+      "self_cpu_ms": 0.45333100000004467,
       "self_cuda_memory_bytes": 0,
       "self_cuda_ms": 0.0
     },
     {
-      "calls": 5,
-      "cpu_ms": 11.202346000000018,
-      "cuda_ms": 314.60485599999913,
-      "name": "train.forward",
-      "self_cpu_memory_bytes": 0,
-      "self_cpu_ms": 0.7240980000000345,
-      "self_cuda_memory_bytes": 0,
-      "self_cuda_ms": 0.0
-    },
-    {
-      "calls": 5,
-      "cpu_ms": 666.057919,
-      "cuda_ms": 673.5805570000077,
-      "name": "autograd::engine::evaluate_function: CompiledFunctionBackward",
-      "self_cpu_memory_bytes": 0,
-      "self_cpu_ms": 0.7102310000000635,
-      "self_cuda_memory_bytes": 0,
-      "self_cuda_ms": 0.0
-    },
-    {
-      "calls": 5,
-      "cpu_ms": 7.938999000000038,
-      "cuda_ms": 314.60485599999913,
+      "calls": 3,
+      "cpu_ms": 4.0113639999999995,
+      "cuda_ms": 94.19753800000016,
       "name": "Torch-Compiled Region: 0/0",
       "self_cpu_memory_bytes": 0,
-      "self_cpu_ms": 0.646928000000064,
+      "self_cpu_ms": 0.3809419999999966,
       "self_cuda_memory_bytes": 0,
       "self_cuda_ms": 0.0
     },
     {
-      "calls": 5,
-      "cpu_ms": 700.0118610000001,
-      "cuda_ms": 344.6041099999993,
-      "name": "ProfilerStep*",
+      "calls": 3,
+      "cpu_ms": 6.068202000000001,
+      "cuda_ms": 199.9058950000009,
+      "name": "autograd::engine::evaluate_function: CompiledFunctionBackward",
       "self_cpu_memory_bytes": 0,
-      "self_cpu_ms": 0.609590000000082,
+      "self_cpu_ms": 0.3349580000000042,
       "self_cuda_memory_bytes": 0,
       "self_cuda_ms": 0.0
     },
     {
-      "calls": 1940,
-      "cpu_ms": 0.5597229999976407,
+      "calls": 3,
+      "cpu_ms": 5.891324000000002,
+      "cuda_ms": 94.19753800000016,
+      "name": "train.forward",
+      "self_cpu_memory_bytes": 0,
+      "self_cpu_ms": 0.31324300000000266,
+      "self_cuda_memory_bytes": 0,
+      "self_cuda_ms": 0.0
+    },
+    {
+      "calls": 1164,
+      "cpu_ms": 0.2575709999999772,
       "cuda_ms": 0.0,
       "name": "detach",
       "self_cpu_memory_bytes": 0,
-      "self_cpu_ms": 0.5597229999976407,
+      "self_cpu_ms": 0.2575709999999772,
       "self_cuda_memory_bytes": 0,
       "self_cuda_ms": 0.0
     },
     {
-      "calls": 10,
-      "cpu_ms": 0.543410000000149,
-      "cuda_ms": 29.940597000000068,
+      "calls": 6,
+      "cpu_ms": 0.2916820000000007,
+      "cuda_ms": 17.871333000000014,
       "name": "aten::_fused_adamw_",
       "self_cpu_memory_bytes": 0,
-      "self_cpu_ms": 0.4781790000001001,
+      "self_cpu_ms": 0.2508060000000014,
       "self_cuda_memory_bytes": 0,
-      "self_cuda_ms": 29.940597000000068
+      "self_cuda_ms": 17.871333000000014
     },
     {
-      "calls": 5,
-      "cpu_ms": 0.549770000000015,
-      "cuda_ms": 0.0,
-      "name": "aten::empty_like",
-      "self_cpu_memory_bytes": 0,
-      "self_cpu_ms": 0.4714519999999875,
-      "self_cuda_memory_bytes": 0,
-      "self_cuda_ms": 0.0
-    },
-    {
-      "calls": 5,
-      "cpu_ms": 0.6491640000000871,
-      "cuda_ms": 5.258013000000093,
-      "name": "aten::zeros",
-      "self_cpu_memory_bytes": 0,
-      "self_cpu_ms": 0.44430500000009215,
-      "self_cuda_memory_bytes": 0,
-      "self_cuda_ms": 0.0
-    },
-    {
-      "calls": 5,
-      "cpu_ms": 0.4373259999999823,
+      "calls": 3,
+      "cpu_ms": 0.24781699999999837,
       "cuda_ms": 0.0,
       "name": "Optimizer.zero_grad#AdamW.zero_grad",
       "self_cpu_memory_bytes": 0,
-      "self_cpu_ms": 0.4373259999999823,
+      "self_cpu_ms": 0.24781699999999837,
       "self_cuda_memory_bytes": 0,
       "self_cuda_ms": 0.0
     },
     {
-      "calls": 35,
-      "cpu_ms": 0.4279439999999831,
+      "calls": 24,
+      "cpu_ms": 0.2032219999999975,
       "cuda_ms": 0.0,
       "name": "cudaLaunchKernel",
       "self_cpu_memory_bytes": 0,
-      "self_cpu_ms": 0.4279439999999831,
+      "self_cpu_ms": 0.2032219999999975,
       "self_cuda_memory_bytes": 0,
       "self_cuda_ms": 0.0
     },
     {
-      "calls": 10,
-      "cpu_ms": 0.44062699999993493,
-      "cuda_ms": 0.05215999999991618,
+      "calls": 6,
+      "cpu_ms": 0.1951170000000011,
+      "cuda_ms": 0.030816000000020723,
       "name": "aten::_foreach_add_",
       "self_cpu_memory_bytes": 0,
-      "self_cpu_ms": 0.27185200000013177,
+      "self_cpu_ms": 0.1306100000000006,
       "self_cuda_memory_bytes": 0,
-      "self_cuda_ms": 0.05215999999991618
+      "self_cuda_ms": 0.030816000000020723
     },
     {
-      "calls": 5,
-      "cpu_ms": 0.19082100000001537,
+      "calls": 3,
+      "cpu_ms": 22.219232,
+      "cuda_ms": 112.10352600000017,
+      "name": "ProfilerStep*",
+      "self_cpu_memory_bytes": 0,
+      "self_cpu_ms": 0.1267489999999989,
+      "self_cuda_memory_bytes": 0,
+      "self_cuda_ms": 0.0
+    },
+    {
+      "calls": 3,
+      "cpu_ms": 0.07886099999999965,
       "cuda_ms": 0.0,
       "name": "Pregraph bytecode",
       "self_cpu_memory_bytes": 0,
-      "self_cpu_ms": 0.19082100000001537,
+      "self_cpu_ms": 0.07886099999999965,
       "self_cuda_memory_bytes": 0,
       "self_cuda_ms": 0.0
     },
     {
-      "calls": 10,
-      "cpu_ms": 0.1316360000000277,
+      "calls": 6,
+      "cpu_ms": 0.2188450000000048,
+      "cuda_ms": 3.5839500000000406,
+      "name": "aten::_foreach_copy_",
+      "self_cpu_memory_bytes": 0,
+      "self_cpu_ms": 0.07462700000000859,
+      "self_cuda_memory_bytes": 0,
+      "self_cuda_ms": 0.007199999999982538
+    },
+    {
+      "calls": 6,
+      "cpu_ms": 0.0631029999999987,
       "cuda_ms": 0.0,
       "name": "cudaMemcpyAsync",
       "self_cpu_memory_bytes": 0,
-      "self_cpu_ms": 0.1316360000000277,
+      "self_cpu_ms": 0.0631029999999987,
       "self_cuda_memory_bytes": 0,
       "self_cuda_ms": 0.0
     },
     {
-      "calls": 5,
-      "cpu_ms": 5.86594599999998,
-      "cuda_ms": 29.992756999999983,
+      "calls": 3,
+      "cpu_ms": 2.775861999999999,
+      "cuda_ms": 17.902149000000033,
       "name": "train.optimizer",
       "self_cpu_memory_bytes": 0,
-      "self_cpu_ms": 0.1291170000000402,
+      "self_cpu_ms": 0.05172399999999743,
       "self_cuda_memory_bytes": 0,
       "self_cuda_ms": 0.0
     },
     {
-      "calls": 10,
-      "cpu_ms": 0.245524999999996,
-      "cuda_ms": 5.264510000000242,
+      "calls": 6,
+      "cpu_ms": 0.09843399999999655,
+      "cuda_ms": 1.5574439999999885,
       "name": "aten::fill_",
       "self_cpu_memory_bytes": 0,
-      "self_cpu_ms": 0.11624599999990187,
+      "self_cpu_ms": 0.050611999999997354,
       "self_cuda_memory_bytes": 0,
-      "self_cuda_ms": 5.264510000000242
+      "self_cuda_ms": 1.5574439999999885
     },
     {
-      "calls": 10,
-      "cpu_ms": 0.36945100000000003,
-      "cuda_ms": 11.885817000000038,
-      "name": "aten::_foreach_copy_",
-      "self_cpu_memory_bytes": 0,
-      "self_cpu_ms": 0.11325999999993383,
-      "self_cuda_memory_bytes": 0,
-      "self_cuda_ms": 0.01695900000014808
-    },
-    {
-      "calls": 5,
-      "cpu_ms": 0.07831800000002749,
+      "calls": 3,
+      "cpu_ms": 0.03243100000000413,
       "cuda_ms": 0.0,
       "name": "aten::empty_strided",
       "self_cpu_memory_bytes": 0,
-      "self_cpu_ms": 0.07831800000002749,
-      "self_cuda_memory_bytes": 2560,
+      "self_cpu_ms": 0.03243100000000413,
+      "self_cuda_memory_bytes": 1536,
       "self_cuda_ms": 0.0
     },
     {
-      "calls": 5,
-      "cpu_ms": 0.06702999999999065,
-      "cuda_ms": 0.0,
-      "name": "aten::empty",
-      "self_cpu_memory_bytes": 0,
-      "self_cpu_ms": 0.06702999999999065,
-      "self_cuda_memory_bytes": 1342177280,
-      "self_cuda_ms": 0.0
-    },
-    {
-      "calls": 10,
-      "cpu_ms": 0.19153200000002926,
-      "cuda_ms": 11.868857999999891,
+      "calls": 6,
+      "cpu_ms": 0.09420099999999774,
+      "cuda_ms": 3.5767500000000583,
       "name": "aten::copy_",
       "self_cpu_memory_bytes": 0,
-      "self_cpu_ms": 0.05989600000000155,
+      "self_cpu_ms": 0.031097999999999047,
       "self_cuda_memory_bytes": 0,
-      "self_cuda_ms": 11.868857999999891
+      "self_cuda_ms": 3.5767500000000583
     },
     {
-      "calls": 5,
-      "cpu_ms": 0.04874399999999286,
+      "calls": 3,
+      "cpu_ms": 0.030335000000000036,
       "cuda_ms": 0.0,
       "name": "AOTDispatcher Runtime Wrapper Prologue",
       "self_cpu_memory_bytes": 0,
-      "self_cpu_ms": 0.04874399999999286,
+      "self_cpu_ms": 0.030335000000000036,
       "self_cuda_memory_bytes": 0,
       "self_cuda_ms": 0.0
     },
     {
-      "calls": 5,
-      "cpu_ms": 0.704010999999975,
-      "cuda_ms": 0.006497000000148546,
+      "calls": 3,
+      "cpu_ms": 0.02624900000000025,
+      "cuda_ms": 0.0,
+      "name": "aten::empty",
+      "self_cpu_memory_bytes": 0,
+      "self_cpu_ms": 0.02624900000000025,
+      "self_cuda_memory_bytes": 402653184,
+      "self_cuda_ms": 0.0
+    },
+    {
+      "calls": 3,
+      "cpu_ms": 0.04751599999999871,
+      "cuda_ms": 0.0,
+      "name": "aten::empty_like",
+      "self_cpu_memory_bytes": 0,
+      "self_cpu_ms": 0.01508499999999458,
+      "self_cuda_memory_bytes": 0,
+      "self_cuda_ms": 0.0
+    },
+    {
+      "calls": 3,
+      "cpu_ms": 0.09364199999999846,
+      "cuda_ms": 1.5536050000000106,
+      "name": "aten::zeros",
+      "self_cpu_memory_bytes": 0,
+      "self_cpu_ms": 0.014079999999997199,
+      "self_cuda_memory_bytes": 0,
+      "self_cuda_ms": 0.0
+    },
+    {
+      "calls": 3,
+      "cpu_ms": 0.11635900000000038,
+      "cuda_ms": 0.003838999999978114,
       "name": "aten::ones_like",
       "self_cpu_memory_bytes": 0,
-      "self_cpu_ms": 0.024951999999937472,
+      "self_cpu_ms": 0.013789000000003852,
       "self_cuda_memory_bytes": 0,
       "self_cuda_ms": 0.0
     },
     {
-      "calls": 5,
-      "cpu_ms": 0.13782900000000428,
-      "cuda_ms": 5.258013000000093,
+      "calls": 3,
+      "cpu_ms": 0.05331300000000101,
+      "cuda_ms": 1.5536050000000106,
       "name": "aten::zero_",
       "self_cpu_memory_bytes": 0,
-      "self_cpu_ms": 0.02159300000003077,
+      "self_cpu_ms": 0.009933000000002266,
       "self_cuda_memory_bytes": 0,
       "self_cuda_ms": 0.0
     },
     {
-      "calls": 20,
-      "cpu_ms": 0.014732000000073185,
+      "calls": 12,
+      "cpu_ms": 0.005576000000002978,
       "cuda_ms": 0.0,
       "name": "aten::_debug_has_internal_overlap",
       "self_cpu_memory_bytes": 0,
-      "self_cpu_ms": 0.014732000000073185,
+      "self_cpu_ms": 0.005576000000002978,
       "self_cuda_memory_bytes": 0,
       "self_cuda_ms": 0.0
     },
     {
-      "calls": 5,
-      "cpu_ms": 0.013250999999967462,
+      "calls": 3,
+      "cpu_ms": 0.004344000000000051,
       "cuda_ms": 0.0,
       "name": "cudaStreamIsCapturing",
       "self_cpu_memory_bytes": 0,
-      "self_cpu_ms": 0.013250999999967462,
+      "self_cpu_ms": 0.004344000000000051,
       "self_cuda_memory_bytes": 0,
       "self_cuda_ms": 0.0
     },
     {
-      "calls": 108,
+      "calls": 125,
       "cpu_ms": 0.0,
-      "cuda_ms": 11.752381999999988,
-      "name": "triton_per_fused__fused_rms_norm__to_copy__unsafe_view_add_11",
+      "cuda_ms": 22.289693999999844,
+      "name": "ampere_bf16_s1688gemm_bf16_128x128_ldg8_f2f_stages_32x1_tn",
       "self_cpu_memory_bytes": 0,
       "self_cpu_ms": 0.0,
       "self_cuda_memory_bytes": 0,
-      "self_cuda_ms": 11.752381999999988
+      "self_cuda_ms": 22.289693999999844
     },
     {
-      "calls": 430,
+      "calls": 54,
       "cpu_ms": 0.0,
-      "cuda_ms": 2.321922999998886,
+      "cuda_ms": 6.275511000000062,
+      "name": "triton_per_fused__fused_rms_norm__to_copy__unsafe_view_add_13",
+      "self_cpu_memory_bytes": 0,
+      "self_cpu_ms": 0.0,
+      "self_cuda_memory_bytes": 0,
+      "self_cuda_ms": 6.275511000000062
+    },
+    {
+      "calls": 240,
+      "cpu_ms": 0.0,
+      "cuda_ms": 1.3301830000001444,
       "name": "triton_poi_fused__to_copy_t_1",
       "self_cpu_memory_bytes": 0,
       "self_cpu_ms": 0.0,
       "self_cuda_memory_bytes": 0,
-      "self_cuda_ms": 2.321922999998886
+      "self_cuda_ms": 1.3301830000001444
     },
     {
-      "calls": 645,
+      "calls": 360,
       "cpu_ms": 0.0,
-      "cuda_ms": 95.82496400000024,
+      "cuda_ms": 27.92977599999991,
       "name": "ampere_bf16_s1688gemm_bf16_128x128_ldg8_f2f_tn",
       "self_cpu_memory_bytes": 0,
       "self_cpu_ms": 0.0,
       "self_cuda_memory_bytes": 0,
-      "self_cuda_ms": 95.82496400000024
+      "self_cuda_ms": 27.92977599999991
     },
     {
-      "calls": 215,
+      "calls": 120,
       "cpu_ms": 0.0,
-      "cuda_ms": 11.58611100000006,
-      "name": "triton_per_fused__fused_rms_norm__to_copy__unsafe_view_add_mul_slice_stack_sub_transpose_unsqueeze_view_2",
+      "cuda_ms": 2.0619890000000765,
+      "name": "triton_per_fused__to_copy__unsafe_view_add_mean_mul_pow_rsqrt_slice_stack_sub_transpose_unsqueeze_view_2",
       "self_cpu_memory_bytes": 0,
       "self_cpu_ms": 0.0,
       "self_cuda_memory_bytes": 0,
-      "self_cuda_ms": 11.58611100000006
+      "self_cuda_ms": 2.0619890000000765
     },
     {
-      "calls": 430,
+      "calls": 240,
       "cpu_ms": 0.0,
-      "cuda_ms": 1.6923800000006886,
+      "cuda_ms": 0.7468119999998007,
       "name": "triton_poi_fused__to_copy_t_3",
       "self_cpu_memory_bytes": 0,
       "self_cpu_ms": 0.0,
       "self_cuda_memory_bytes": 0,
-      "self_cuda_ms": 1.6923800000006886
+      "self_cuda_ms": 0.7468119999998007
     },
     {
-      "calls": 652,
+      "calls": 240,
       "cpu_ms": 0.0,
-      "cuda_ms": 93.7506729999999,
-      "name": "ampere_bf16_s1688gemm_bf16_128x128_ldg8_f2f_stages_32x1_tn",
+      "cuda_ms": 4.509136000000144,
+      "name": "ampere_bf16_s1688gemm_bf16_64x128_sliced1x2_ldg8_f2f_tn",
       "self_cpu_memory_bytes": 0,
       "self_cpu_ms": 0.0,
       "self_cuda_memory_bytes": 0,
-      "self_cuda_ms": 93.7506729999999
+      "self_cuda_ms": 4.509136000000144
     },
     {
-      "calls": 215,
+      "calls": 120,
       "cpu_ms": 0.0,
-      "cuda_ms": 2.223933999999944,
-      "name": "triton_per_fused__fused_rms_norm__to_copy__unsafe_view_add_mul_slice_stack_sub_transpose_unsqueeze_view_4",
+      "cuda_ms": 0.5716840000000901,
+      "name": "triton_per_fused__to_copy__unsafe_view_add_mean_mul_pow_rsqrt_slice_stack_sub_transpose_unsqueeze_view_4",
       "self_cpu_memory_bytes": 0,
       "self_cpu_ms": 0.0,
       "self_cuda_memory_bytes": 0,
-      "self_cuda_ms": 2.223933999999944
+      "self_cuda_ms": 0.5716840000000901
     },
     {
-      "calls": 215,
+      "calls": 120,
       "cpu_ms": 0.0,
-      "cuda_ms": 0.7841940000007024,
-      "name": "triton_poi_fused__to_copy_view_5",
-      "self_cpu_memory_bytes": 0,
-      "self_cpu_ms": 0.0,
-      "self_cuda_memory_bytes": 0,
-      "self_cuda_ms": 0.7841940000007024
-    },
-    {
-      "calls": 215,
-      "cpu_ms": 0.0,
-      "cuda_ms": 8.871642000000076,
-      "name": "triton_poi_fused__to_copy_view_6",
-      "self_cpu_memory_bytes": 0,
-      "self_cpu_ms": 0.0,
-      "self_cuda_memory_bytes": 0,
-      "self_cuda_ms": 8.871642000000076
-    },
-    {
-      "calls": 215,
-      "cpu_ms": 0.0,
-      "cuda_ms": 60.05342400000003,
+      "cuda_ms": 18.110346000000092,
       "name": "void pytorch_flash::flash_fwd_kernel<Flash_fwd_kernel_traits<64, 128, 128, 4, false, false, cutlass::bfloat16_t, Flash_kernel_traits<64, 128, 128, 4, cutlass::bfloat16_t> >, false, true, false, false, true, true, false, false>(pytorch_flash::Flash_fwd_params)",
       "self_cpu_memory_bytes": 0,
       "self_cpu_ms": 0.0,
       "self_cuda_memory_bytes": 0,
-      "self_cuda_ms": 60.05342400000003
+      "self_cuda_ms": 18.110346000000092
     },
     {
-      "calls": 215,
+      "calls": 120,
       "cpu_ms": 0.0,
-      "cuda_ms": 1.9143619999994967,
-      "name": "triton_poi_fused_clone_transpose_7",
+      "cuda_ms": 0.581509000000007,
+      "name": "triton_poi_fused_clone_transpose_5",
       "self_cpu_memory_bytes": 0,
       "self_cpu_ms": 0.0,
       "self_cuda_memory_bytes": 0,
-      "self_cuda_ms": 1.9143619999994967
+      "self_cuda_ms": 0.581509000000007
     },
     {
-      "calls": 108,
+      "calls": 57,
       "cpu_ms": 0.0,
-      "cuda_ms": 20.195290000000096,
+      "cuda_ms": 2.5621549999999544,
       "name": "triton_per_fused__fused_rms_norm__to_copy__unsafe_view_add_12",
       "self_cpu_memory_bytes": 0,
       "self_cpu_ms": 0.0,
       "self_cuda_memory_bytes": 0,
-      "self_cuda_ms": 20.195290000000096
+      "self_cuda_ms": 2.5621549999999544
     },
     {
-      "calls": 430,
+      "calls": 240,
       "cpu_ms": 0.0,
-      "cuda_ms": 5.977500999999575,
-      "name": "triton_poi_fused__to_copy_t_9",
+      "cuda_ms": 3.1741549999998626,
+      "name": "triton_poi_fused__to_copy_t_7",
       "self_cpu_memory_bytes": 0,
       "self_cpu_ms": 0.0,
       "self_cuda_memory_bytes": 0,
-      "self_cuda_ms": 5.977500999999575
+      "self_cuda_ms": 3.1741549999998626
+    },
+    {
+      "calls": 120,
+      "cpu_ms": 0.0,
+      "cuda_ms": 8.448358000000068,
+      "name": "triton_poi_fused__to_copy__unsafe_view_add_expm1_gt_minimum_mul_pow_softplus_sub_where_8",
+      "self_cpu_memory_bytes": 0,
+      "self_cpu_ms": 0.0,
+      "self_cuda_memory_bytes": 0,
+      "self_cuda_ms": 8.448358000000068
+    },
+    {
+      "calls": 60,
+      "cpu_ms": 0.0,
+      "cuda_ms": 4.335473000000033,
+      "name": "triton_per_fused__fused_rms_norm__to_copy__unsafe_view_add_9",
+      "self_cpu_memory_bytes": 0,
+      "self_cpu_ms": 0.0,
+      "self_cuda_memory_bytes": 0,
+      "self_cuda_ms": 4.335473000000033
     }
   ],
   "top_cuda_kernels": [
     {
-      "calls": 5,
+      "calls": 3,
       "cpu_ms": 0.0,
-      "cuda_ms": 669.8599429999999,
-      "name": "## Call CompiledFxGraph fqy3w5bg6wxtkxno5qmsqhedqguer4yeog65zpk4brtlze7hmkg3 ##",
+      "cuda_ms": 198.94671100000002,
+      "name": "## Call CompiledFxGraph f6fc4gh4vi4hy4amwwm7btjsfww5umaakv2os4p45x35am742vc7 ##",
       "self_cpu_memory_bytes": 0,
       "self_cpu_ms": 0.0,
       "self_cuda_memory_bytes": 0,
-      "self_cuda_ms": 669.8599429999999
+      "self_cuda_ms": 198.94671100000002
     },
     {
-      "calls": 5,
-      "cpu_ms": 665.347688,
-      "cuda_ms": 673.5805570000077,
+      "calls": 3,
+      "cpu_ms": 5.733243999999997,
+      "cuda_ms": 199.9058950000009,
       "name": "CompiledFunctionBackward",
       "self_cpu_memory_bytes": 0,
-      "self_cpu_ms": 1.2313669999998347,
+      "self_cpu_ms": 0.515262999999999,
       "self_cuda_memory_bytes": 0,
-      "self_cuda_ms": 656.4536860000077
+      "self_cuda_ms": 194.77554000000083
     },
     {
-      "calls": 5,
-      "cpu_ms": 7.052505999999965,
-      "cuda_ms": 314.60485599999913,
+      "calls": 3,
+      "cpu_ms": 3.521226000000003,
+      "cuda_ms": 94.19753800000016,
       "name": "CompiledFunction",
       "self_cpu_memory_bytes": 0,
-      "self_cpu_ms": 1.8592289999999598,
+      "self_cpu_ms": 0.9441340000000041,
       "self_cuda_memory_bytes": 0,
-      "self_cuda_ms": 314.58789699999903
+      "self_cuda_ms": 94.19033800000018
     },
     {
-      "calls": 5,
+      "calls": 3,
       "cpu_ms": 0.0,
-      "cuda_ms": 314.13577199999986,
-      "name": "## Call CompiledFxGraph fdyxxji32tura6bcrmq3sxyyvcmptzevjhl5a5dxwft7g66gic3a ##",
+      "cuda_ms": 94.123509,
+      "name": "## Call CompiledFxGraph fmkltid6e2qghiyqpk5emrq72355rylzwvbun6dksw4miz2x4ypr ##",
       "self_cpu_memory_bytes": 0,
       "self_cpu_ms": 0.0,
       "self_cuda_memory_bytes": 0,
-      "self_cuda_ms": 314.13577199999986
+      "self_cuda_ms": 94.123509
     },
     {
-      "calls": 1344,
+      "calls": 772,
       "cpu_ms": 0.0,
-      "cuda_ms": 170.05072400000037,
+      "cuda_ms": 57.13312800000047,
       "name": "ampere_bf16_s1688gemm_bf16_128x128_ldg8_f2f_stages_32x1_nn",
       "self_cpu_memory_bytes": 0,
       "self_cpu_ms": 0.0,
       "self_cuda_memory_bytes": 0,
-      "self_cuda_ms": 170.05072400000037
+      "self_cuda_ms": 57.13312800000047
     },
     {
-      "calls": 224,
+      "calls": 128,
       "cpu_ms": 0.0,
-      "cuda_ms": 160.04605399999994,
+      "cuda_ms": 48.42371099999995,
       "name": "void pytorch_flash::flash_bwd_dq_dk_dv_loop_seqk_parallel_kernel<Flash_bwd_kernel_traits<64, 64, 128, 8, 2, 4, 4, true, false, cutlass::bfloat16_t, Flash_kernel_traits<64, 64, 128, 8, cutlass::bfloat16_t> >, false, true, false, false, true, true, false>(pytorch_flash::Flash_bwd_params)",
       "self_cpu_memory_bytes": 0,
       "self_cpu_ms": 0.0,
       "self_cuda_memory_bytes": 0,
-      "self_cuda_ms": 160.04605399999994
+      "self_cuda_ms": 48.42371099999995
     },
     {
-      "calls": 448,
+      "calls": 260,
       "cpu_ms": 0.0,
-      "cuda_ms": 121.9257460000014,
+      "cuda_ms": 43.256304000000064,
       "name": "ampere_bf16_s1688gemm_bf16_128x128_ldg8_f2f_stages_32x1_nt",
       "self_cpu_memory_bytes": 0,
       "self_cpu_ms": 0.0,
       "self_cuda_memory_bytes": 0,
-      "self_cuda_ms": 121.9257460000014
+      "self_cuda_ms": 43.256304000000064
     },
     {
-      "calls": 645,
+      "calls": 360,
       "cpu_ms": 0.0,
-      "cuda_ms": 95.82496400000024,
+      "cuda_ms": 27.92977599999991,
       "name": "ampere_bf16_s1688gemm_bf16_128x128_ldg8_f2f_tn",
       "self_cpu_memory_bytes": 0,
       "self_cpu_ms": 0.0,
       "self_cuda_memory_bytes": 0,
-      "self_cuda_ms": 95.82496400000024
+      "self_cuda_ms": 27.92977599999991
     },
     {
-      "calls": 652,
+      "calls": 12,
       "cpu_ms": 0.0,
-      "cuda_ms": 93.7506729999999,
-      "name": "ampere_bf16_s1688gemm_bf16_128x128_ldg8_f2f_stages_32x1_tn",
-      "self_cpu_memory_bytes": 0,
-      "self_cpu_ms": 0.0,
-      "self_cuda_memory_bytes": 0,
-      "self_cuda_ms": 93.7506729999999
-    },
-    {
-      "calls": 215,
-      "cpu_ms": 0.0,
-      "cuda_ms": 60.05342400000003,
-      "name": "void pytorch_flash::flash_fwd_kernel<Flash_fwd_kernel_traits<64, 128, 128, 4, false, false, cutlass::bfloat16_t, Flash_kernel_traits<64, 128, 128, 4, cutlass::bfloat16_t> >, false, true, false, false, true, true, false, false>(pytorch_flash::Flash_fwd_params)",
-      "self_cpu_memory_bytes": 0,
-      "self_cpu_ms": 0.0,
-      "self_cuda_memory_bytes": 0,
-      "self_cuda_ms": 60.05342400000003
-    },
-    {
-      "calls": 896,
-      "cpu_ms": 0.0,
-      "cuda_ms": 57.963675999998884,
-      "name": "ampere_bf16_s16816gemm_bf16_128x64_ldg8_f2f_stages_64x3_nt",
-      "self_cpu_memory_bytes": 0,
-      "self_cpu_ms": 0.0,
-      "self_cuda_memory_bytes": 0,
-      "self_cuda_ms": 57.963675999998884
-    },
-    {
-      "calls": 224,
-      "cpu_ms": 0.0,
-      "cuda_ms": 49.446474999999985,
-      "name": "triton_poi_fused__to_copy__unsafe_view_add_expm1_gt_mul_neg_nll_loss_backward_pow_view_where_10",
-      "self_cpu_memory_bytes": 0,
-      "self_cpu_ms": 0.0,
-      "self_cuda_memory_bytes": 0,
-      "self_cuda_ms": 49.446474999999985
-    },
-    {
-      "calls": 217,
-      "cpu_ms": 0.0,
-      "cuda_ms": 43.375412000000985,
-      "name": "triton_per_fused__fused_rms_norm_backward__to_copy_add_view_23",
-      "self_cpu_memory_bytes": 0,
-      "self_cpu_ms": 0.0,
-      "self_cuda_memory_bytes": 0,
-      "self_cuda_ms": 43.375412000000985
-    },
-    {
-      "calls": 14,
-      "cpu_ms": 0.0,
-      "cuda_ms": 41.909617000000054,
+      "cuda_ms": 23.84281300000001,
       "name": "void at::native::(anonymous namespace)::multi_tensor_apply_kernel<at::native::(anonymous namespace)::FusedOptimizerTensorListMetadata<4>, at::native::(anonymous namespace)::FusedAdamMathFunctor<float, 4, (at::native::ADAM_MODE)1, false>, float const*, double, double, double, double, double, bool, float const*, float const*>(at::native::(anonymous namespace)::FusedOptimizerTensorListMetadata<4>, at::native::(anonymous namespace)::FusedAdamMathFunctor<float, 4, (at::native::ADAM_MODE)1, false>, float const*, double, double, double, double, double, bool, float const*, float const*)",
       "self_cpu_memory_bytes": 0,
       "self_cpu_ms": 0.0,
       "self_cuda_memory_bytes": 0,
-      "self_cuda_ms": 41.909617000000054
+      "self_cuda_ms": 23.84281300000001
     },
     {
-      "calls": 215,
+      "calls": 125,
       "cpu_ms": 0.0,
-      "cuda_ms": 35.59803699999939,
-      "name": "triton_poi_fused__to_copy__unsafe_view_add_expm1_gt_mul_pow_sub_where_10",
+      "cuda_ms": 22.289693999999844,
+      "name": "ampere_bf16_s1688gemm_bf16_128x128_ldg8_f2f_stages_32x1_tn",
       "self_cpu_memory_bytes": 0,
       "self_cpu_ms": 0.0,
       "self_cuda_memory_bytes": 0,
-      "self_cuda_ms": 35.59803699999939
+      "self_cuda_ms": 22.289693999999844
     },
     {
-      "calls": 224,
+      "calls": 512,
       "cpu_ms": 0.0,
-      "cuda_ms": 34.01909699999985,
-      "name": "triton_red_fused__to_copy__unsafe_view_expm1_gt_mul_neg_nll_loss_backward_pow_sum_view_where_7",
+      "cuda_ms": 18.656073999999876,
+      "name": "ampere_bf16_s16816gemm_bf16_128x64_ldg8_f2f_stages_64x3_nt",
       "self_cpu_memory_bytes": 0,
       "self_cpu_ms": 0.0,
       "self_cuda_memory_bytes": 0,
-      "self_cuda_ms": 34.01909699999985
+      "self_cuda_ms": 18.656073999999876
     },
     {
-      "calls": 217,
+      "calls": 120,
       "cpu_ms": 0.0,
-      "cuda_ms": 31.30395200000114,
-      "name": "triton_per_fused__fused_rms_norm_backward__to_copy_add_view_11",
+      "cuda_ms": 18.110346000000092,
+      "name": "void pytorch_flash::flash_fwd_kernel<Flash_fwd_kernel_traits<64, 128, 128, 4, false, false, cutlass::bfloat16_t, Flash_kernel_traits<64, 128, 128, 4, cutlass::bfloat16_t> >, false, true, false, false, true, true, false, false>(pytorch_flash::Flash_fwd_params)",
       "self_cpu_memory_bytes": 0,
       "self_cpu_ms": 0.0,
       "self_cuda_memory_bytes": 0,
-      "self_cuda_ms": 31.30395200000114
+      "self_cuda_ms": 18.110346000000092
     },
     {
-      "calls": 5,
+      "calls": 3,
       "cpu_ms": 0.0,
-      "cuda_ms": 30.00405200000014,
+      "cuda_ms": 17.910726000000082,
       "name": "Optimizer.step#AdamW.step",
       "self_cpu_memory_bytes": 0,
       "self_cpu_ms": 0.0,
       "self_cuda_memory_bytes": 0,
-      "self_cuda_ms": 30.00405200000014
+      "self_cuda_ms": 17.910726000000082
     },
     {
-      "calls": 10,
-      "cpu_ms": 0.543410000000149,
-      "cuda_ms": 29.940597000000068,
+      "calls": 6,
+      "cpu_ms": 0.2916820000000007,
+      "cuda_ms": 17.871333000000014,
       "name": "aten::_fused_adamw_",
       "self_cpu_memory_bytes": 0,
-      "self_cpu_ms": 0.4781790000001001,
+      "self_cpu_ms": 0.2508060000000014,
       "self_cuda_memory_bytes": 0,
-      "self_cuda_ms": 29.940597000000068
+      "self_cuda_ms": 17.871333000000014
     },
     {
-      "calls": 7,
+      "calls": 124,
       "cpu_ms": 0.0,
-      "cuda_ms": 24.695285999999708,
-      "name": "triton_red_fused__log_softmax__to_copy__unsafe_view_add_prepare_softmax_online_view_20",
+      "cuda_ms": 10.993645999999979,
+      "name": "triton_per_fused__fused_rms_norm_backward__to_copy_add_view_21",
       "self_cpu_memory_bytes": 0,
       "self_cpu_ms": 0.0,
       "self_cuda_memory_bytes": 0,
-      "self_cuda_ms": 24.695285999999708
+      "self_cuda_ms": 10.993645999999979
     },
     {
-      "calls": 217,
+      "calls": 128,
       "cpu_ms": 0.0,
-      "cuda_ms": 24.630163999999933,
-      "name": "triton_red_fused__fused_rms_norm_backward__to_copy_add_view_24",
+      "cuda_ms": 10.827631000000009,
+      "name": "triton_poi_fused__to_copy__unsafe_view_add_div_eq_expm1_gt_masked_fill_minimum_mul_neg_nll_loss_backward_pow_softplus_view_where_9",
       "self_cpu_memory_bytes": 0,
       "self_cpu_ms": 0.0,
       "self_cuda_memory_bytes": 0,
-      "self_cuda_ms": 24.630163999999933
+      "self_cuda_ms": 10.827631000000009
     },
     {
-      "calls": 7,
+      "calls": 124,
       "cpu_ms": 0.0,
-      "cuda_ms": 24.045175000000018,
+      "cuda_ms": 10.039048999999963,
+      "name": "triton_per_fused__fused_rms_norm_backward__to_copy_add_view_11",
+      "self_cpu_memory_bytes": 0,
+      "self_cpu_ms": 0.0,
+      "self_cuda_memory_bytes": 0,
+      "self_cuda_ms": 10.039048999999963
+    },
+    {
+      "calls": 128,
+      "cpu_ms": 0.0,
+      "cuda_ms": 9.290089000000153,
+      "name": "triton_red_fused__to_copy__unsafe_view_expm1_gt_minimum_mul_neg_nll_loss_backward_pow_sum_view_where_7",
+      "self_cpu_memory_bytes": 0,
+      "self_cpu_ms": 0.0,
+      "self_cuda_memory_bytes": 0,
+      "self_cuda_ms": 9.290089000000153
+    },
+    {
+      "calls": 120,
+      "cpu_ms": 0.0,
+      "cuda_ms": 8.448358000000068,
+      "name": "triton_poi_fused__to_copy__unsafe_view_add_expm1_gt_minimum_mul_pow_softplus_sub_where_8",
+      "self_cpu_memory_bytes": 0,
+      "self_cpu_ms": 0.0,
+      "self_cuda_memory_bytes": 0,
+      "self_cuda_ms": 8.448358000000068
+    },
+    {
+      "calls": 4,
+      "cpu_ms": 0.0,
+      "cuda_ms": 7.059035999999967,
+      "name": "triton_red_fused__log_softmax__unsafe_view_add_prepare_softmax_online_view_18",
+      "self_cpu_memory_bytes": 0,
+      "self_cpu_ms": 0.0,
+      "self_cuda_memory_bytes": 0,
+      "self_cuda_ms": 7.059035999999967
+    },
+    {
+      "calls": 124,
+      "cpu_ms": 0.0,
+      "cuda_ms": 6.995199999999684,
+      "name": "triton_red_fused__fused_rms_norm_backward__to_copy_add_view_22",
+      "self_cpu_memory_bytes": 0,
+      "self_cpu_ms": 0.0,
+      "self_cuda_memory_bytes": 0,
+      "self_cuda_ms": 6.995199999999684
+    },
+    {
+      "calls": 4,
+      "cpu_ms": 0.0,
+      "cuda_ms": 6.970203000000081,
       "name": "triton_red_fused__log_softmax__log_softmax_backward_data__to_copy_add_arange_eq_expand_nll_loss_backward_scalar_tensor_view_0",
       "self_cpu_memory_bytes": 0,
       "self_cpu_ms": 0.0,
       "self_cuda_memory_bytes": 0,
-      "self_cuda_ms": 24.045175000000018
+      "self_cuda_ms": 6.970203000000081
     },
     {
-      "calls": 7,
+      "calls": 124,
       "cpu_ms": 0.0,
-      "cuda_ms": 23.24770199999994,
-      "name": "void cutlass::Kernel2<cutlass_80_tensorop_bf16_s16816gemm_relu_bf16_64x256_32x4_nn_align8>(cutlass_80_tensorop_bf16_s16816gemm_relu_bf16_64x256_32x4_nn_align8::Params)",
-      "self_cpu_memory_bytes": 0,
-      "self_cpu_ms": 0.0,
-      "self_cuda_memory_bytes": 0,
-      "self_cuda_ms": 23.24770199999994
-    },
-    {
-      "calls": 7,
-      "cpu_ms": 0.0,
-      "cuda_ms": 23.12194099999986,
-      "name": "void cutlass::Kernel2<cutlass_80_tensorop_bf16_s16816gemm_relu_bf16_64x256_32x4_nt_align8>(cutlass_80_tensorop_bf16_s16816gemm_relu_bf16_64x256_32x4_nt_align8::Params)",
-      "self_cpu_memory_bytes": 0,
-      "self_cpu_ms": 0.0,
-      "self_cuda_memory_bytes": 0,
-      "self_cuda_ms": 23.12194099999986
-    },
-    {
-      "calls": 95,
-      "cpu_ms": 0.0,
-      "cuda_ms": 21.29880500000008,
-      "name": "triton_per_fused__fused_rms_norm__to_copy__unsafe_view_add_15",
-      "self_cpu_memory_bytes": 0,
-      "self_cpu_ms": 0.0,
-      "self_cuda_memory_bytes": 0,
-      "self_cuda_ms": 21.29880500000008
-    },
-    {
-      "calls": 217,
-      "cpu_ms": 0.0,
-      "cuda_ms": 20.97411500000079,
+      "cuda_ms": 6.782968999999946,
       "name": "triton_red_fused__fused_rms_norm_backward__to_copy_view_12",
       "self_cpu_memory_bytes": 0,
       "self_cpu_ms": 0.0,
       "self_cuda_memory_bytes": 0,
-      "self_cuda_ms": 20.97411500000079
+      "self_cuda_ms": 6.782968999999946
     },
     {
-      "calls": 108,
+      "calls": 54,
       "cpu_ms": 0.0,
-      "cuda_ms": 20.195290000000096,
-      "name": "triton_per_fused__fused_rms_norm__to_copy__unsafe_view_add_12",
+      "cuda_ms": 6.275511000000062,
+      "name": "triton_per_fused__fused_rms_norm__to_copy__unsafe_view_add_13",
       "self_cpu_memory_bytes": 0,
       "self_cpu_ms": 0.0,
       "self_cuda_memory_bytes": 0,
-      "self_cuda_ms": 20.195290000000096
+      "self_cuda_ms": 6.275511000000062
     },
     {
-      "calls": 14,
+      "calls": 60,
       "cpu_ms": 0.0,
-      "cuda_ms": 16.627702999999894,
+      "cuda_ms": 5.291096000000205,
+      "name": "triton_per_fused__fused_rms_norm__to_copy__unsafe_view_add_10",
+      "self_cpu_memory_bytes": 0,
+      "self_cpu_ms": 0.0,
+      "self_cuda_memory_bytes": 0,
+      "self_cuda_ms": 5.291096000000205
+    },
+    {
+      "calls": 8,
+      "cpu_ms": 0.0,
+      "cuda_ms": 4.75966700000006,
       "name": "Memcpy DtoD (Device -> Device)",
       "self_cpu_memory_bytes": 0,
       "self_cpu_ms": 0.0,
       "self_cuda_memory_bytes": 0,
-      "self_cuda_ms": 16.627702999999894
+      "self_cuda_ms": 4.75966700000006
     },
     {
-      "calls": 224,
+      "calls": 240,
       "cpu_ms": 0.0,
-      "cuda_ms": 15.595810000001482,
-      "name": "triton_red_fused__fused_rms_norm__fused_rms_norm_backward__to_copy__unsafe_view_clone_transpose_21",
+      "cuda_ms": 4.509136000000144,
+      "name": "ampere_bf16_s1688gemm_bf16_64x128_sliced1x2_ldg8_f2f_tn",
       "self_cpu_memory_bytes": 0,
       "self_cpu_ms": 0.0,
       "self_cuda_memory_bytes": 0,
-      "self_cuda_ms": 15.595810000001482
+      "self_cuda_ms": 4.509136000000144
     },
     {
-      "calls": 224,
+      "calls": 60,
       "cpu_ms": 0.0,
-      "cuda_ms": 14.36035300000006,
+      "cuda_ms": 4.335473000000033,
+      "name": "triton_per_fused__fused_rms_norm__to_copy__unsafe_view_add_9",
+      "self_cpu_memory_bytes": 0,
+      "self_cpu_ms": 0.0,
+      "self_cuda_memory_bytes": 0,
+      "self_cuda_ms": 4.335473000000033
+    },
+    {
+      "calls": 128,
+      "cpu_ms": 0.0,
+      "cuda_ms": 4.183889000000061,
       "name": "void at::native::elementwise_kernel<128, 4, at::native::gpu_kernel_impl_nocast<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#12}::operator()() const::{lambda(c10::BFloat16)#1}>(at::TensorIteratorBase&, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#12}::operator()() const::{lambda(c10::BFloat16)#1} const&)::{lambda(int)#1}>(int, at::native::gpu_kernel_impl_nocast<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#12}::operator()() const::{lambda(c10::BFloat16)#1}>(at::TensorIteratorBase&, at::native::direct_copy_kernel_cuda(at::TensorIteratorBase&)::{lambda()#3}::operator()() const::{lambda()#12}::operator()() const::{lambda(c10::BFloat16)#1} const&)::{lambda(int)#1})",
       "self_cpu_memory_bytes": 0,
       "self_cpu_ms": 0.0,
       "self_cuda_memory_bytes": 0,
-      "self_cuda_ms": 14.36035300000006
+      "self_cuda_ms": 4.183889000000061
     },
     {
-      "calls": 448,
-      "cpu_ms": 0.0,
-      "cuda_ms": 14.345081999999675,
-      "name": "void at::native::reduce_kernel<128, 4, at::native::ReduceOp<c10::BFloat16, at::native::func_wrapper_t<c10::BFloat16, at::native::sum_functor<c10::BFloat16, float, c10::BFloat16>::operator()(at::TensorIterator&)::{lambda(float, float)#1}>, unsigned int, c10::BFloat16, 4, 8> >(at::native::ReduceOp<c10::BFloat16, at::native::func_wrapper_t<c10::BFloat16, at::native::sum_functor<c10::BFloat16, float, c10::BFloat16>::operator()(at::TensorIterator&)::{lambda(float, float)#1}>, unsigned int, c10::BFloat16, 4, 8>)",
-      "self_cpu_memory_bytes": 0,
-      "self_cpu_ms": 0.0,
-      "self_cuda_memory_bytes": 0,
-      "self_cuda_ms": 14.345081999999675
-    },
-    {
-      "calls": 224,
-      "cpu_ms": 0.0,
-      "cuda_ms": 13.997823000001619,
-      "name": "triton_per_fused__fused_rms_norm__fused_rms_norm_backward__to_copy__unsafe_view_clone_transpose_20",
-      "self_cpu_memory_bytes": 0,
-      "self_cpu_ms": 0.0,
-      "self_cuda_memory_bytes": 0,
-      "self_cuda_ms": 13.997823000001619
-    },
-    {
-      "calls": 101,
-      "cpu_ms": 0.0,
-      "cuda_ms": 13.669018999999864,
-      "name": "triton_per_fused__fused_rms_norm__to_copy__unsafe_view_add_14",
-      "self_cpu_memory_bytes": 0,
-      "self_cpu_ms": 0.0,
-      "self_cuda_memory_bytes": 0,
-      "self_cuda_ms": 13.669018999999864
-    },
-    {
-      "calls": 224,
-      "cpu_ms": 0.0,
-      "cuda_ms": 12.348095000001267,
-      "name": "triton_poi_fused__to_copy_add_mul_neg_select_slice_backward_unsqueeze_view_15",
-      "self_cpu_memory_bytes": 0,
-      "self_cpu_ms": 0.0,
-      "self_cuda_memory_bytes": 0,
-      "self_cuda_ms": 12.348095000001267
-    },
-    {
-      "calls": 10,
-      "cpu_ms": 0.19153200000002926,
-      "cuda_ms": 11.868857999999891,
+      "calls": 6,
+      "cpu_ms": 0.09420099999999774,
+      "cuda_ms": 3.5767500000000583,
       "name": "aten::copy_",
       "self_cpu_memory_bytes": 0,
-      "self_cpu_ms": 0.05989600000000155,
+      "self_cpu_ms": 0.031097999999999047,
       "self_cuda_memory_bytes": 0,
-      "self_cuda_ms": 11.868857999999891
+      "self_cuda_ms": 3.5767500000000583
     },
     {
-      "calls": 108,
+      "calls": 240,
       "cpu_ms": 0.0,
-      "cuda_ms": 11.752381999999988,
-      "name": "triton_per_fused__fused_rms_norm__to_copy__unsafe_view_add_11",
+      "cuda_ms": 3.1741549999998626,
+      "name": "triton_poi_fused__to_copy_t_7",
       "self_cpu_memory_bytes": 0,
       "self_cpu_ms": 0.0,
       "self_cuda_memory_bytes": 0,
-      "self_cuda_ms": 11.752381999999988
+      "self_cuda_ms": 3.1741549999998626
     },
     {
-      "calls": 224,
+      "calls": 128,
       "cpu_ms": 0.0,
-      "cuda_ms": 11.689820999999982,
+      "cuda_ms": 3.1108200000001527,
+      "name": "triton_per_fused__to_copy__unsafe_view_add_clone_div_expand_mul_neg_pow_select_slice_backward_sum_transpose_unsqueeze_view_15",
+      "self_cpu_memory_bytes": 0,
+      "self_cpu_ms": 0.0,
+      "self_cuda_memory_bytes": 0,
+      "self_cuda_ms": 3.1108200000001527
+    },
+    {
+      "calls": 128,
+      "cpu_ms": 0.0,
+      "cuda_ms": 2.861836999999876,
       "name": "void pytorch_flash::flash_bwd_dot_do_o_kernel<true, Flash_bwd_kernel_traits<64, 64, 128, 8, 2, 4, 4, true, false, cutlass::bfloat16_t, Flash_kernel_traits<64, 64, 128, 8, cutlass::bfloat16_t> > >(pytorch_flash::Flash_bwd_params)",
       "self_cpu_memory_bytes": 0,
       "self_cpu_ms": 0.0,
       "self_cuda_memory_bytes": 0,
-      "self_cuda_ms": 11.689820999999982
+      "self_cuda_ms": 2.861836999999876
     },
     {
-      "calls": 215,
+      "calls": 256,
       "cpu_ms": 0.0,
-      "cuda_ms": 11.58611100000006,
-      "name": "triton_per_fused__fused_rms_norm__to_copy__unsafe_view_add_mul_slice_stack_sub_transpose_unsqueeze_view_2",
+      "cuda_ms": 2.762535000000018,
+      "name": "void at::native::reduce_kernel<128, 4, at::native::ReduceOp<c10::BFloat16, at::native::func_wrapper_t<c10::BFloat16, at::native::sum_functor<c10::BFloat16, float, c10::BFloat16>::operator()(at::TensorIterator&)::{lambda(float, float)#1}>, unsigned int, c10::BFloat16, 4, 8> >(at::native::ReduceOp<c10::BFloat16, at::native::func_wrapper_t<c10::BFloat16, at::native::sum_functor<c10::BFloat16, float, c10::BFloat16>::operator()(at::TensorIterator&)::{lambda(float, float)#1}>, unsigned int, c10::BFloat16, 4, 8>)",
       "self_cpu_memory_bytes": 0,
       "self_cpu_ms": 0.0,
       "self_cuda_memory_bytes": 0,
-      "self_cuda_ms": 11.58611100000006
+      "self_cuda_ms": 2.762535000000018
     },
     {
-      "calls": 215,
+      "calls": 128,
       "cpu_ms": 0.0,
-      "cuda_ms": 8.871642000000076,
-      "name": "triton_poi_fused__to_copy_view_6",
+      "cuda_ms": 2.6559480000000257,
+      "name": "triton_red_fused__to_copy__unsafe_view_mul_sum_transpose_view_19",
       "self_cpu_memory_bytes": 0,
       "self_cpu_ms": 0.0,
       "self_cuda_memory_bytes": 0,
-      "self_cuda_ms": 8.871642000000076
+      "self_cuda_ms": 2.6559480000000257
     },
     {
-      "calls": 224,
+      "calls": 57,
       "cpu_ms": 0.0,
-      "cuda_ms": 8.806017999999487,
-      "name": "void pytorch_flash::flash_bwd_convert_dq_kernel<Flash_bwd_kernel_traits<64, 64, 128, 8, 2, 4, 4, true, false, cutlass::bfloat16_t, Flash_kernel_traits<64, 64, 128, 8, cutlass::bfloat16_t> > >(pytorch_flash::Flash_bwd_params, int)",
+      "cuda_ms": 2.5621549999999544,
+      "name": "triton_per_fused__fused_rms_norm__to_copy__unsafe_view_add_12",
       "self_cpu_memory_bytes": 0,
       "self_cpu_ms": 0.0,
       "self_cuda_memory_bytes": 0,
-      "self_cuda_ms": 8.806017999999487
+      "self_cuda_ms": 2.5621549999999544
     },
     {
-      "calls": 7,
+      "calls": 4,
       "cpu_ms": 0.0,
-      "cuda_ms": 8.72668399999995,
-      "name": "void cutlass::Kernel2<cutlass_80_tensorop_bf16_s16816gemm_bf16_128x256_32x3_nt_align2>(cutlass_80_tensorop_bf16_s16816gemm_bf16_128x256_32x3_nt_align2::Params)",
+      "cuda_ms": 2.5540899999999747,
+      "name": "void cutlass::Kernel2<cutlass_80_tensorop_bf16_s16816gemm_bf16_64x256_32x4_nt_align2>(cutlass_80_tensorop_bf16_s16816gemm_bf16_64x256_32x4_nt_align2::Params)",
       "self_cpu_memory_bytes": 0,
       "self_cpu_ms": 0.0,
       "self_cuda_memory_bytes": 0,
-      "self_cuda_ms": 8.72668399999995
+      "self_cuda_ms": 2.5540899999999747
     },
     {
-      "calls": 7,
+      "calls": 4,
       "cpu_ms": 0.0,
-      "cuda_ms": 8.360732999999898,
+      "cuda_ms": 2.3572239999999947,
       "name": "void cutlass::Kernel2<cutlass_80_tensorop_bf16_s16816gemm_bf16_128x128_64x3_nn_align2>(cutlass_80_tensorop_bf16_s16816gemm_bf16_128x128_64x3_nn_align2::Params)",
       "self_cpu_memory_bytes": 0,
       "self_cpu_ms": 0.0,
       "self_cuda_memory_bytes": 0,
-      "self_cuda_ms": 8.360732999999898
+      "self_cuda_ms": 2.3572239999999947
     },
     {
-      "calls": 7,
+      "calls": 4,
       "cpu_ms": 0.0,
-      "cuda_ms": 7.493915999999736,
-      "name": "void cutlass::Kernel2<cutlass_80_tensorop_bf16_s16816gemm_bf16_128x256_32x3_tn_align2>(cutlass_80_tensorop_bf16_s16816gemm_bf16_128x256_32x3_tn_align2::Params)",
-      "self_cpu_memory_bytes": 0,
-      "self_cpu_ms": 0.0,
-      "self_cuda_memory_bytes": 0,
-      "self_cuda_ms": 7.493915999999736
-    },
-    {
-      "calls": 7,
-      "cpu_ms": 0.0,
-      "cuda_ms": 7.373564000000093,
+      "cuda_ms": 2.071111000000008,
       "name": "void at::native::vectorized_elementwise_kernel<4, at::native::FillFunctor<c10::BFloat16>, std::array<char*, 1ul>, false>(int, at::native::FillFunctor<c10::BFloat16>, std::array<char*, 1ul>)",
       "self_cpu_memory_bytes": 0,
       "self_cpu_ms": 0.0,
       "self_cuda_memory_bytes": 0,
-      "self_cuda_ms": 7.373564000000093
+      "self_cuda_ms": 2.071111000000008
     },
     {
-      "calls": 430,
+      "calls": 120,
       "cpu_ms": 0.0,
-      "cuda_ms": 5.977500999999575,
-      "name": "triton_poi_fused__to_copy_t_9",
+      "cuda_ms": 2.0619890000000765,
+      "name": "triton_per_fused__to_copy__unsafe_view_add_mean_mul_pow_rsqrt_slice_stack_sub_transpose_unsqueeze_view_2",
       "self_cpu_memory_bytes": 0,
       "self_cpu_ms": 0.0,
       "self_cuda_memory_bytes": 0,
-      "self_cuda_ms": 5.977500999999575
+      "self_cuda_ms": 2.0619890000000765
     },
     {
-      "calls": 10,
-      "cpu_ms": 0.245524999999996,
-      "cuda_ms": 5.264510000000242,
+      "calls": 4,
+      "cpu_ms": 0.0,
+      "cuda_ms": 2.0566470000000336,
+      "name": "void cutlass::Kernel2<cutlass_80_tensorop_bf16_s16816gemm_bf16_128x256_32x3_tn_align2>(cutlass_80_tensorop_bf16_s16816gemm_bf16_128x256_32x3_tn_align2::Params)",
+      "self_cpu_memory_bytes": 0,
+      "self_cpu_ms": 0.0,
+      "self_cuda_memory_bytes": 0,
+      "self_cuda_ms": 2.0566470000000336
+    },
+    {
+      "calls": 6,
+      "cpu_ms": 0.09843399999999655,
+      "cuda_ms": 1.5574439999999885,
       "name": "aten::fill_",
       "self_cpu_memory_bytes": 0,
-      "self_cpu_ms": 0.11624599999990187,
+      "self_cpu_ms": 0.050611999999997354,
       "self_cuda_memory_bytes": 0,
-      "self_cuda_ms": 5.264510000000242
+      "self_cuda_ms": 1.5574439999999885
     },
     {
-      "calls": 224,
+      "calls": 128,
       "cpu_ms": 0.0,
-      "cuda_ms": 4.926265999999348,
-      "name": "triton_red_fused__fused_rms_norm__fused_rms_norm_backward__to_copy__unsafe_view_clone_transpose_18",
+      "cuda_ms": 1.4487969999998314,
+      "name": "triton_per_fused__to_copy__unsafe_view_add_clone_div_expand_mul_neg_pow_select_slice_backward_sum_transpose_unsqueeze_view_14",
       "self_cpu_memory_bytes": 0,
       "self_cpu_ms": 0.0,
       "self_cuda_memory_bytes": 0,
-      "self_cuda_ms": 4.926265999999348
+      "self_cuda_ms": 1.4487969999998314
     },
     {
-      "calls": 224,
+      "calls": 240,
       "cpu_ms": 0.0,
-      "cuda_ms": 4.262056000000302,
-      "name": "triton_per_fused__fused_rms_norm__fused_rms_norm_backward__to_copy__unsafe_view_clone_transpose_17",
-      "self_cpu_memory_bytes": 0,
-      "self_cpu_ms": 0.0,
-      "self_cuda_memory_bytes": 0,
-      "self_cuda_ms": 4.262056000000302
-    },
-    {
-      "calls": 448,
-      "cpu_ms": 0.0,
-      "cuda_ms": 2.7086990000023796,
-      "name": "triton_poi_fused__to_copy_6",
-      "self_cpu_memory_bytes": 0,
-      "self_cpu_ms": 0.0,
-      "self_cuda_memory_bytes": 0,
-      "self_cuda_ms": 2.7086990000023796
-    },
-    {
-      "calls": 430,
-      "cpu_ms": 0.0,
-      "cuda_ms": 2.321922999998886,
+      "cuda_ms": 1.3301830000001444,
       "name": "triton_poi_fused__to_copy_t_1",
       "self_cpu_memory_bytes": 0,
       "self_cpu_ms": 0.0,
       "self_cuda_memory_bytes": 0,
-      "self_cuda_ms": 2.321922999998886
+      "self_cuda_ms": 1.3301830000001444
+    },
+    {
+      "calls": 256,
+      "cpu_ms": 0.0,
+      "cuda_ms": 1.2007439999998533,
+      "name": "triton_poi_fused__to_copy_6",
+      "self_cpu_memory_bytes": 0,
+      "self_cpu_ms": 0.0,
+      "self_cuda_memory_bytes": 0,
+      "self_cuda_ms": 1.2007439999998533
+    },
+    {
+      "calls": 4,
+      "cpu_ms": 0.0,
+      "cuda_ms": 0.9049959999999991,
+      "name": "triton_poi_fused__to_copy_add_27",
+      "self_cpu_memory_bytes": 0,
+      "self_cpu_ms": 0.0,
+      "self_cuda_memory_bytes": 0,
+      "self_cuda_ms": 0.9049959999999991
+    },
+    {
+      "calls": 128,
+      "cpu_ms": 0.0,
+      "cuda_ms": 0.9027620000001844,
+      "name": "void pytorch_flash::flash_bwd_convert_dq_kernel<Flash_bwd_kernel_traits<64, 64, 128, 8, 2, 4, 4, true, false, cutlass::bfloat16_t, Flash_kernel_traits<64, 64, 128, 8, cutlass::bfloat16_t> > >(pytorch_flash::Flash_bwd_params, int)",
+      "self_cpu_memory_bytes": 0,
+      "self_cpu_ms": 0.0,
+      "self_cuda_memory_bytes": 0,
+      "self_cuda_ms": 0.9027620000001844
+    },
+    {
+      "calls": 128,
+      "cpu_ms": 0.0,
+      "cuda_ms": 0.8734059999999517,
+      "name": "triton_red_fused__to_copy__unsafe_view_mul_sum_transpose_view_17",
+      "self_cpu_memory_bytes": 0,
+      "self_cpu_ms": 0.0,
+      "self_cuda_memory_bytes": 0,
+      "self_cuda_ms": 0.8734059999999517
+    },
+    {
+      "calls": 240,
+      "cpu_ms": 0.0,
+      "cuda_ms": 0.7468119999998007,
+      "name": "triton_poi_fused__to_copy_t_3",
+      "self_cpu_memory_bytes": 0,
+      "self_cpu_ms": 0.0,
+      "self_cuda_memory_bytes": 0,
+      "self_cuda_ms": 0.7468119999998007
+    },
+    {
+      "calls": 256,
+      "cpu_ms": 0.0,
+      "cuda_ms": 0.6525790000000634,
+      "name": "triton_poi_fused__to_copy_13",
+      "self_cpu_memory_bytes": 0,
+      "self_cpu_ms": 0.0,
+      "self_cuda_memory_bytes": 0,
+      "self_cuda_ms": 0.6525790000000634
     }
   ],
   "trace_dir": "artifacts/profile/reduce-overhead/traces"
