@@ -31,6 +31,8 @@ class DecoderBlock(nn.Module):
             config.use_bias,
             config.xielu_alpha_p_init,
             config.xielu_alpha_n_init,
+            config.xielu_beta,
+            config.xielu_eps,
         )
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
@@ -86,7 +88,17 @@ class DecoderLM(nn.Module):
         """Estimate forward and train FLOPs; useful for interpreting throughput."""
 
         tokens = batch_size * seq_len
-        projection_flops = 2 * config.d_model * (4 * config.d_model + 2 * config.kv_dim + 2 * config.mlp_hidden_dim)
+        # Four attention projections (Q, K, V, O) and the two MLP linear
+        # projections.  Count each matrix multiply as 2*m*n*k FLOPs; do not
+        # replace q_dim with 2*d_model here, which double-counts Q and O.
+        projection_flops = (
+            2 * config.d_model * config.q_dim
+            + 2 * config.d_model * config.kv_dim
+            + 2 * config.d_model * config.kv_dim
+            + 2 * config.q_dim * config.d_model
+            + 2 * config.d_model * config.mlp_hidden_dim
+            + 2 * config.mlp_hidden_dim * config.d_model
+        )
         attention_flops = 4 * seq_len * config.q_dim
         per_token_forward = config.depth * (projection_flops + attention_flops)
         lm_head_flops = 2 * config.d_model * config.vocab_size
@@ -120,9 +132,9 @@ class DecoderLM(nn.Module):
                 raise ValueError("labels must have the same shape as input_ids")
             if getattr(self, "profile_ranges", False):
                 with record_function("model.loss"):
-                    loss = F.cross_entropy(logits.float().reshape(-1, self.config.vocab_size), labels.reshape(-1))
+                    loss = F.cross_entropy(logits.reshape(-1, self.config.vocab_size), labels.reshape(-1))
             else:
-                loss = F.cross_entropy(logits.float().reshape(-1, self.config.vocab_size), labels.reshape(-1))
+                loss = F.cross_entropy(logits.reshape(-1, self.config.vocab_size), labels.reshape(-1))
         return CausalLMOutput(logits=logits, loss=loss)
 
     @torch.no_grad()
@@ -132,16 +144,35 @@ class DecoderLM(nn.Module):
         max_new_tokens: int,
         temperature: float = 1.0,
         top_k: int | None = None,
+        do_sample: bool | None = None,
     ) -> torch.Tensor:
+        """Generate tokens with greedy decoding or temperature/top-k sampling.
+
+        Greedy decoding remains the default when no sampling controls are
+        supplied. Passing a temperature other than 1 or ``top_k`` implicitly
+        opts into sampling; callers can make the choice explicit with
+        ``do_sample``.
+        """
         self.eval()
+        if max_new_tokens < 0:
+            raise ValueError("max_new_tokens must be non-negative")
         if temperature <= 0:
             raise ValueError("temperature must be positive")
+        if top_k is not None and top_k <= 0:
+            raise ValueError("top_k must be positive when set")
+        if do_sample is None:
+            do_sample = temperature != 1.0 or top_k is not None
         for _ in range(max_new_tokens):
             context = input_ids[:, -self.config.max_seq_len :]
-            logits = self(context).logits[:, -1, :] / temperature
-            if top_k is not None:
-                values, _ = torch.topk(logits, min(top_k, logits.shape[-1]))
-                logits = logits.masked_fill(logits < values[:, [-1]], float("-inf"))
-            next_token = torch.argmax(logits, dim=-1, keepdim=True)
+            logits = self(context).logits[:, -1, :]
+            if do_sample:
+                logits = logits / temperature
+                if top_k is not None:
+                    values, _ = torch.topk(logits, min(top_k, logits.shape[-1]))
+                    logits = logits.masked_fill(logits < values[:, [-1]], float("-inf"))
+                probabilities = F.softmax(logits, dim=-1)
+                next_token = torch.multinomial(probabilities, num_samples=1)
+            else:
+                next_token = torch.argmax(logits, dim=-1, keepdim=True)
             input_ids = torch.cat((input_ids, next_token), dim=1)
         return input_ids

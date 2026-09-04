@@ -16,6 +16,7 @@ from src.training.config import DataConfig, TrainConfig
 from src.training.metrics import MetricsWriter
 from src.training.scheduler import TokenCosineScheduler
 from src.training.trainer import Trainer
+from scripts.lr_range_test import build_proxy_config
 
 
 def _tiny_train_config(max_tokens: int) -> TrainConfig:
@@ -162,6 +163,24 @@ def test_scheduler_state_resume() -> None:
     other.load_state_dict(state)
     assert other.last_tokens == 45
     assert other.last_lr == scheduler.last_lr
+
+
+def test_lr_proxy_preserves_formal_batch_and_schedule() -> None:
+    formal = TrainConfig(
+        device="cpu",
+        sequence_length=1024,
+        micro_batch_size=8,
+        gradient_accumulation_steps=16,
+        global_batch_tokens=131072,
+        total_tokens=1_100_000_000,
+        warmup_tokens=20_000_000,
+    )
+    proxy = build_proxy_config(formal, proxy_tokens=20_000_000, learning_rate=5e-4)
+    assert proxy.effective_global_batch_tokens == formal.effective_global_batch_tokens == 131072
+    assert proxy.total_tokens == formal.total_tokens
+    assert proxy.warmup_tokens == formal.warmup_tokens
+    assert proxy.max_tokens == 20_000_000
+    assert proxy.learning_rate == 5e-4
 
 
 def test_checkpoint_manager_atomic_roundtrip(tmp_path: Path) -> None:

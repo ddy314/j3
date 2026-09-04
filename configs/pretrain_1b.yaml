@@ -14,6 +14,9 @@ model:
   initializer_range: 0.02
   xielu_alpha_p_init: 0.5
   xielu_alpha_n_init: 1.0
+  xielu_beta: 0.5
+  xielu_eps: -1.0e-6
+  xielu_parameterization: softplus_constrained_v1
   tie_embeddings: true
   use_qk_norm: true
   use_bias: false

@@ -7,7 +7,7 @@ from torch import nn
 from torch.nn import functional as F
 from torch.autograd.profiler import record_function
 
-from .norm import RMSNorm
+from .norm import HeadwiseRMSNorm
 from .rope import RotaryEmbedding
 
 
@@ -24,8 +24,10 @@ class GQAAttention(nn.Module):
         self.q_proj = nn.Linear(config.d_model, self.q_dim, bias=config.use_bias)
         self.k_proj = nn.Linear(config.d_model, self.kv_dim, bias=config.use_bias)
         self.v_proj = nn.Linear(config.d_model, self.kv_dim, bias=config.use_bias)
-        self.q_norm = RMSNorm(self.q_dim, config.norm_eps)
-        self.k_norm = RMSNorm(self.kv_dim, config.norm_eps)
+        # QK-RMSNorm is applied independently to each head vector. The
+        # per-projected-channel scales preserve the frozen parameter count.
+        self.q_norm = HeadwiseRMSNorm(self.num_q_heads, self.head_dim, config.norm_eps)
+        self.k_norm = HeadwiseRMSNorm(self.num_kv_heads, self.head_dim, config.norm_eps)
         self.rope = RotaryEmbedding(config.head_dim, config.max_seq_len, config.rope_theta)
         self.out_proj = nn.Linear(self.q_dim, config.d_model, bias=config.use_bias)
         try:
@@ -43,8 +45,10 @@ class GQAAttention(nn.Module):
 
     def _forward_impl(self, x: torch.Tensor) -> torch.Tensor:
         batch, seq_len, _ = x.shape
-        q = self.q_norm(self.q_proj(x)).view(batch, seq_len, self.num_q_heads, self.head_dim).transpose(1, 2)
-        k = self.k_norm(self.k_proj(x)).view(batch, seq_len, self.num_kv_heads, self.head_dim).transpose(1, 2)
+        q = self.q_proj(x).view(batch, seq_len, self.num_q_heads, self.head_dim)
+        q = self.q_norm(q).transpose(1, 2)
+        k = self.k_proj(x).view(batch, seq_len, self.num_kv_heads, self.head_dim)
+        k = self.k_norm(k).transpose(1, 2)
         v = self.v_proj(x).view(batch, seq_len, self.num_kv_heads, self.head_dim).transpose(1, 2)
         q, k = self.rope(q, k)
         if self._native_gqa:

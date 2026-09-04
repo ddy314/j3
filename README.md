@@ -8,8 +8,8 @@ J3 is a direct PyTorch pretraining system for a 49M-parameter decoder-only langu
 
 - vocabulary 16,384; model width 384; 32 independent decoder blocks;
 - 6 Q heads / 2 KV heads, head dimension 64, native SDPA GQA;
-- per-projection-channel Q/K RMSNorm and RoPE;
-- pre-RMSNorm blocks, bias-free MLP with 1,216 hidden units and trainable scalar xIELU;
+- per-head Q/K RMSNorm and RoPE;
+- pre-RMSNorm blocks, bias-free MLP with 1,216 hidden units and constrained trainable scalar xIELU;
 - tied token embedding/language-model head plus a rank-12 untied residual output head;
 - configurable context length, default 1,024.
 
@@ -97,11 +97,22 @@ At the selected `default` operating points, peak PyTorch allocated VRAM was 4,85
 
 The compiled profile shows PyTorch flash-attention forward/backward kernels, BF16 Tensor Core GEMMs, compiler-generated Triton fused xIELU/RMSNorm, and fused AdamW. The eager profile identifies MLP/xIELU elementwise work and launch count as the main small-model overhead. Since the compiled path already fuses these operations and max-autotune did not win, no custom CUDA/Triton kernel was added.
 
-Before a long run, use the short LR proxy sweep:
+Before a long run, use the LR proxy sweep. By default it reuses the formal
+sequence length, microbatch, accumulation, effective global batch, warmup, and
+cosine horizon; `--tokens` only limits how far into that formal schedule each
+independent run proceeds. This avoids selecting an LR with a 512-token batch
+when the real run consumes 131,072 tokens per optimizer step:
 
 ```bash
-uv run python scripts/lr_range_test.py --config configs/pretrain_1b.yaml --tokens 5000000
+uv run python scripts/lr_range_test.py --config configs/pretrain_1b.yaml --tokens 20000000
 ```
+
+The model stores xIELU parameters in an unconstrained optimization space but
+uses `softplus(alpha_p)` and `beta + softplus(alpha_n)` in the forward pass,
+so the effective slopes cannot become invalid during training. Q/K RMSNorm is
+applied independently to each head vector. The loss uses the autocast-native
+logits dtype instead of making an explicit full FP32 logits copy; the
+benchmark artifact verifies the resulting memory boundary.
 
 ## Pretraining
 
@@ -165,7 +176,7 @@ tests/           model, data, checkpoint, scheduler, RNG, and exact-resume tests
 - `nvidia-smi`/CUDA unavailable: run `uv run python scripts/check_env.py`; the code can validate on CPU, but GPU throughput claims require a working driver-visible CUDA process.
 - CUDA OOM: select the largest successful benchmark microbatch and increase accumulation; do not simply raise the microbatch in the formal config.
 - First `torch.compile` invocation is slow: it compiles Triton/Inductor kernels. Benchmark numbers exclude this one-time compilation after warmup.
-- Missing or mismatched tokenizer/manifest: run the offline data steps again and keep the tokenizer, manifest, and shards together; resume rejects hash mismatches.
+- Missing or mismatched tokenizer/manifest: run the offline data steps again and keep the tokenizer, manifest, and shards together; resume rejects hash mismatches. Checkpoints created before a model-config change (including the constrained xIELU parameterization) must be restarted from the matching code/config rather than silently resumed.
 - Missing `flash_attn`: expected for this baseline. Native PyTorch SDPA is the supported attention implementation.
 
 ## Verification

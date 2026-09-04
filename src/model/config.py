@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import math
 from dataclasses import asdict, dataclass
 
 
@@ -7,9 +8,10 @@ from dataclasses import asdict, dataclass
 class ModelConfig:
     """Architecture configuration for D32-1216-R12.
 
-    The Q/K RMSNorm parameters are per projected channel (384 Q channels and
-    128 K/V channels), while each xIELU owns two trainable scalar parameters.
-    This convention is part of the frozen parameter-count contract.
+    The Q/K RMS statistic is computed per head vector, with one affine scale
+    per projected channel, while each xIELU owns two trainable scalar
+    parameters. This convention is part of the frozen parameter-count
+    contract.
     """
 
     model_name: str = "D32-1216-R12"
@@ -27,6 +29,9 @@ class ModelConfig:
     initializer_range: float = 0.02
     xielu_alpha_p_init: float = 0.5
     xielu_alpha_n_init: float = 1.0
+    xielu_beta: float = 0.5
+    xielu_eps: float = -1.0e-6
+    xielu_parameterization: str = "softplus_constrained_v1"
     tie_embeddings: bool = True
     use_qk_norm: bool = True
     use_bias: bool = False
@@ -50,6 +55,19 @@ class ModelConfig:
             raise ValueError("the frozen D32-1216-R12 architecture requires Q/K RMSNorm")
         if self.use_bias:
             raise ValueError("the frozen D32-1216-R12 architecture is bias-free")
+        if self.xielu_beta <= 0 or not math.isfinite(self.xielu_beta):
+            raise ValueError("xielu_beta must be finite and positive")
+        if self.xielu_eps > 0 or not math.isfinite(self.xielu_eps):
+            raise ValueError("xielu_eps must be finite and non-positive")
+        if self.xielu_alpha_p_init <= 0 or not math.isfinite(self.xielu_alpha_p_init):
+            raise ValueError("xielu_alpha_p_init must be finite and positive")
+        if (
+            self.xielu_alpha_n_init <= self.xielu_beta
+            or not math.isfinite(self.xielu_alpha_n_init)
+        ):
+            raise ValueError("xielu_alpha_n_init must be finite and greater than xielu_beta")
+        if self.xielu_parameterization != "softplus_constrained_v1":
+            raise ValueError("unsupported xIELU parameterization")
 
     @property
     def q_dim(self) -> int:

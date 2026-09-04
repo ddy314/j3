@@ -43,6 +43,8 @@ def test_gqa_dimensions(tiny_config: ModelConfig) -> None:
     attention = GQAAttention(tiny_config)
     assert attention.num_q_heads == 4
     assert attention.num_kv_heads == 2
+    assert attention.q_norm.weight.shape == (tiny_config.num_q_heads, tiny_config.head_dim)
+    assert attention.k_norm.weight.shape == (tiny_config.num_kv_heads, tiny_config.head_dim)
     x = torch.randn(2, 5, tiny_config.d_model)
     assert attention(x).shape == x.shape
 
@@ -66,6 +68,38 @@ def test_xielu_is_differentiable() -> None:
     assert x.grad is not None and torch.isfinite(x.grad).all()
     assert activation.alpha_p.grad is not None
     assert activation.alpha_n.grad is not None
+
+
+def test_xielu_effective_slopes_remain_constrained() -> None:
+    activation = XIELU(alpha_p=0.5, alpha_n=1.0, beta=0.5)
+    assert activation.effective_alpha_p.detach().item() > 0.0
+    assert activation.effective_alpha_n.detach().item() > activation.beta.item()
+    with torch.no_grad():
+        activation.alpha_p.fill_(-10.0)
+        activation.alpha_n.fill_(-10.0)
+    assert activation.effective_alpha_p.detach().item() > 0.0
+    assert activation.effective_alpha_n.detach().item() > activation.beta.item()
+
+
+def test_flops_estimate_counts_each_projection_once(tiny_config: ModelConfig) -> None:
+    batch_size = 2
+    seq_len = 5
+    estimate = DecoderLM.estimate_flops(tiny_config, batch_size, seq_len)
+    projection = (
+        2 * tiny_config.d_model * tiny_config.q_dim
+        + 2 * tiny_config.d_model * tiny_config.kv_dim
+        + 2 * tiny_config.d_model * tiny_config.kv_dim
+        + 2 * tiny_config.q_dim * tiny_config.d_model
+        + 2 * tiny_config.d_model * tiny_config.mlp_hidden_dim
+        + 2 * tiny_config.mlp_hidden_dim * tiny_config.d_model
+    )
+    attention = 4 * seq_len * tiny_config.q_dim
+    per_token = tiny_config.depth * (projection + attention)
+    output = 2 * tiny_config.d_model * tiny_config.vocab_size
+    residual = 2 * tiny_config.d_model * tiny_config.output_residual_rank + 2 * tiny_config.output_residual_rank * tiny_config.vocab_size
+    expected_per_token = per_token + output + residual
+    assert estimate["forward_per_token"] == expected_per_token
+    assert estimate["forward"] == batch_size * seq_len * expected_per_token
 
 
 def test_tied_embedding_and_output_residual(tiny_config: ModelConfig) -> None:
@@ -96,3 +130,11 @@ def test_generation(tiny_config: ModelConfig) -> None:
     prompt = torch.tensor([[1, 2, 3]])
     generated = model.generate(prompt, max_new_tokens=2)
     assert generated.shape == (1, 5)
+
+
+def test_generation_top_k_one_sampling_matches_greedy(tiny_config: ModelConfig) -> None:
+    model = DecoderLM(tiny_config).eval()
+    prompt = torch.tensor([[1, 2, 3]])
+    greedy = model.generate(prompt, max_new_tokens=3, do_sample=False)
+    sampled = model.generate(prompt, max_new_tokens=3, temperature=0.7, top_k=1, do_sample=True)
+    torch.testing.assert_close(sampled, greedy)
