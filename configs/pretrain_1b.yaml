@@ -1,0 +1,62 @@
+model:
+  model_name: D32-1216-R12
+  vocab_size: 16384
+  d_model: 384
+  depth: 32
+  num_q_heads: 6
+  num_kv_heads: 2
+  head_dim: 64
+  mlp_hidden_dim: 1216
+  output_residual_rank: 12
+  max_seq_len: 1024
+  rope_theta: 10000.0
+  norm_eps: 1.0e-5
+  initializer_range: 0.02
+  xielu_alpha_p_init: 0.5
+  xielu_alpha_n_init: 1.0
+  tie_embeddings: true
+  use_qk_norm: true
+  use_bias: false
+
+training:
+  run_id: null
+  runs_dir: runs
+  seed: 1337
+  device: cuda
+  precision: bf16
+  compile: true
+  compile_mode: default
+  tf32: true
+  sequence_length: 1024
+  micro_batch_size: 8
+  gradient_accumulation_steps: 16
+  global_batch_tokens: 131072
+  max_tokens: null
+  max_steps: null
+  learning_rate: 3.0e-4
+  min_learning_rate: 3.0e-5
+  warmup_tokens: 20000000
+  total_tokens: 1100000000
+  weight_decay: 0.1
+  beta1: 0.9
+  beta2: 0.95
+  adam_eps: 1.0e-8
+  grad_clip: 1.0
+  log_every_steps: 1
+  eval_every_tokens: 10000000
+  checkpoint_every_steps: 0
+  checkpoint_every_tokens: 0
+  checkpoint_every_minutes: 15
+  permanent_checkpoint_every_tokens: 50000000
+  keep_last_n: 3
+  pin_memory: true
+  num_workers: 0
+
+data:
+  train_manifest: data/tokenized/manifest.json
+  val_manifest: data/tokenized/manifest.json
+  tokenizer: data/tokenized/tokenizer.model
+  shuffle_shards: true
+  shuffle_seed: 1337
+  eval_batches: 20
+  synthetic: false

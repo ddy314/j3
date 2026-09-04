@@ -1,0 +1,176 @@
+# J3: D32-1216-R12 pretraining system
+
+J3 is a direct PyTorch 2.x pretraining system for a 49M-parameter decoder-only language model. It is designed for long single-GPU runs: the data stream is offline-tokenized and mmap-backed, the training loop is small, checkpoints are atomic and portable, and the dashboard is a separate read-only process.
+
+## Frozen model
+
+`D32-1216-R12` has exactly `49,001,408` trainable parameters:
+
+- vocabulary 16,384; model width 384; 32 independent decoder blocks;
+- 6 Q heads / 2 KV heads, head dimension 64, native SDPA GQA;
+- per-projection-channel Q/K RMSNorm and RoPE;
+- pre-RMSNorm blocks, bias-free MLP with 1,216 hidden units and trainable scalar xIELU;
+- tied token embedding/language-model head plus a rank-12 untied residual output head;
+- configurable context length, default 1,024.
+
+No RPR, depth sharing, recurrent block, or depth-delta mechanism is present.
+
+## Environment
+
+Python 3.13 is selected by `.python-version`. Install the locked environment and print the complete hardware/runtime report:
+
+```bash
+./scripts/setup.sh
+# or
+uv sync --locked
+uv run python scripts/check_env.py
+```
+
+The baseline intentionally does not install `flash-attn`: PyTorch SDPA is benchmarked first and selects the CUDA flash path on supported shapes. Triton is supplied by the locked PyTorch environment and is checked by `check_env.py`.
+
+## Data preparation
+
+Training never tokenizes raw text. First train a SentencePiece BPE tokenizer, then create uint16 shards:
+
+```bash
+uv run python scripts/train_tokenizer.py \
+  --input /path/to/text-or-jsonl \
+  --output-dir data/tokenized \
+  --vocab-size 16384
+
+uv run python scripts/prepare_data.py \
+  --input /path/to/text-or-jsonl \
+  --tokenizer data/tokenized/tokenizer.model \
+  --output-dir data/tokenized \
+  --shard-tokens 4194304 \
+  --val-ratio 0.001 \
+  --deduplicate
+```
+
+`--hf-dataset` is available in both scripts for a one-time FineWeb-Edu-style preprocessing pass. The trainer itself does not use HF streaming. `manifest.json` records source, tokenizer hash, dtype, shard counts, token counts, duplicate-filter status, simple language statistics, and token-frequency statistics.
+
+For the optional Hugging Face source adapter, install its extra once with `uv sync --locked --extra data`; local-file preprocessing only needs the default environment.
+
+## Smoke training
+
+The smoke configuration uses deterministic synthetic tokens when no manifest is supplied and runs about one million tokens:
+
+```bash
+./scripts/train_smoke.sh
+# short runtime check
+./scripts/train_smoke.sh --max-steps 4
+```
+
+Each run creates `runs/<run_id>/` with `config.yaml`, `environment.json`, `command.json`, `metrics.jsonl`, `status.json`, `train.log`, and `checkpoints/`. `runs/latest` points to the most recent run.
+
+The local GPU smoke validation completed 128 optimizer steps / 1,048,576 tokens with status `completed`, BF16 + compiled `default` mode, fused AdamW, and a final checkpoint. The observed final logged training loss was 3.3990; use the run artifacts rather than this example value for later comparisons.
+
+## Benchmark and profiling
+
+Benchmark uses CUDA events after warmup and compares eager, `default`, `reduce-overhead`, and `max-autotune` across sequence lengths 512/1,024 and increasing microbatches. It reports tokens/sec, step time, forward/backward/optimizer breakdown, GPU utilization, VRAM, temperature, power, and OOM boundaries:
+
+```bash
+./scripts/benchmark.sh
+```
+
+Results are written to `artifacts/benchmarks.json` and `artifacts/benchmarks.csv`. Profile traces and summaries are produced with:
+
+```bash
+uv run python scripts/profile_train.py \
+  --mode reduce-overhead \
+  --sequence-length 1024 \
+  --micro-batch-size 8
+```
+
+The trace is under `artifacts/profile/<mode>/traces/`; the summary includes module ranges and top CUDA/CPU operations. The implemented optimization order is eager → `torch.compile` → profiler. No custom kernel is kept unless a measured stable gain justifies it.
+
+The checked-in benchmark was run on one RTX 4060 Laptop GPU with eight warmup and twenty measured steps per isolated trial. Each compile mode completed successfully; the `seq=1,024, microbatch=16` boundary was OOM, so the next lower microbatch was selected:
+
+| mode | seq 512 best | seq 512 tok/s | seq 512 step | seq 1,024 best | seq 1,024 tok/s | seq 1,024 step |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| eager | 2 | 17,804 | 57.51 ms | 1 | 17,104 | 59.87 ms |
+| `default` | 16 | **43,407** | 188.72 ms | 8 | **40,431** | 202.61 ms |
+| `reduce-overhead` | 16 | 43,163 | 189.79 ms | 8 | 40,295 | 203.30 ms |
+| `max-autotune` | 16 | 43,181 | 189.71 ms | 8 | 40,268 | 203.44 ms |
+
+At the selected `default` operating points, peak PyTorch allocated VRAM was 4,858.9 MiB, reserved VRAM was 5,134 MiB, NVIDIA-reported memory was 5,314 MiB, and sampled GPU utilization reached 100%. Relative to the best eager point, `default` compile improved throughput by 2.44× at sequence 512 and 2.36× at sequence 1,024. These results are synthetic-token model-step measurements; the mmap input path is separately tested and should be rechecked on the target storage system.
+
+The compiled profile shows PyTorch flash-attention forward/backward kernels, BF16 Tensor Core GEMMs, compiler-generated Triton fused xIELU/RMSNorm, and fused AdamW. The eager profile identifies MLP/xIELU elementwise work and launch count as the main small-model overhead. Since the compiled path already fuses these operations and max-autotune did not win, no custom CUDA/Triton kernel was added.
+
+Before a long run, use the short LR proxy sweep:
+
+```bash
+uv run python scripts/lr_range_test.py --config configs/pretrain_1b.yaml --tokens 5000000
+```
+
+## Pretraining
+
+After `data/tokenized/manifest.json` exists, inspect and adjust the LR proxy result, then start the formal 1.1B-token configuration:
+
+```bash
+./scripts/train_pretrain_1b.sh
+```
+
+The default formal settings are BF16, `torch.compile(mode="default")`, fused AdamW when supported, weight decay 0.1, gradient clipping 1.0, token-indexed warmup plus cosine decay, sequence length 1,024, microbatch 8, accumulation 16, and effective global batch 131,072 tokens. The script does not run automatically. This mode/batch was selected from the checked-in RTX 4060 benchmark artifact; rerun the benchmark on a different GPU.
+
+`global_batch_tokens` must equal `sequence_length * micro_batch_size * gradient_accumulation_steps`; this is validated at startup. A larger microbatch can be selected from the benchmark and the accumulation adjusted to preserve the desired effective batch.
+
+## Resume and safe pause
+
+Resume the latest complete checkpoint:
+
+```bash
+uv run python train.py --config configs/pretrain_1b.yaml --resume auto
+```
+
+Or resume a specific checkpoint:
+
+```bash
+uv run python train.py \
+  --config configs/pretrain_1b.yaml \
+  --resume runs/<run_id>/checkpoints/tokens_000050m
+```
+
+Checkpoint state includes model, optimizer, token scheduler, global step/tokens, epoch/shard/offset/order, Python/NumPy/PyTorch CPU/CUDA RNG, model/training config, tokenizer and manifest hashes, Git commit, software versions, host, timestamp, and reason. Checkpoint directories are written to a temporary directory, fsynced, and atomically renamed; `checkpoints/latest` is an atomic relative symlink. Time checkpoints, token milestones, emergency checkpoints, `keep_last_n`, and permanent milestone retention are supported.
+
+`Ctrl+C`, `SIGTERM`, `runs/<run_id>/STOP_REQUESTED`, and `control.json` request a graceful emergency checkpoint. The process saves after the current optimizer step and exits cleanly. A dashboard checkpoint/stop request uses the same control file and never kills the trainer.
+
+To move a run to another computer, copy the entire run directory and the immutable tokenizer/manifest/shards, install the locked environment, and use the same resume command. The checkpoint validates model and dataset identity before loading.
+
+## Dashboard
+
+The dashboard is decoupled from training and incrementally tails `metrics.jsonl` rather than rereading the file on every refresh:
+
+```bash
+./scripts/dashboard.sh runs/<run_id>
+# or
+uv run python dashboard.py --run runs/latest --port 7860
+```
+
+Open `http://127.0.0.1:7860`. It shows overview/progress, loss curves, throughput, step time, GPU telemetry, training settings, ETA windows, checkpoint metadata, and recent logs. The optional buttons request a checkpoint or graceful stop through `control.json`.
+
+## Repository layout
+
+```text
+src/model/       model, attention, MLP/xIELU, RMSNorm, RoPE
+src/data/        tokenizer wrapper, raw readers, mmap token stream
+src/training/    trainer, atomic checkpoints, scheduler, metrics, telemetry
+scripts/         environment, data, benchmark, profile, launch utilities
+configs/         smoke, benchmark, and 1.1B-token pretraining configs
+tests/           model, data, checkpoint, scheduler, RNG, and exact-resume tests
+```
+
+## Common issues
+
+- `nvidia-smi`/CUDA unavailable: run `uv run python scripts/check_env.py`; the code can validate on CPU, but GPU throughput claims require a working driver-visible CUDA process.
+- CUDA OOM: select the largest successful benchmark microbatch and increase accumulation; do not simply raise the microbatch in the formal config.
+- First `torch.compile` invocation is slow: it compiles Triton/Inductor kernels. Benchmark numbers exclude this one-time compilation after warmup.
+- Missing or mismatched tokenizer/manifest: run the offline data steps again and keep the tokenizer, manifest, and shards together; resume rejects hash mismatches.
+- Missing `flash_attn`: expected for this baseline. Native PyTorch SDPA is the supported attention implementation.
+
+## Verification
+
+```bash
+uv run pytest
+uv run python -m compileall -q src scripts train.py dashboard.py
+```
