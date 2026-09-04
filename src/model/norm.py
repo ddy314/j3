@@ -59,6 +59,15 @@ class HeadwiseRMSNorm(nn.Module):
             raise ValueError(
                 f"HeadwiseRMSNorm expected [..., {self.num_heads}, {self.head_dim}], got {tuple(x.shape)}"
             )
-        variance = x.float().square().mean(dim=-1, keepdim=True)
+        native = getattr(F, "rms_norm", None)
+        if native is not None:
+            # Native RMSNorm supports a [B, T, H, D] input with normalized
+            # shape D. Apply the per-channel scale separately because the
+            # scale itself is [H, D], which the native kernel does not accept
+            # as its weight shape.
+            normalized = native(x, (self.head_dim,), None, self.eps)
+        else:
+            variance = x.float().square().mean(dim=-1, keepdim=True)
+            normalized = x * torch.rsqrt(variance + self.eps).to(dtype=x.dtype)
         weight = self.weight if self.weight.dtype == x.dtype else self.weight.to(dtype=x.dtype)
-        return (x * torch.rsqrt(variance + self.eps).to(dtype=x.dtype)) * weight
+        return normalized * weight
