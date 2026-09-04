@@ -1,6 +1,6 @@
-# J3: D32-1216-R12 pretraining system
+# J3
 
-J3 is a direct PyTorch 2.x pretraining system for a 49M-parameter decoder-only language model. It is designed for long single-GPU runs: the data stream is offline-tokenized and mmap-backed, the training loop is small, checkpoints are atomic and portable, and the dashboard is a separate read-only process.
+J3 is a direct PyTorch pretraining system for a 49M-parameter decoder-only language model. It is designed for long single-GPU runs: the data stream is offline-tokenized and mmap-backed, the training loop is small, checkpoints are atomic and portable, and the dashboard is a separate read-only process.
 
 ## Frozen model
 
