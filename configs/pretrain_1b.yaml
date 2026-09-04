@@ -30,8 +30,8 @@ training:
   compile: true
   compile_mode: default
   tf32: true
-  sequence_length: 1024
-  micro_batch_size: 8
+  sequence_length: 512
+  micro_batch_size: 16
   gradient_accumulation_steps: 16
   global_batch_tokens: 131072
   max_tokens: null

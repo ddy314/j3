@@ -12,7 +12,7 @@ import torch
 from src.data.mmap_dataset import MMapTokenStream, SyntheticTokenStream
 from src.model import DecoderLM, ModelConfig
 from src.training.checkpoint import CheckpointManager, capture_rng_state, restore_rng_state
-from src.training.config import DataConfig, TrainConfig
+from src.training.config import DataConfig, TrainConfig, load_config
 from src.training.metrics import MetricsWriter
 from src.training.scheduler import TokenCosineScheduler
 from src.training.trainer import Trainer
@@ -181,6 +181,15 @@ def test_lr_proxy_preserves_formal_batch_and_schedule() -> None:
     assert proxy.warmup_tokens == formal.warmup_tokens
     assert proxy.max_tokens == 20_000_000
     assert proxy.learning_rate == 5e-4
+
+
+def test_formal_pretrain_uses_first_stage_sequence_length() -> None:
+    repository = Path(__file__).resolve().parents[1]
+    _, training, _, _ = load_config(repository / "configs/pretrain_1b.yaml")
+    assert training.sequence_length == 512
+    assert training.micro_batch_size == 16
+    assert training.gradient_accumulation_steps == 16
+    assert training.effective_global_batch_tokens == 131072
 
 
 def test_checkpoint_manager_atomic_roundtrip(tmp_path: Path) -> None:

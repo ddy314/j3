@@ -84,7 +84,7 @@ uv run python scripts/profile_train.py \
 
 The trace is under `artifacts/profile/<mode>/traces/`; the summary includes module ranges and top CUDA/CPU operations. The implemented optimization order is eager → `torch.compile` → profiler. No custom kernel is kept unless a measured stable gain justifies it.
 
-The checked-in benchmark was run on one RTX 4060 Laptop GPU with eight warmup and twenty measured steps per isolated trial. It contains 38 completed/explicit-boundary trials; each compile mode completed successfully. The `seq=1,024, microbatch=16` boundary was OOM, so the next lower microbatch was selected:
+The checked-in benchmark was run on one RTX 4060 Laptop GPU with eight warmup and twenty measured steps per isolated trial. It contains 38 completed/explicit-boundary trials; each compile mode completed successfully. The `seq=1,024, microbatch=16` boundary was OOM. For the first large-scale stage, the selected point is `seq=512, microbatch=16`; the 1,024-token result remains available for later context-length expansion:
 
 | mode | seq 512 best | seq 512 tok/s | seq 512 step | seq 1,024 best | seq 1,024 tok/s | seq 1,024 step |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
@@ -103,8 +103,8 @@ The compiled profile shows PyTorch flash-attention forward/backward kernels, BF1
 Before a long run, use the LR proxy sweep. By default it reuses the formal
 sequence length, microbatch, accumulation, effective global batch, warmup, and
 cosine horizon; `--tokens` only limits how far into that formal schedule each
-independent run proceeds. This avoids selecting an LR with a 512-token batch
-when the real run consumes 131,072 tokens per optimizer step:
+independent run proceeds. This avoids selecting an LR with a different
+effective batch from the formal 131,072 tokens per optimizer step:
 
 ```bash
 uv run python scripts/lr_range_test.py --config configs/pretrain_1b.yaml --tokens 20000000
@@ -125,7 +125,7 @@ After `data/tokenized/manifest.json` exists, inspect and adjust the LR proxy res
 ./scripts/train_pretrain_1b.sh
 ```
 
-The default formal settings are BF16, `torch.compile(mode="default")`, fused AdamW when supported, weight decay 0.1, gradient clipping 1.0, token-indexed warmup plus cosine decay, sequence length 1,024, microbatch 8, accumulation 16, and effective global batch 131,072 tokens. The script does not run automatically. This mode/batch was selected from the checked-in RTX 4060 benchmark artifact; rerun the benchmark on a different GPU.
+The default first-stage settings are BF16, `torch.compile(mode="default")`, fused AdamW when supported, weight decay 0.1, gradient clipping 1.0, token-indexed warmup plus cosine decay, sequence length 512, microbatch 16, accumulation 16, and effective global batch 131,072 tokens. The model still supports a 1,024-token context; that length is reserved for a later stage. The script does not run automatically. This mode/batch was selected from the checked-in RTX 4060 benchmark artifact; rerun the benchmark on a different GPU.
 
 `global_batch_tokens` must equal `sequence_length * micro_batch_size * gradient_accumulation_steps`; this is validated at startup. A larger microbatch can be selected from the benchmark and the accumulation adjusted to preserve the desired effective batch.
 
