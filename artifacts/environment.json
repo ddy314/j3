@@ -15,11 +15,11 @@
     "error": "No module named 'flash_attn'"
   },
   "float32_matmul_precision": "high",
-  "git_commit": "uncommitted",
+  "git_commit": "49bd5b4946926cf0344ffb1c2df9332985b66f4e",
   "hostname": "xiaArch",
   "nvidia_smi": {
     "available": true,
-    "output": "Fri Sep  4 18:36:23 2026       \n+-----------------------------------------------------------------------------------------+\n| NVIDIA-SMI 610.57.04              KMD Version: 610.57.04     CUDA UMD Version: 13.3     |\n+-----------------------------------------+------------------------+----------------------+\n| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |\n| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |\n|                                         |                        |               MIG M. |\n|=========================================+========================+======================|\n|   0  NVIDIA GeForce RTX 4060 ...    Off |   00000000:01:00.0 Off |                  N/A |\n| N/A   55C    P0             13W /  115W |      43MiB /   8188MiB |     13%      Default |\n|                                         |                        |                  N/A |\n+-----------------------------------------+------------------------+----------------------+\n\n+-----------------------------------------------------------------------------------------+\n| Processes:                                                                              |\n|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |\n|        ID   ID                                                               Usage      |\n|=========================================================================================|\n|    0   N/A  N/A            1572    C+G   /usr/bin/kwin_wayland                     7MiB |\n+-----------------------------------------------------------------------------------------+\n"
+    "output": "Fri Sep  4 18:44:21 2026       \n+-----------------------------------------------------------------------------------------+\n| NVIDIA-SMI 610.57.04              KMD Version: 610.57.04     CUDA UMD Version: 13.3     |\n+-----------------------------------------+------------------------+----------------------+\n| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |\n| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |\n|                                         |                        |               MIG M. |\n|=========================================+========================+======================|\n|   0  NVIDIA GeForce RTX 4060 ...    Off |   00000000:01:00.0 Off |                  N/A |\n| N/A   55C    P0             14W /  115W |      43MiB /   8188MiB |     13%      Default |\n|                                         |                        |                  N/A |\n+-----------------------------------------+------------------------+----------------------+\n\n+-----------------------------------------------------------------------------------------+\n| Processes:                                                                              |\n|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |\n|        ID   ID                                                               Usage      |\n|=========================================================================================|\n|    0   N/A  N/A            1572    C+G   /usr/bin/kwin_wayland                     7MiB |\n+-----------------------------------------------------------------------------------------+\n"
   },
   "platform": "Linux-7.1.9-arch1-2-x86_64-with-glibc2.44",
   "python": "3.13.11 (main, Jan 14 2026, 19:38:04) [Clang 21.1.4 ]",
@@ -29,7 +29,7 @@
   "sdpa_mem_efficient_enabled": true,
   "tf32_cudnn": true,
   "tf32_matmul": true,
-  "timestamp": "2026-09-04T18:36:23+0800",
+  "timestamp": "2026-09-04T18:44:21+0800",
   "torch_cuda_version": "13.0",
   "torch_file": "/home/xia/code/j3/.venv/lib/python3.13/site-packages/torch/__init__.py",
   "torch_version": "2.14.0+cu130",
