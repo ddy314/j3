@@ -1,0 +1,41 @@
+version: 1
+name: j3-english-pretrain-mix
+
+# Training-token quotas. The extractor stops exactly at each scaled quota and
+# writes two-byte uint16 ids; no raw-text corpus is materialized locally.
+sources:
+  - name: dclm_edu_3plus
+    dataset: HuggingFaceTB/dclm-edu
+    config: null
+    split: train
+    text_field: text
+    token_budget: 600000000
+    filters:
+      language: en
+      edu_int_score_min: 3
+
+  - name: fineweb_edu
+    dataset: HuggingFaceFW/fineweb-edu
+    config: sample-10BT
+    split: train
+    text_field: text
+    token_budget: 300000000
+    filters:
+      language: en
+
+  # Cosmopedia v2 is published in the SmolLM corpus repository.
+  - name: cosmopedia_v2
+    dataset: HuggingFaceTB/smollm-corpus
+    config: cosmopedia-v2
+    split: train
+    text_field: text
+    token_budget: 100000000
+
+  - name: wikitext_103
+    dataset: Salesforce/wikitext
+    config: wikitext-103-v1
+    split: train
+    text_field: text
+    # This is intentionally approximate, as requested; extraction fails
+    # loudly instead of silently repeating WikiText if it is too small.
+    token_budget: 100000000

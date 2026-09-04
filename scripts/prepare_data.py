@@ -13,60 +13,9 @@ import numpy as np
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from src.data.raw import iter_file_documents, iter_hf_documents
-from src.data.tokenizer import SentencePieceTokenizer, tokenizer_sha256
+from src.data.shards import ShardWriter
+from src.data.tokenizer import clean_text_for_tokenization, load_tokenizer, tokenizer_sha256
 from src.training.metrics import atomic_json_write
-
-
-class ShardWriter:
-    def __init__(self, directory: Path, prefix: str, shard_tokens: int, manifest_root: Path) -> None:
-        self.directory = directory
-        self.manifest_root = manifest_root
-        self.directory.mkdir(parents=True, exist_ok=True)
-        self.prefix = prefix
-        self.shard_tokens = shard_tokens
-        self.index = 0
-        self.handle = None
-        self.current_tokens = 0
-        self.total_tokens = 0
-        self.entries: list[dict[str, object]] = []
-
-    def _open(self) -> None:
-        if self.handle is not None:
-            self.handle.flush()
-            import os
-
-            os.fsync(self.handle.fileno())
-            self.handle.close()
-        path = self.directory / f"{self.prefix}_{self.index:06d}.bin"
-        self.handle = path.open("wb")
-        self.current_tokens = 0
-        self.entries.append({"path": str(path.relative_to(self.manifest_root)), "token_count": 0})
-
-    def write(self, ids: list[int]) -> None:
-        if not ids:
-            return
-        values = np.asarray(ids, dtype=np.uint16)
-        start = 0
-        while start < len(values):
-            if self.handle is None or self.current_tokens >= self.shard_tokens:
-                self._open()
-            take = min(len(values) - start, self.shard_tokens - self.current_tokens)
-            self.handle.write(values[start : start + take].tobytes(order="C"))
-            self.current_tokens += take
-            self.total_tokens += take
-            self.entries[-1]["token_count"] = self.current_tokens
-            start += take
-            if self.current_tokens >= self.shard_tokens:
-                self.index += 1
-
-    def close(self) -> None:
-        if self.handle is not None:
-            self.handle.flush()
-            import os
-
-            os.fsync(self.handle.fileno())
-            self.handle.close()
-            self.handle = None
 
 
 def parse_args() -> argparse.Namespace:
@@ -92,7 +41,7 @@ def main() -> None:
         raise SystemExit("provide --input files/directories or --hf-dataset")
     if not 0 <= args.val_ratio < 1:
         raise SystemExit("--val-ratio must be in [0, 1)")
-    tokenizer = SentencePieceTokenizer(args.tokenizer)
+    tokenizer = load_tokenizer(args.tokenizer)
     output_dir = Path(args.output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
     train_writer = ShardWriter(output_dir, "shard", args.shard_tokens, output_dir)
@@ -126,7 +75,7 @@ def main() -> None:
             if args.max_documents is not None and index >= args.max_documents:
                 break
             stats["document_count"] += 1
-            normalized = text.strip()
+            normalized = clean_text_for_tokenization(text)
             if not normalized:
                 stats["empty_document_count"] += 1
                 continue

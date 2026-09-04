@@ -11,6 +11,7 @@ import torch
 
 from src.data.mmap_dataset import MMapTokenStream, SyntheticTokenStream
 from src.model import DecoderLM, ModelConfig
+from src.data.tokenizer import load_tokenizer
 from src.training.checkpoint import CheckpointManager, capture_rng_state, restore_rng_state
 from src.training.config import DataConfig, TrainConfig, load_config
 from src.training.metrics import MetricsWriter
@@ -151,6 +152,44 @@ def test_offline_tokenizer_and_prepare_data_paths(tmp_path: Path) -> None:
     inputs, targets = stream.next_batch(1, 4)
     assert inputs.shape == targets.shape == (1, 4)
     assert int(inputs.max()) < 64
+
+
+def test_byte_level_bpe_handles_unicode_and_literal_unk(tmp_path: Path) -> None:
+    corpus = tmp_path / "corpus.txt"
+    corpus.write_text(
+        ("English text with repeated words and a small byte-level tokenizer. 中文🙂 <unk>\n" * 20),
+        encoding="utf-8",
+    )
+    output_dir = tmp_path / "byte-tokenizer"
+    repository = Path(__file__).resolve().parents[1]
+    result = subprocess.run(
+        [
+            sys.executable,
+            str(repository / "scripts/train_tokenizer.py"),
+            "--input",
+            str(corpus),
+            "--output-dir",
+            str(output_dir),
+            "--tokenizer-type",
+            "byte-bpe",
+            "--vocab-size",
+            "512",
+            "--min-token-frequency",
+            "1",
+            "--max-token-length",
+            "32",
+        ],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    assert result.returncode == 0, result.stderr
+    tokenizer = load_tokenizer(output_dir / "tokenizer.json")
+    ids = tokenizer.encode("中文🙂 <unk>")
+    assert tokenizer.unk_id not in ids
+    assert max(ids) < tokenizer.vocab_size
+    metadata = json.loads((output_dir / "tokenizer_meta.json").read_text())
+    assert metadata["tokenizer_type"] == "byte-bpe"
 
 
 def test_scheduler_state_resume() -> None:

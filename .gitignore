@@ -19,3 +19,4 @@ data/tokenized/
 data/raw/
 data/*.model
 data/*.vocab
+data/

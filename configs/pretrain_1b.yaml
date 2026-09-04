@@ -58,7 +58,7 @@ training:
 data:
   train_manifest: data/tokenized/manifest.json
   val_manifest: data/tokenized/manifest.json
-  tokenizer: data/tokenized/tokenizer.model
+  tokenizer: data/tokenized/tokenizer.json
   shuffle_shards: true
   shuffle_seed: 1337
   eval_batches: 20

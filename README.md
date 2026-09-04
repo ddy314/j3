@@ -30,26 +30,131 @@ The baseline intentionally does not install `flash-attn`: PyTorch SDPA is benchm
 
 ## Data preparation
 
-Training never tokenizes raw text. First train a SentencePiece BPE tokenizer, then create uint16 shards:
+Training never tokenizes raw text. For the English pretraining mix, use the
+true byte-level BPE path, then create uint16 shards:
 
 ```bash
 uv run python scripts/train_tokenizer.py \
   --input /path/to/text-or-jsonl \
   --output-dir data/tokenized \
-  --vocab-size 16384
+  --tokenizer-type byte-bpe \
+  --vocab-size 16384 \
+  --min-token-frequency 10 \
+  --max-token-length 32
 
 uv run python scripts/prepare_data.py \
   --input /path/to/text-or-jsonl \
-  --tokenizer data/tokenized/tokenizer.model \
+  --tokenizer data/tokenized/tokenizer.json \
   --output-dir data/tokenized \
   --shard-tokens 4194304 \
   --val-ratio 0.001 \
   --deduplicate
 ```
 
-`--hf-dataset` is available in both scripts for a one-time FineWeb-Edu-style preprocessing pass. The trainer itself does not use HF streaming. `manifest.json` records source, tokenizer hash, dtype, shard counts, token counts, duplicate-filter status, simple language statistics, and token-frequency statistics.
+For the requested English mixture, use the checked-in [HF mix config](configs/hf_mix_1b.yaml). It selects DCLM-Edu with `edu_int_score >= 3` (600M tokens), FineWeb-Edu `sample-10BT` (300M), Cosmopedia v2 from `HuggingFaceTB/smollm-corpus` (100M), and WikiText-103 (100M). The extractor tokenizes while streaming and stops at the exact per-source token quota; it does not materialize a 4–5 GB raw-text corpus.
 
-For the optional Hugging Face source adapter, install its extra once with `uv sync --locked --extra data`; local-file preprocessing only needs the default environment.
+Install the HF extra once, then train a tokenizer from a bounded sample of every source:
+
+```bash
+uv sync --locked --extra data
+
+uv run python scripts/train_tokenizer.py \
+  --mix-config configs/hf_mix_1b.yaml \
+  --parquet-root /cache/j3-hf-parquet \
+  --output-dir data/tokenized-pilot \
+  --tokenizer-type byte-bpe \
+  --vocab-size 16384 \
+  --max-documents-per-source 10000 \
+  --min-token-frequency 10 \
+  --max-token-length 32
+
+uv run python scripts/audit_tokenizer.py \
+  --tokenizer data/tokenized-pilot/tokenizer.json \
+  --mix-config configs/hf_mix_1b.yaml \
+  --parquet-root /cache/j3-hf-parquet \
+  --json-output data/tokenized-pilot/tokenizer_audit.json
+```
+
+Pull an 11M-token pilot first (1% of every requested quota):
+
+```bash
+uv run python scripts/prepare_hf_mix.py \
+  --config configs/hf_mix_1b.yaml \
+  --tokenizer data/tokenized-pilot/tokenizer.json \
+  --output-dir data/tokenized-pilot \
+  --scale 0.01 \
+  --shard-tokens 4194304 \
+  --val-ratio 0.01
+```
+
+After checking the manifest and disk/network behavior, repeat into a clean
+`data/tokenized` directory with `--scale 1.0`. Copy the pilot tokenizer into
+that clean directory first, or train it again from the same bounded sample:
+
+```bash
+mkdir -p data/tokenized
+cp data/tokenized-pilot/tokenizer.json data/tokenized/tokenizer.json
+cp data/tokenized-pilot/tokenizer_meta.json data/tokenized/tokenizer_meta.json
+
+uv run python scripts/prepare_hf_mix.py \
+  --config configs/hf_mix_1b.yaml \
+  --tokenizer data/tokenized/tokenizer.json \
+  --output-dir data/tokenized \
+  --scale 1.0 \
+  --shard-tokens 4194304 \
+  --val-ratio 0.01
+```
+
+This produces the requested 1.1B training tokens and is the path used by
+`configs/pretrain_1b.yaml`.
+The extractor writes `mix_progress.json` after each completed source, resumes
+completed sources, and retries transient stream failures a bounded number of
+times. For a slow or unstable Xet/CDN route, use bounded HTTP timeouts and the
+regular Hub route:
+
+```bash
+export HF_HUB_DISABLE_XET=1
+export HF_HUB_DOWNLOAD_TIMEOUT=60
+export HF_HUB_ETAG_TIMEOUT=60
+```
+
+`load_dataset` is called with `token=True`, so it reuses the credential saved
+by `hf auth login` without printing or copying the token.
+
+If Hub/Xet metadata works but a streaming shard stalls, download only the
+needed parquet shards with a resumable downloader such as `aria2c`, placing
+them under one directory per source (for example,
+`/cache/j3-hf-parquet/dclm_edu_3plus/*.parquet`). Then pass that root to the
+same extractor:
+
+```bash
+uv run python scripts/prepare_hf_mix.py \
+  --config configs/hf_mix_1b.yaml \
+  --tokenizer data/tokenized/tokenizer.json \
+  --output-dir data/tokenized \
+  --parquet-root /cache/j3-hf-parquet \
+  --scale 1.0 \
+  --shard-tokens 4194304 \
+  --val-ratio 0.01
+```
+
+Local parquet mode uses the same filters, tokenizer, exact quotas, progress
+file, and manifest; it only replaces the network row iterator.
+
+The selected sources are English datasets/configurations; the DCLM and
+FineWeb rows are additionally checked for `language: en`. The 100M WikiText
+target remains approximate: if the split cannot supply that many tokens, the
+extractor stops with an error instead of silently repeating it.
+
+The older `--hf-dataset` mode remains available in both tokenizer/data scripts
+for a single source. The trainer itself does not use HF streaming.
+`manifest.json` records source, tokenizer hash, dtype, shard counts, token
+counts, source filters, duplicate-filter status, and token-frequency statistics.
+The legacy SentencePiece trainer remains available with
+`--tokenizer-type sentencepiece`; its Unicode vocabulary is not used for this
+English 1.1B-token artifact. `audit_tokenizer.py` treats the 256 byte alphabet
+as required infrastructure and audits only learned merges for corpus-specific
+garbage.
 
 ## Smoke training
 
