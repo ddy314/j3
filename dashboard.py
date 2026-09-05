@@ -82,31 +82,59 @@ class RunMonitor:
         return str(value)
 
     def _plot(self, axis: str):
-        import matplotlib.pyplot as plt
+        """Build the browser-rendered Plotly figure for the selected x axis.
 
-        figure, axes = plt.subplots(figsize=(10, 4.5))
-        if not self.records:
-            axes.set_title("Waiting for metrics.jsonl")
-            axes.set_xlabel(axis)
-            axes.set_ylabel("loss")
-            figure.tight_layout()
-            return figure
-        x_key = {"step": "step", "tokens": "tokens_seen", "wall time": "elapsed_time"}.get(axis, "tokens_seen")
-        x = [record.get(x_key, 0) for record in self.records]
-        for key, label, style in (
-            ("train_loss", "train loss", "-"),
-            ("smoothed_loss", "smoothed train loss", "-"),
-            ("validation_loss", "validation loss", "--"),
+        ``gr.Plot`` serializes the returned figure with ``Figure.to_json()``. Keeping
+        this as a Plotly figure means the browser receives the plot specification and
+        can provide hover, zoom, pan, and legend interactions without a raster image.
+        """
+        import plotly.graph_objects as go
+
+        axis_key, axis_label = {
+            "step": ("step", "Step"),
+            "tokens": ("tokens_seen", "Tokens seen"),
+            "wall time": ("elapsed_time", "Elapsed time (s)"),
+        }.get(axis, ("tokens_seen", "Tokens seen"))
+        figure = go.Figure()
+
+        for key, label, dash, color in (
+            ("train_loss", "Train loss", "solid", "#2563eb"),
+            ("smoothed_loss", "Smoothed train loss", "solid", "#0f766e"),
+            ("validation_loss", "Validation loss", "dash", "#dc2626"),
         ):
-            values = [record.get(key) for record in self.records]
-            points = [(left, right) for left, right in zip(x, values) if right is not None]
-            if points:
-                axes.plot([point[0] for point in points], [point[1] for point in points], style, label=label)
-        axes.set_xlabel(x_key)
-        axes.set_ylabel("loss")
-        axes.grid(alpha=0.2)
-        axes.legend(loc="best")
-        figure.tight_layout()
+            points = [
+                (record.get(axis_key, 0), record[key])
+                for record in self.records
+                if record.get(key) is not None
+            ]
+            if not points:
+                continue
+            figure.add_trace(
+                go.Scatter(
+                    x=[point[0] for point in points],
+                    y=[point[1] for point in points],
+                    mode="lines",
+                    name=label,
+                    line={"color": color, "dash": dash, "width": 2},
+                    hovertemplate=f"{axis_label}: %{{x:,.0f}}<br>Loss: %{{y:.4f}}<extra>{label}</extra>",
+                )
+            )
+
+        figure.update_layout(
+            title={
+                "text": "Training loss" if self.records else "Waiting for metrics.jsonl",
+                "x": 0.02,
+                "xanchor": "left",
+            },
+            template="plotly_white",
+            height=420,
+            margin={"l": 60, "r": 24, "t": 56, "b": 56},
+            hovermode="x unified",
+            uirevision=f"loss-{axis}",
+            legend={"orientation": "h", "y": 1.02, "yanchor": "bottom", "x": 0},
+        )
+        figure.update_xaxes(title_text=axis_label, showgrid=False)
+        figure.update_yaxes(title_text="Loss", gridcolor="rgba(148, 163, 184, 0.25)", zeroline=False)
         return figure
 
     def refresh(self, axis: str = "tokens"):

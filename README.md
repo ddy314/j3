@@ -266,7 +266,7 @@ The dashboard is decoupled from training and incrementally tails `metrics.jsonl`
 uv run python dashboard.py --run runs/latest --port 7860
 ```
 
-Open `http://127.0.0.1:7860`. It shows overview/progress, loss curves, throughput, step time, GPU telemetry, training settings, ETA windows, checkpoint metadata, and recent logs. The optional buttons request a checkpoint or graceful stop through `control.json`.
+Open `http://127.0.0.1:7860`. It shows overview/progress, interactive Plotly loss curves, throughput, step time, GPU telemetry, training settings, ETA windows, checkpoint metadata, and recent logs. Hover, zoom, pan, and toggle curves directly in the browser. The optional buttons request a checkpoint or graceful stop through `control.json`.
 
 ## Repository layout
 

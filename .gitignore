@@ -1,22 +1,35 @@
 # Python-generated files
 __pycache__/
+*.py[cod]
 .pytest_cache/
-*.py[oc]
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
 build/
 dist/
 wheels/
-*.egg-info
+*.egg-info/
 
 # Virtual environments
-.venv
+.venv/
+venv/
+env/
+
+# Local configuration and secrets
+.env
+.env.*
+!.env.example
+
+# Logs and local editor files
+*.log
+.DS_Store
+.vscode/
+.idea/
 
 # Generated training state and local data
-artifacts/profile/*/traces/
-artifacts/lr-range/
-artifacts/benchmark_smoke/
-runs/
-data/tokenized/
-data/raw/
-data/*.model
-data/*.vocab
-data/
+/artifacts/profile/*/traces/
+/artifacts/lr-range/
+/artifacts/benchmark_smoke/
+/runs/
+/data/
