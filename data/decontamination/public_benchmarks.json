@@ -1,0 +1,19 @@
+{
+  "benchmarks": [
+    "hellaswag",
+    "piqa",
+    "arc",
+    "winogrande"
+  ],
+  "includes_answers": false,
+  "public_rows": {
+    "arc": 7787,
+    "hellaswag": 59950,
+    "piqa": 21035,
+    "winogrande": 43432
+  },
+  "rejection_rule": "at least two exact normalized word shingles from the same benchmark",
+  "shingle_width": 12,
+  "unique_shingles": 2779056,
+  "version": 1
+}

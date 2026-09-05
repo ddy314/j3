@@ -1,0 +1,1477 @@
+{
+  "byte_alphabet_count": 256,
+  "checks": {
+    "byte_alphabet_is_complete": true,
+    "no_base64_like_learned_merges": true,
+    "no_cjk_learned_merges": true,
+    "no_control_byte_learned_merges": true,
+    "no_hex_like_learned_merges": true,
+    "no_overlong_learned_merges": true,
+    "no_unknown_tokens_on_sample": true
+  },
+  "learned_merge_count": 16124,
+  "passed": true,
+  "sample": {
+    "character_count": 153727006,
+    "characters_per_token": 4.430968487109689,
+    "document_count": 40000,
+    "token_count": 34693771,
+    "training_line_count": 41996,
+    "unknown_rate": 0.0,
+    "unknown_token_count": 0
+  },
+  "special_token_count": 4,
+  "tokenizer": "/home/xia/code/j3/data/tokenized/tokenizer.json",
+  "vocab_size": 16384,
+  "vocabulary": {
+    "base64_like": [],
+    "cjk_merges": [],
+    "control_merges": [],
+    "hex_like": [],
+    "long_tokens_over_limit": [],
+    "low_frequency_merges": [
+      {
+        "byte_length": 7,
+        "decoded": " includ",
+        "frequency": 2,
+        "id": 802,
+        "is_byte_alphabet": false,
+        "raw_utf8": " includ",
+        "token": "Ġinclud",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 7,
+        "decoded": " Americ",
+        "frequency": 5,
+        "id": 992,
+        "is_byte_alphabet": false,
+        "raw_utf8": " Americ",
+        "token": "ĠAmeric",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 7,
+        "decoded": " consid",
+        "frequency": 2,
+        "id": 1150,
+        "is_byte_alphabet": false,
+        "raw_utf8": " consid",
+        "token": "Ġconsid",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 7,
+        "decoded": " proble",
+        "frequency": 2,
+        "id": 1169,
+        "is_byte_alphabet": false,
+        "raw_utf8": " proble",
+        "token": "Ġproble",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 7,
+        "decoded": " repres",
+        "frequency": 0,
+        "id": 1388,
+        "is_byte_alphabet": false,
+        "raw_utf8": " repres",
+        "token": "Ġrepres",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 6,
+        "decoded": " toget",
+        "frequency": 0,
+        "id": 1448,
+        "is_byte_alphabet": false,
+        "raw_utf8": " toget",
+        "token": "Ġtoget",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 5,
+        "decoded": " answ",
+        "frequency": 3,
+        "id": 1735,
+        "is_byte_alphabet": false,
+        "raw_utf8": " answ",
+        "token": "Ġansw",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 3,
+        "decoded": " @-",
+        "frequency": 2,
+        "id": 1747,
+        "is_byte_alphabet": false,
+        "raw_utf8": " @-",
+        "token": "Ġ@-",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 9,
+        "decoded": " experien",
+        "frequency": 0,
+        "id": 1776,
+        "is_byte_alphabet": false,
+        "raw_utf8": " experien",
+        "token": "Ġexperien",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 6,
+        "decoded": "porary",
+        "frequency": 1,
+        "id": 2390,
+        "is_byte_alphabet": false,
+        "raw_utf8": "porary",
+        "token": "porary",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 7,
+        "decoded": " compon",
+        "frequency": 0,
+        "id": 2472,
+        "is_byte_alphabet": false,
+        "raw_utf8": " compon",
+        "token": "Ġcompon",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 7,
+        "decoded": " streng",
+        "frequency": 0,
+        "id": 2565,
+        "is_byte_alphabet": false,
+        "raw_utf8": " streng",
+        "token": "Ġstreng",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 5,
+        "decoded": " stru",
+        "frequency": 5,
+        "id": 2851,
+        "is_byte_alphabet": false,
+        "raw_utf8": " stru",
+        "token": "Ġstru",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 6,
+        "decoded": " thous",
+        "frequency": 0,
+        "id": 3009,
+        "is_byte_alphabet": false,
+        "raw_utf8": " thous",
+        "token": "Ġthous",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 9,
+        "decoded": " perspect",
+        "frequency": 2,
+        "id": 3010,
+        "is_byte_alphabet": false,
+        "raw_utf8": " perspect",
+        "token": "Ġperspect",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 7,
+        "decoded": " compan",
+        "frequency": 2,
+        "id": 3077,
+        "is_byte_alphabet": false,
+        "raw_utf8": " compan",
+        "token": "Ġcompan",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 5,
+        "decoded": "icien",
+        "frequency": 3,
+        "id": 3139,
+        "is_byte_alphabet": false,
+        "raw_utf8": "icien",
+        "token": "icien",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 6,
+        "decoded": " molec",
+        "frequency": 1,
+        "id": 3249,
+        "is_byte_alphabet": false,
+        "raw_utf8": " molec",
+        "token": "Ġmolec",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 7,
+        "decoded": " philos",
+        "frequency": 3,
+        "id": 3339,
+        "is_byte_alphabet": false,
+        "raw_utf8": " philos",
+        "token": "Ġphilos",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 7,
+        "decoded": " strugg",
+        "frequency": 0,
+        "id": 3345,
+        "is_byte_alphabet": false,
+        "raw_utf8": " strugg",
+        "token": "Ġstrugg",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 6,
+        "decoded": " citiz",
+        "frequency": 1,
+        "id": 3464,
+        "is_byte_alphabet": false,
+        "raw_utf8": " citiz",
+        "token": "Ġcitiz",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 5,
+        "decoded": " tiss",
+        "frequency": 3,
+        "id": 3552,
+        "is_byte_alphabet": false,
+        "raw_utf8": " tiss",
+        "token": "Ġtiss",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 7,
+        "decoded": " societ",
+        "frequency": 3,
+        "id": 3605,
+        "is_byte_alphabet": false,
+        "raw_utf8": " societ",
+        "token": "Ġsociet",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 6,
+        "decoded": " categ",
+        "frequency": 1,
+        "id": 3652,
+        "is_byte_alphabet": false,
+        "raw_utf8": " categ",
+        "token": "Ġcateg",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 7,
+        "decoded": " compre",
+        "frequency": 5,
+        "id": 3709,
+        "is_byte_alphabet": false,
+        "raw_utf8": " compre",
+        "token": "Ġcompre",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 6,
+        "decoded": " instr",
+        "frequency": 2,
+        "id": 3734,
+        "is_byte_alphabet": false,
+        "raw_utf8": " instr",
+        "token": "Ġinstr",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 6,
+        "decoded": " accur",
+        "frequency": 3,
+        "id": 3813,
+        "is_byte_alphabet": false,
+        "raw_utf8": " accur",
+        "token": "Ġaccur",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 7,
+        "decoded": " commer",
+        "frequency": 5,
+        "id": 3865,
+        "is_byte_alphabet": false,
+        "raw_utf8": " commer",
+        "token": "Ġcommer",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 8,
+        "decoded": " experim",
+        "frequency": 0,
+        "id": 4121,
+        "is_byte_alphabet": false,
+        "raw_utf8": " experim",
+        "token": "Ġexperim",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 9,
+        "decoded": " algorith",
+        "frequency": 1,
+        "id": 4251,
+        "is_byte_alphabet": false,
+        "raw_utf8": " algorith",
+        "token": "Ġalgorith",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 7,
+        "decoded": " territ",
+        "frequency": 3,
+        "id": 4300,
+        "is_byte_alphabet": false,
+        "raw_utf8": " territ",
+        "token": "Ġterrit",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 8,
+        "decoded": " corresp",
+        "frequency": 0,
+        "id": 4317,
+        "is_byte_alphabet": false,
+        "raw_utf8": " corresp",
+        "token": "Ġcorresp",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 5,
+        "decoded": " opin",
+        "frequency": 2,
+        "id": 4329,
+        "is_byte_alphabet": false,
+        "raw_utf8": " opin",
+        "token": "Ġopin",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 5,
+        "decoded": " weap",
+        "frequency": 0,
+        "id": 4664,
+        "is_byte_alphabet": false,
+        "raw_utf8": " weap",
+        "token": "Ġweap",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 7,
+        "decoded": " ingred",
+        "frequency": 0,
+        "id": 4676,
+        "is_byte_alphabet": false,
+        "raw_utf8": " ingred",
+        "token": "Ġingred",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 5,
+        "decoded": " fert",
+        "frequency": 2,
+        "id": 4754,
+        "is_byte_alphabet": false,
+        "raw_utf8": " fert",
+        "token": "Ġfert",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 6,
+        "decoded": " satis",
+        "frequency": 3,
+        "id": 4810,
+        "is_byte_alphabet": false,
+        "raw_utf8": " satis",
+        "token": "Ġsatis",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 6,
+        "decoded": " nutri",
+        "frequency": 0,
+        "id": 4954,
+        "is_byte_alphabet": false,
+        "raw_utf8": " nutri",
+        "token": "Ġnutri",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 7,
+        "decoded": " framew",
+        "frequency": 2,
+        "id": 4985,
+        "is_byte_alphabet": false,
+        "raw_utf8": " framew",
+        "token": "Ġframew",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 7,
+        "decoded": " scenar",
+        "frequency": 1,
+        "id": 5085,
+        "is_byte_alphabet": false,
+        "raw_utf8": " scenar",
+        "token": "Ġscenar",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 7,
+        "decoded": " acknow",
+        "frequency": 1,
+        "id": 5617,
+        "is_byte_alphabet": false,
+        "raw_utf8": " acknow",
+        "token": "Ġacknow",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 2,
+        "decoded": ".@",
+        "frequency": 2,
+        "id": 5697,
+        "is_byte_alphabet": false,
+        "raw_utf8": ".@",
+        "token": ".@",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 6,
+        "decoded": " Vietn",
+        "frequency": 2,
+        "id": 5844,
+        "is_byte_alphabet": false,
+        "raw_utf8": " Vietn",
+        "token": "ĠVietn",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 7,
+        "decoded": " satell",
+        "frequency": 2,
+        "id": 5907,
+        "is_byte_alphabet": false,
+        "raw_utf8": " satell",
+        "token": "Ġsatell",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 2,
+        "decoded": ",@",
+        "frequency": 1,
+        "id": 6225,
+        "is_byte_alphabet": false,
+        "raw_utf8": ",@",
+        "token": ",@",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 7,
+        "decoded": " enthus",
+        "frequency": 3,
+        "id": 6304,
+        "is_byte_alphabet": false,
+        "raw_utf8": " enthus",
+        "token": "Ġenthus",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 8,
+        "decoded": " strengt",
+        "frequency": 0,
+        "id": 6406,
+        "is_byte_alphabet": false,
+        "raw_utf8": " strengt",
+        "token": "Ġstrengt",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 6,
+        "decoded": " metab",
+        "frequency": 5,
+        "id": 6414,
+        "is_byte_alphabet": false,
+        "raw_utf8": " metab",
+        "token": "Ġmetab",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 6,
+        "decoded": " galax",
+        "frequency": 0,
+        "id": 6514,
+        "is_byte_alphabet": false,
+        "raw_utf8": " galax",
+        "token": "Ġgalax",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 7,
+        "decoded": " therap",
+        "frequency": 1,
+        "id": 6523,
+        "is_byte_alphabet": false,
+        "raw_utf8": " therap",
+        "token": "Ġtherap",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 6,
+        "decoded": " cryst",
+        "frequency": 0,
+        "id": 6876,
+        "is_byte_alphabet": false,
+        "raw_utf8": " cryst",
+        "token": "Ġcryst",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 6,
+        "decoded": " sched",
+        "frequency": 5,
+        "id": 7044,
+        "is_byte_alphabet": false,
+        "raw_utf8": " sched",
+        "token": "Ġsched",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 8,
+        "decoded": " earthqu",
+        "frequency": 0,
+        "id": 7139,
+        "is_byte_alphabet": false,
+        "raw_utf8": " earthqu",
+        "token": "Ġearthqu",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 5,
+        "decoded": " craf",
+        "frequency": 0,
+        "id": 7176,
+        "is_byte_alphabet": false,
+        "raw_utf8": " craf",
+        "token": "Ġcraf",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 7,
+        "decoded": " preval",
+        "frequency": 2,
+        "id": 7942,
+        "is_byte_alphabet": false,
+        "raw_utf8": " preval",
+        "token": "Ġpreval",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 3,
+        "decoded": "sue",
+        "frequency": 3,
+        "id": 8032,
+        "is_byte_alphabet": false,
+        "raw_utf8": "sue",
+        "token": "sue",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 5,
+        "decoded": "repre",
+        "frequency": 2,
+        "id": 8127,
+        "is_byte_alphabet": false,
+        "raw_utf8": "repre",
+        "token": "repre",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 7,
+        "decoded": " sovere",
+        "frequency": 5,
+        "id": 8153,
+        "is_byte_alphabet": false,
+        "raw_utf8": " sovere",
+        "token": "Ġsovere",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 6,
+        "decoded": " occas",
+        "frequency": 1,
+        "id": 8340,
+        "is_byte_alphabet": false,
+        "raw_utf8": " occas",
+        "token": "Ġoccas",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 7,
+        "decoded": " worksh",
+        "frequency": 0,
+        "id": 8527,
+        "is_byte_alphabet": false,
+        "raw_utf8": " worksh",
+        "token": "Ġworksh",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 8,
+        "decoded": "ountered",
+        "frequency": 3,
+        "id": 8686,
+        "is_byte_alphabet": false,
+        "raw_utf8": "ountered",
+        "token": "ountered",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 6,
+        "decoded": " Antar",
+        "frequency": 3,
+        "id": 8965,
+        "is_byte_alphabet": false,
+        "raw_utf8": " Antar",
+        "token": "ĠAntar",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 4,
+        "decoded": "dule",
+        "frequency": 5,
+        "id": 9169,
+        "is_byte_alphabet": false,
+        "raw_utf8": "dule",
+        "token": "dule",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 7,
+        "decoded": "olester",
+        "frequency": 2,
+        "id": 9288,
+        "is_byte_alphabet": false,
+        "raw_utf8": "olester",
+        "token": "olester",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 8,
+        "decoded": " proport",
+        "frequency": 0,
+        "id": 9486,
+        "is_byte_alphabet": false,
+        "raw_utf8": " proport",
+        "token": "Ġproport",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 6,
+        "decoded": "akespe",
+        "frequency": 0,
+        "id": 10783,
+        "is_byte_alphabet": false,
+        "raw_utf8": "akespe",
+        "token": "akespe",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 4,
+        "decoded": "Ãƒ",
+        "frequency": 0,
+        "id": 11658,
+        "is_byte_alphabet": false,
+        "raw_utf8": "Ãƒ",
+        "token": "ÃĥÆĴ",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 2,
+        "decoded": "��",
+        "frequency": 5,
+        "id": 11825,
+        "is_byte_alphabet": false,
+        "raw_utf8": "��",
+        "token": "ģĦ",
+        "valid_utf8": false
+      },
+      {
+        "byte_length": 5,
+        "decoded": "onsin",
+        "frequency": 1,
+        "id": 12312,
+        "is_byte_alphabet": false,
+        "raw_utf8": "onsin",
+        "token": "onsin",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 5,
+        "decoded": "acerb",
+        "frequency": 4,
+        "id": 12791,
+        "is_byte_alphabet": false,
+        "raw_utf8": "acerb",
+        "token": "acerb",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 7,
+        "decoded": " Tennes",
+        "frequency": 5,
+        "id": 13868,
+        "is_byte_alphabet": false,
+        "raw_utf8": " Tennes",
+        "token": "ĠTennes",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 2,
+        "decoded": " \n",
+        "frequency": 0,
+        "id": 14888,
+        "is_byte_alphabet": false,
+        "raw_utf8": " \n",
+        "token": "ĠĊ",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 5,
+        "decoded": " Cany",
+        "frequency": 3,
+        "id": 15296,
+        "is_byte_alphabet": false,
+        "raw_utf8": " Cany",
+        "token": "ĠCany",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 9,
+        "decoded": "itzerland",
+        "frequency": 5,
+        "id": 15909,
+        "is_byte_alphabet": false,
+        "raw_utf8": "itzerland",
+        "token": "itzerland",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 7,
+        "decoded": "htaking",
+        "frequency": 1,
+        "id": 16113,
+        "is_byte_alphabet": false,
+        "raw_utf8": "htaking",
+        "token": "htaking",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 2,
+        "decoded": "Å",
+        "frequency": 4,
+        "id": 16166,
+        "is_byte_alphabet": false,
+        "raw_utf8": "Å",
+        "token": "Ãħ",
+        "valid_utf8": true
+      }
+    ],
+    "rare_word_merges": [
+      {
+        "byte_length": 7,
+        "decoded": " includ",
+        "frequency": 2,
+        "id": 802,
+        "is_byte_alphabet": false,
+        "raw_utf8": " includ",
+        "token": "Ġinclud",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 7,
+        "decoded": " Americ",
+        "frequency": 5,
+        "id": 992,
+        "is_byte_alphabet": false,
+        "raw_utf8": " Americ",
+        "token": "ĠAmeric",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 7,
+        "decoded": " consid",
+        "frequency": 2,
+        "id": 1150,
+        "is_byte_alphabet": false,
+        "raw_utf8": " consid",
+        "token": "Ġconsid",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 7,
+        "decoded": " proble",
+        "frequency": 2,
+        "id": 1169,
+        "is_byte_alphabet": false,
+        "raw_utf8": " proble",
+        "token": "Ġproble",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 7,
+        "decoded": " repres",
+        "frequency": 0,
+        "id": 1388,
+        "is_byte_alphabet": false,
+        "raw_utf8": " repres",
+        "token": "Ġrepres",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 6,
+        "decoded": " toget",
+        "frequency": 0,
+        "id": 1448,
+        "is_byte_alphabet": false,
+        "raw_utf8": " toget",
+        "token": "Ġtoget",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 5,
+        "decoded": " answ",
+        "frequency": 3,
+        "id": 1735,
+        "is_byte_alphabet": false,
+        "raw_utf8": " answ",
+        "token": "Ġansw",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 9,
+        "decoded": " experien",
+        "frequency": 0,
+        "id": 1776,
+        "is_byte_alphabet": false,
+        "raw_utf8": " experien",
+        "token": "Ġexperien",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 6,
+        "decoded": "porary",
+        "frequency": 1,
+        "id": 2390,
+        "is_byte_alphabet": false,
+        "raw_utf8": "porary",
+        "token": "porary",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 7,
+        "decoded": " compon",
+        "frequency": 0,
+        "id": 2472,
+        "is_byte_alphabet": false,
+        "raw_utf8": " compon",
+        "token": "Ġcompon",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 7,
+        "decoded": " streng",
+        "frequency": 0,
+        "id": 2565,
+        "is_byte_alphabet": false,
+        "raw_utf8": " streng",
+        "token": "Ġstreng",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 5,
+        "decoded": " stru",
+        "frequency": 5,
+        "id": 2851,
+        "is_byte_alphabet": false,
+        "raw_utf8": " stru",
+        "token": "Ġstru",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 6,
+        "decoded": " thous",
+        "frequency": 0,
+        "id": 3009,
+        "is_byte_alphabet": false,
+        "raw_utf8": " thous",
+        "token": "Ġthous",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 9,
+        "decoded": " perspect",
+        "frequency": 2,
+        "id": 3010,
+        "is_byte_alphabet": false,
+        "raw_utf8": " perspect",
+        "token": "Ġperspect",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 7,
+        "decoded": " compan",
+        "frequency": 2,
+        "id": 3077,
+        "is_byte_alphabet": false,
+        "raw_utf8": " compan",
+        "token": "Ġcompan",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 5,
+        "decoded": "icien",
+        "frequency": 3,
+        "id": 3139,
+        "is_byte_alphabet": false,
+        "raw_utf8": "icien",
+        "token": "icien",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 6,
+        "decoded": " molec",
+        "frequency": 1,
+        "id": 3249,
+        "is_byte_alphabet": false,
+        "raw_utf8": " molec",
+        "token": "Ġmolec",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 7,
+        "decoded": " philos",
+        "frequency": 3,
+        "id": 3339,
+        "is_byte_alphabet": false,
+        "raw_utf8": " philos",
+        "token": "Ġphilos",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 7,
+        "decoded": " strugg",
+        "frequency": 0,
+        "id": 3345,
+        "is_byte_alphabet": false,
+        "raw_utf8": " strugg",
+        "token": "Ġstrugg",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 6,
+        "decoded": " citiz",
+        "frequency": 1,
+        "id": 3464,
+        "is_byte_alphabet": false,
+        "raw_utf8": " citiz",
+        "token": "Ġcitiz",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 5,
+        "decoded": " tiss",
+        "frequency": 3,
+        "id": 3552,
+        "is_byte_alphabet": false,
+        "raw_utf8": " tiss",
+        "token": "Ġtiss",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 7,
+        "decoded": " societ",
+        "frequency": 3,
+        "id": 3605,
+        "is_byte_alphabet": false,
+        "raw_utf8": " societ",
+        "token": "Ġsociet",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 6,
+        "decoded": " categ",
+        "frequency": 1,
+        "id": 3652,
+        "is_byte_alphabet": false,
+        "raw_utf8": " categ",
+        "token": "Ġcateg",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 7,
+        "decoded": " compre",
+        "frequency": 5,
+        "id": 3709,
+        "is_byte_alphabet": false,
+        "raw_utf8": " compre",
+        "token": "Ġcompre",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 6,
+        "decoded": " instr",
+        "frequency": 2,
+        "id": 3734,
+        "is_byte_alphabet": false,
+        "raw_utf8": " instr",
+        "token": "Ġinstr",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 6,
+        "decoded": " accur",
+        "frequency": 3,
+        "id": 3813,
+        "is_byte_alphabet": false,
+        "raw_utf8": " accur",
+        "token": "Ġaccur",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 7,
+        "decoded": " commer",
+        "frequency": 5,
+        "id": 3865,
+        "is_byte_alphabet": false,
+        "raw_utf8": " commer",
+        "token": "Ġcommer",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 8,
+        "decoded": " experim",
+        "frequency": 0,
+        "id": 4121,
+        "is_byte_alphabet": false,
+        "raw_utf8": " experim",
+        "token": "Ġexperim",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 9,
+        "decoded": " algorith",
+        "frequency": 1,
+        "id": 4251,
+        "is_byte_alphabet": false,
+        "raw_utf8": " algorith",
+        "token": "Ġalgorith",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 7,
+        "decoded": " territ",
+        "frequency": 3,
+        "id": 4300,
+        "is_byte_alphabet": false,
+        "raw_utf8": " territ",
+        "token": "Ġterrit",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 8,
+        "decoded": " corresp",
+        "frequency": 0,
+        "id": 4317,
+        "is_byte_alphabet": false,
+        "raw_utf8": " corresp",
+        "token": "Ġcorresp",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 5,
+        "decoded": " opin",
+        "frequency": 2,
+        "id": 4329,
+        "is_byte_alphabet": false,
+        "raw_utf8": " opin",
+        "token": "Ġopin",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 5,
+        "decoded": " weap",
+        "frequency": 0,
+        "id": 4664,
+        "is_byte_alphabet": false,
+        "raw_utf8": " weap",
+        "token": "Ġweap",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 7,
+        "decoded": " ingred",
+        "frequency": 0,
+        "id": 4676,
+        "is_byte_alphabet": false,
+        "raw_utf8": " ingred",
+        "token": "Ġingred",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 5,
+        "decoded": " fert",
+        "frequency": 2,
+        "id": 4754,
+        "is_byte_alphabet": false,
+        "raw_utf8": " fert",
+        "token": "Ġfert",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 6,
+        "decoded": " satis",
+        "frequency": 3,
+        "id": 4810,
+        "is_byte_alphabet": false,
+        "raw_utf8": " satis",
+        "token": "Ġsatis",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 6,
+        "decoded": " nutri",
+        "frequency": 0,
+        "id": 4954,
+        "is_byte_alphabet": false,
+        "raw_utf8": " nutri",
+        "token": "Ġnutri",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 7,
+        "decoded": " framew",
+        "frequency": 2,
+        "id": 4985,
+        "is_byte_alphabet": false,
+        "raw_utf8": " framew",
+        "token": "Ġframew",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 7,
+        "decoded": " scenar",
+        "frequency": 1,
+        "id": 5085,
+        "is_byte_alphabet": false,
+        "raw_utf8": " scenar",
+        "token": "Ġscenar",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 7,
+        "decoded": " acknow",
+        "frequency": 1,
+        "id": 5617,
+        "is_byte_alphabet": false,
+        "raw_utf8": " acknow",
+        "token": "Ġacknow",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 6,
+        "decoded": " Vietn",
+        "frequency": 2,
+        "id": 5844,
+        "is_byte_alphabet": false,
+        "raw_utf8": " Vietn",
+        "token": "ĠVietn",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 7,
+        "decoded": " satell",
+        "frequency": 2,
+        "id": 5907,
+        "is_byte_alphabet": false,
+        "raw_utf8": " satell",
+        "token": "Ġsatell",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 7,
+        "decoded": " enthus",
+        "frequency": 3,
+        "id": 6304,
+        "is_byte_alphabet": false,
+        "raw_utf8": " enthus",
+        "token": "Ġenthus",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 8,
+        "decoded": " strengt",
+        "frequency": 0,
+        "id": 6406,
+        "is_byte_alphabet": false,
+        "raw_utf8": " strengt",
+        "token": "Ġstrengt",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 6,
+        "decoded": " metab",
+        "frequency": 5,
+        "id": 6414,
+        "is_byte_alphabet": false,
+        "raw_utf8": " metab",
+        "token": "Ġmetab",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 6,
+        "decoded": " galax",
+        "frequency": 0,
+        "id": 6514,
+        "is_byte_alphabet": false,
+        "raw_utf8": " galax",
+        "token": "Ġgalax",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 7,
+        "decoded": " therap",
+        "frequency": 1,
+        "id": 6523,
+        "is_byte_alphabet": false,
+        "raw_utf8": " therap",
+        "token": "Ġtherap",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 6,
+        "decoded": " cryst",
+        "frequency": 0,
+        "id": 6876,
+        "is_byte_alphabet": false,
+        "raw_utf8": " cryst",
+        "token": "Ġcryst",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 6,
+        "decoded": " sched",
+        "frequency": 5,
+        "id": 7044,
+        "is_byte_alphabet": false,
+        "raw_utf8": " sched",
+        "token": "Ġsched",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 8,
+        "decoded": " earthqu",
+        "frequency": 0,
+        "id": 7139,
+        "is_byte_alphabet": false,
+        "raw_utf8": " earthqu",
+        "token": "Ġearthqu",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 5,
+        "decoded": " craf",
+        "frequency": 0,
+        "id": 7176,
+        "is_byte_alphabet": false,
+        "raw_utf8": " craf",
+        "token": "Ġcraf",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 7,
+        "decoded": " preval",
+        "frequency": 2,
+        "id": 7942,
+        "is_byte_alphabet": false,
+        "raw_utf8": " preval",
+        "token": "Ġpreval",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 5,
+        "decoded": "repre",
+        "frequency": 2,
+        "id": 8127,
+        "is_byte_alphabet": false,
+        "raw_utf8": "repre",
+        "token": "repre",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 7,
+        "decoded": " sovere",
+        "frequency": 5,
+        "id": 8153,
+        "is_byte_alphabet": false,
+        "raw_utf8": " sovere",
+        "token": "Ġsovere",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 6,
+        "decoded": " occas",
+        "frequency": 1,
+        "id": 8340,
+        "is_byte_alphabet": false,
+        "raw_utf8": " occas",
+        "token": "Ġoccas",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 7,
+        "decoded": " worksh",
+        "frequency": 0,
+        "id": 8527,
+        "is_byte_alphabet": false,
+        "raw_utf8": " worksh",
+        "token": "Ġworksh",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 8,
+        "decoded": "ountered",
+        "frequency": 3,
+        "id": 8686,
+        "is_byte_alphabet": false,
+        "raw_utf8": "ountered",
+        "token": "ountered",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 6,
+        "decoded": " Antar",
+        "frequency": 3,
+        "id": 8965,
+        "is_byte_alphabet": false,
+        "raw_utf8": " Antar",
+        "token": "ĠAntar",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 4,
+        "decoded": "dule",
+        "frequency": 5,
+        "id": 9169,
+        "is_byte_alphabet": false,
+        "raw_utf8": "dule",
+        "token": "dule",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 7,
+        "decoded": "olester",
+        "frequency": 2,
+        "id": 9288,
+        "is_byte_alphabet": false,
+        "raw_utf8": "olester",
+        "token": "olester",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 8,
+        "decoded": " proport",
+        "frequency": 0,
+        "id": 9486,
+        "is_byte_alphabet": false,
+        "raw_utf8": " proport",
+        "token": "Ġproport",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 6,
+        "decoded": "akespe",
+        "frequency": 0,
+        "id": 10783,
+        "is_byte_alphabet": false,
+        "raw_utf8": "akespe",
+        "token": "akespe",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 5,
+        "decoded": "onsin",
+        "frequency": 1,
+        "id": 12312,
+        "is_byte_alphabet": false,
+        "raw_utf8": "onsin",
+        "token": "onsin",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 5,
+        "decoded": "acerb",
+        "frequency": 4,
+        "id": 12791,
+        "is_byte_alphabet": false,
+        "raw_utf8": "acerb",
+        "token": "acerb",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 7,
+        "decoded": " Tennes",
+        "frequency": 5,
+        "id": 13868,
+        "is_byte_alphabet": false,
+        "raw_utf8": " Tennes",
+        "token": "ĠTennes",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 5,
+        "decoded": " Cany",
+        "frequency": 3,
+        "id": 15296,
+        "is_byte_alphabet": false,
+        "raw_utf8": " Cany",
+        "token": "ĠCany",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 9,
+        "decoded": "itzerland",
+        "frequency": 5,
+        "id": 15909,
+        "is_byte_alphabet": false,
+        "raw_utf8": "itzerland",
+        "token": "itzerland",
+        "valid_utf8": true
+      },
+      {
+        "byte_length": 7,
+        "decoded": "htaking",
+        "frequency": 1,
+        "id": 16113,
+        "is_byte_alphabet": false,
+        "raw_utf8": "htaking",
+        "token": "htaking",
+        "valid_utf8": true
+      }
+    ]
+  }
+}

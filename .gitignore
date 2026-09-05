@@ -32,4 +32,4 @@ env/
 /artifacts/lr-range/
 /artifacts/benchmark_smoke/
 /runs/
-/data/
+/data/stage2_tokenized/
