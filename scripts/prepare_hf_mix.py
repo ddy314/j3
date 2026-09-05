@@ -1,8 +1,10 @@
 from __future__ import annotations
 
 import argparse
+import concurrent.futures
 import hashlib
 import json
+import os
 import random
 import shutil
 import sys
@@ -16,13 +18,14 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from src.data.hf_mix import (
     HFMixSource,
-    iter_parquet_rows,
     iter_hf_rows,
+    iter_local_rows,
     load_mix_config,
     row_matches_filters,
     row_text,
     source_slug,
 )
+from src.data.decontamination import BenchmarkDecontaminator
 from src.data.shards import ShardWriter
 from src.data.tokenizer import clean_text_for_tokenization, load_tokenizer, tokenizer_sha256
 from src.training.metrics import atomic_json_write
@@ -48,12 +51,29 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--max-retries", type=int, default=5)
     parser.add_argument("--retry-backoff-seconds", type=float, default=5.0)
     parser.add_argument(
+        "--workers",
+        type=int,
+        default=0,
+        help="text-cleaning worker processes; 0 selects the benchmarked default (up to 4)",
+    )
+    parser.add_argument(
+        "--batch-size",
+        type=int,
+        default=1_024,
+        help="documents per cleaning/tokenization batch",
+    )
+    parser.add_argument(
         "--parquet-root",
         default=None,
         help=(
             "read downloaded parquet shards from <root>/<source-name>/ instead of Hub streaming; "
             "useful with aria2c or another resumable downloader"
         ),
+    )
+    parser.add_argument(
+        "--decontamination-index",
+        default=None,
+        help="NPZ index built by build_benchmark_decontamination.py",
     )
     return parser.parse_args()
 
@@ -95,6 +115,35 @@ def _top_frequency(frequency: np.ndarray, limit: int = 100) -> list[dict[str, in
     ]
 
 
+def _clean_text(text: str) -> str:
+    """Pickle-safe worker entry point for CPU-bound Unicode cleanup."""
+
+    return clean_text_for_tokenization(text)
+
+
+_WORKER_DECONTAMINATOR: BenchmarkDecontaminator | None = None
+
+
+def _initialize_worker(decontamination_path: str | None) -> None:
+    global _WORKER_DECONTAMINATOR
+    _WORKER_DECONTAMINATOR = (
+        BenchmarkDecontaminator(decontamination_path) if decontamination_path else None
+    )
+
+
+def _clean_and_match(text: str) -> tuple[str, int]:
+    cleaned = clean_text_for_tokenization(text)
+    mask = _WORKER_DECONTAMINATOR.match_mask(cleaned) if _WORKER_DECONTAMINATOR else 0
+    return cleaned, mask
+
+
+def _encode_batch(tokenizer: Any, texts: list[str]) -> list[list[int]]:
+    encode_batch = getattr(tokenizer, "encode_batch", None)
+    if callable(encode_batch):
+        return encode_batch(texts, add_bos=False, add_eos=True)
+    return [tokenizer.encode(text, add_bos=False, add_eos=True) for text in texts]
+
+
 def _entries_are_intact(root: Path, result: dict[str, Any]) -> bool:
     for split in ("train_shards", "val_shards"):
         for entry in result.get(split, []):
@@ -118,6 +167,9 @@ def _prepare_source(
     max_retries: int,
     retry_backoff_seconds: float,
     parquet_root: Path | None = None,
+    workers: int = 1,
+    batch_size: int = 1_024,
+    decontaminator: BenchmarkDecontaminator | None = None,
 ) -> dict[str, Any]:
     train_target = _scaled_budget(source, scale)
     val_target = int(round(train_target * val_ratio)) if val_ratio else 0
@@ -138,7 +190,20 @@ def _prepare_source(
         "train_document_count": 0,
         "val_document_count": 0,
         "unk_token_count": 0,
+        "decontaminated_document_count": 0,
+        "decontamination_hits": {"hellaswag": 0, "piqa": 0, "arc": 0, "winogrande": 0},
     }
+
+    executor: concurrent.futures.ProcessPoolExecutor | None = None
+    if workers > 1:
+        decontamination_path = (
+            str(decontaminator.path) if decontaminator is not None else None
+        )
+        executor = concurrent.futures.ProcessPoolExecutor(
+            max_workers=workers,
+            initializer=_initialize_worker,
+            initargs=(decontamination_path,),
+        )
 
     try:
         if parquet_root is None:
@@ -148,69 +213,104 @@ def _prepare_source(
                 retry_backoff_seconds=retry_backoff_seconds,
             )
         else:
-            source_dir = parquet_root / slug
-            parquet_paths = sorted(source_dir.glob("*.parquet"))
-            if not parquet_paths:
+            local_subdir = source.local_subdir or slug
+            source_dir = parquet_root / local_subdir
+            local_paths = sorted(source_dir.glob(source.local_pattern))
+            if not local_paths:
                 raise FileNotFoundError(
-                    f"no parquet shards found for {source.name!r} under {source_dir}"
+                    f"no {source.local_pattern!r} files found for {source.name!r} under {source_dir}"
                 )
             print(
-                f"[hf] {source.name}: reading {len(parquet_paths)} local parquet shard(s)",
+                f"[hf] {source.name}: reading {len(local_paths)} local source file(s)",
                 flush=True,
             )
-            rows = iter_parquet_rows(parquet_paths)
-        for raw_rows_seen, row in rows:
-            stats["raw_rows_seen"] = raw_rows_seen
-            if train_writer.total_tokens >= train_target and val_writer.total_tokens >= val_target:
-                break
-            if not row_matches_filters(row, source.filters):
-                stats["filtered_rows"] += 1
-                continue
-            text = row_text(row, source.text_field)
-            if text is None:
-                stats["missing_or_nontext_rows"] += 1
-                continue
-            text = clean_text_for_tokenization(text)
-            if not text:
-                stats["empty_document_count"] += 1
-                continue
-            digest = hashlib.sha256(text.encode("utf-8")).hexdigest()
-            if deduplicate and digest in seen:
-                stats["duplicate_count"] += 1
-                continue
-            if deduplicate:
-                seen.add(digest)
-
-            ids = tokenizer.encode(text, add_bos=False, add_eos=True)
-            if not ids:
-                stats["empty_document_count"] += 1
-                continue
-            if max(ids) >= tokenizer.vocab_size:
-                raise RuntimeError(f"tokenizer emitted an out-of-range id for {source.name}")
-            stats["accepted_document_count"] += 1
-
-            train_remaining = train_target - train_writer.total_tokens
-            val_remaining = val_target - val_writer.total_tokens
-            choose_validation = bool(
-                val_remaining > 0 and train_remaining > 0 and rng.random() < val_ratio
-            )
-            if train_remaining <= 0:
-                if val_remaining <= 0:
+            rows = iter_local_rows(local_paths)
+        exhausted = False
+        while not exhausted:
+            raw_texts: list[str] = []
+            while len(raw_texts) < batch_size:
+                try:
+                    raw_rows_seen, row = next(rows)
+                except StopIteration:
+                    exhausted = True
                     break
-                choose_validation = True
-            if choose_validation:
-                selected_ids = take_exact(ids, val_remaining, tokenizer.eos_id)
-                val_writer.write(selected_ids)
-                stats["val_document_count"] += 1
-            elif train_remaining > 0:
-                selected_ids = take_exact(ids, train_remaining, tokenizer.eos_id)
-                train_writer.write(selected_ids)
-                stats["train_document_count"] += 1
-            else:
+                stats["raw_rows_seen"] = raw_rows_seen
+                if not row_matches_filters(row, source.filters):
+                    stats["filtered_rows"] += 1
+                    continue
+                text = row_text(row, source.text_field)
+                if text is None:
+                    stats["missing_or_nontext_rows"] += 1
+                    continue
+                raw_texts.append(text)
+            if not raw_texts:
                 continue
-            frequency += np.bincount(selected_ids, minlength=tokenizer.vocab_size)
-            stats["unk_token_count"] += selected_ids.count(tokenizer.unk_id)
+
+            if executor is None:
+                cleaned_results = []
+                for raw_text in raw_texts:
+                    cleaned = _clean_text(raw_text)
+                    match_mask = decontaminator.match_mask(cleaned) if decontaminator else 0
+                    cleaned_results.append((cleaned, match_mask))
+            else:
+                chunk_size = max(1, len(raw_texts) // (workers * 4))
+                cleaned_results = list(
+                    executor.map(_clean_and_match, raw_texts, chunksize=chunk_size)
+                )
+
+            accepted_texts: list[str] = []
+            for text, match_mask in cleaned_results:
+                if not text:
+                    stats["empty_document_count"] += 1
+                    continue
+                if deduplicate:
+                    digest = hashlib.sha256(text.encode("utf-8")).hexdigest()
+                    if digest in seen:
+                        stats["duplicate_count"] += 1
+                        continue
+                    seen.add(digest)
+                if match_mask:
+                    stats["decontaminated_document_count"] += 1
+                    benchmark_names = ("hellaswag", "piqa", "arc", "winogrande")
+                    for index, benchmark_name in enumerate(benchmark_names):
+                        if match_mask & (1 << index):
+                            stats["decontamination_hits"][benchmark_name] += 1
+                    continue
+                accepted_texts.append(text)
+
+            for ids in _encode_batch(tokenizer, accepted_texts):
+                if not ids:
+                    stats["empty_document_count"] += 1
+                    continue
+                if max(ids) >= tokenizer.vocab_size:
+                    raise RuntimeError(f"tokenizer emitted an out-of-range id for {source.name}")
+                stats["accepted_document_count"] += 1
+
+                train_remaining = train_target - train_writer.total_tokens
+                val_remaining = val_target - val_writer.total_tokens
+                choose_validation = bool(
+                    val_remaining > 0 and train_remaining > 0 and rng.random() < val_ratio
+                )
+                if train_remaining <= 0:
+                    if val_remaining <= 0:
+                        exhausted = True
+                        break
+                    choose_validation = True
+                if choose_validation:
+                    selected_ids = take_exact(ids, val_remaining, tokenizer.eos_id)
+                    val_writer.write(selected_ids)
+                    stats["val_document_count"] += 1
+                elif train_remaining > 0:
+                    selected_ids = take_exact(ids, train_remaining, tokenizer.eos_id)
+                    train_writer.write(selected_ids)
+                    stats["train_document_count"] += 1
+                else:
+                    continue
+                frequency += np.bincount(selected_ids, minlength=tokenizer.vocab_size)
+                stats["unk_token_count"] += selected_ids.count(tokenizer.unk_id)
     finally:
+        if executor is not None:
+            executor.shutdown(wait=True, cancel_futures=True)
         train_writer.close()
         val_writer.close()
 
@@ -260,6 +360,9 @@ def _progress_metadata(
     shard_tokens: int,
     deduplicate: bool,
     parquet_root: Path | None,
+    workers: int,
+    batch_size: int,
+    decontamination_index: Path | None,
 ) -> dict[str, Any]:
     return {
         "version": 1,
@@ -273,6 +376,14 @@ def _progress_metadata(
         "shard_tokens": shard_tokens,
         "deduplicate": deduplicate,
         "parquet_root": str(parquet_root.resolve()) if parquet_root is not None else None,
+        "workers": workers,
+        "batch_size": batch_size,
+        "decontamination_index": (
+            str(decontamination_index.resolve()) if decontamination_index is not None else None
+        ),
+        "decontamination_sha256": (
+            _sha256(decontamination_index) if decontamination_index is not None else None
+        ),
     }
 
 
@@ -372,13 +483,27 @@ def main() -> None:
         raise SystemExit("--val-ratio must be in [0, 1)")
     if args.shard_tokens <= 0:
         raise SystemExit("--shard-tokens must be positive")
+    if args.workers < 0:
+        raise SystemExit("--workers must be non-negative")
+    if args.batch_size <= 0:
+        raise SystemExit("--batch-size must be positive")
+
+    workers = args.workers or min(4, os.cpu_count() or 1)
 
     config_path = Path(args.config)
     tokenizer_path = Path(args.tokenizer)
     output_dir = Path(args.output_dir)
     parquet_root = Path(args.parquet_root).resolve() if args.parquet_root else None
+    decontamination_index = (
+        Path(args.decontamination_index).resolve() if args.decontamination_index else None
+    )
     raw_config, sources = load_mix_config(config_path)
     tokenizer = load_tokenizer(tokenizer_path)
+    decontaminator = (
+        BenchmarkDecontaminator(decontamination_index)
+        if decontamination_index is not None
+        else None
+    )
     if tokenizer.vocab_size > 65_536:
         raise SystemExit("uint16 tokenization requires a vocabulary of at most 65,536 pieces")
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -399,6 +524,9 @@ def main() -> None:
         shard_tokens=args.shard_tokens,
         deduplicate=args.deduplicate,
         parquet_root=parquet_root,
+        workers=workers,
+        batch_size=args.batch_size,
+        decontamination_index=decontamination_index,
     )
     progress = _load_progress(progress_path, metadata)
     results: dict[str, dict[str, Any]] = progress["sources"]
@@ -432,6 +560,9 @@ def main() -> None:
             max_retries=args.max_retries,
             retry_backoff_seconds=args.retry_backoff_seconds,
             parquet_root=parquet_root,
+            workers=workers,
+            batch_size=args.batch_size,
+            decontaminator=decontaminator,
         )
         results[source.name] = result
         atomic_json_write(progress_path, progress)

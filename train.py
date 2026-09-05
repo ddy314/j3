@@ -22,6 +22,11 @@ def _parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Train D32-1216-R12 with resumable direct PyTorch loop")
     parser.add_argument("--config", required=True, help="YAML training configuration")
     parser.add_argument("--resume", default=None, help="auto or a checkpoint directory")
+    parser.add_argument(
+        "--init-from",
+        default=None,
+        help="initialize model/optimizer from a prior checkpoint while starting this dataset at offset zero",
+    )
     parser.add_argument("--run", default=None, help="run directory, useful with --resume auto")
     parser.add_argument("--device", default=None, help="override config device, e.g. cuda or cpu")
     parser.add_argument("--max-steps", type=int, default=None, help="override the run length for a smoke test")
@@ -68,6 +73,8 @@ def _make_latest_link(runs_root: Path, run_dir: Path) -> None:
 
 def main() -> None:
     args = _parse_args()
+    if args.resume is not None and args.init_from is not None:
+        raise SystemExit("--resume and --init-from are mutually exclusive")
     model_config, train_config, data_config, raw_config = load_config(args.config)
     if args.device:
         train_config.device = args.device
@@ -100,7 +107,9 @@ def main() -> None:
         run_dir,
         tokenizer_hash=tokenizer_hash,
     )
-    if args.resume is not None:
+    if args.init_from is not None:
+        trainer.initialize_from_checkpoint(args.init_from)
+    elif args.resume is not None:
         trainer.load_checkpoint(resume_ref)
     print(f"model={model_config.model_name} parameters={model.parameter_count:,}", flush=True)
     print(

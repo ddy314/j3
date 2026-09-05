@@ -25,6 +25,19 @@ def test_requested_hf_mix_config_has_exact_budgets() -> None:
     assert sum(source.token_budget for source in sources) == 1_100_000_000
 
 
+def test_stage2_mix_has_exact_balanced_budgets() -> None:
+    repository = Path(__file__).resolve().parents[1]
+    _, sources = load_mix_config(repository / "configs/hf_mix_stage2_1b.yaml")
+    assert sum(source.token_budget for source in sources) == 1_000_000_000
+    l1 = [source for source in sources if source.name.startswith("ultra_fineweb_l1_")]
+    assert len(l1) == 6
+    assert sum(source.token_budget for source in l1) == 300_000_000
+    l2 = [source for source in sources if source.name.startswith("ultra_fineweb_l2_")]
+    assert sum(source.token_budget for source in l2) == 250_000_000
+    assert l2[0].filters == {"score_min": 0.55, "score_max": 0.8}
+    assert l2[-1].token_budget == 37_500_000
+
+
 def test_hf_mix_filters_use_english_and_dclm_score() -> None:
     repository = Path(__file__).resolve().parents[1]
     _, sources = load_mix_config(repository / "configs/hf_mix_1b.yaml")
@@ -33,6 +46,9 @@ def test_hf_mix_filters_use_english_and_dclm_score() -> None:
     assert not row_matches_filters({"language": "en", "edu_int_score": 2}, dclm.filters)
     assert not row_matches_filters({"language": "fr", "edu_int_score": 5}, dclm.filters)
     assert row_matches_filters({"metadata": {"language": "en"}}, {"language": "en"})
+    assert row_matches_filters({"score": 0.7, "format": "story"}, {"score_min": 0.55, "score_max": 0.8, "format_in": ["story"]})
+    assert not row_matches_filters({"score": 0.95}, {"score_min": 0.55, "score_max": 0.8})
+    assert row_matches_filters({"meta": '{"language": "en", "language_score": 0.9}'}, {"language": "en", "language_score_min": 0.8})
 
 
 def test_take_exact_keeps_an_eos_boundary() -> None:

@@ -135,10 +135,10 @@ class Trainer:
         self.stop_requested = False
         self.stop_reason = ""
         self.checkpoint_requested = False
-        self.tokenizer_hash = tokenizer_hash
-        self.dataset_manifest_hash = dataset_manifest_hash or getattr(train_stream, "manifest_hash", None)
         self.train_stream = train_stream or self._make_stream(False)
         self.val_stream = val_stream or self._make_stream(True)
+        self.tokenizer_hash = tokenizer_hash
+        self.dataset_manifest_hash = dataset_manifest_hash or getattr(self.train_stream, "manifest_hash", None)
         self._val_initial_state = self.val_stream.state_dict() if self.val_stream is not None else None
         self.telemetry = GPUTelemetry(self.device)
         self.control_path = self.run_dir / "control.json"
@@ -329,6 +329,40 @@ class Trainer:
             f"lr={self.scheduler.last_lr:.6g}, created={meta.get('created_at', 'unknown')}"
         )
         self._write_status("running", resumed_from=str(path))
+        return path
+
+    def initialize_from_checkpoint(self, reference: str | Path) -> Path:
+        """Transfer a trained model to a new dataset without resuming its cursor.
+
+        This intentionally preserves model/optimizer/RNG state while resetting
+        Stage 2 progress to zero. Exact ``load_checkpoint`` remains strict and
+        is still the path for resuming an interrupted run on the same manifest.
+        """
+
+        payload, path = self.checkpoints.load(reference)
+        metadata = self.checkpoints.metadata(path)
+        checkpoint_model_config = metadata.get("model_config")
+        if checkpoint_model_config is not None and checkpoint_model_config != self.model_config.to_dict():
+            raise ValueError("model config differs from checkpoint")
+        checkpoint_tokenizer_hash = metadata.get("tokenizer_hash")
+        if (
+            checkpoint_tokenizer_hash is not None
+            and self.tokenizer_hash is not None
+            and checkpoint_tokenizer_hash != self.tokenizer_hash
+        ):
+            raise ValueError("tokenizer hash differs from checkpoint")
+        self.raw_model.load_state_dict(payload["model"])
+        self.optimizer.load_state_dict(payload["optimizer"])
+        restore_rng_state(payload["rng"])
+        self.state = TrainerState(started_at=time.strftime("%Y-%m-%dT%H:%M:%S%z"))
+        self.scheduler.step(0)
+        self._next_eval_tokens = self.config.eval_every_tokens if self.config.eval_every_tokens > 0 else math.inf
+        self._emit(
+            "initialized from checkpoint: "
+            f"previous step={metadata.get('step', 'unknown')}, "
+            f"tokens={metadata.get('tokens_seen', 'unknown')}, source={path}"
+        )
+        self._write_status("initialized", initialized_from=str(path))
         return path
 
     def _should_checkpoint(self) -> tuple[bool, str, str | None]:

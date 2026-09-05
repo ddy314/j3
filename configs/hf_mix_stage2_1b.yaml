@@ -1,0 +1,121 @@
+version: 1
+name: j3-stage2-balanced-web-science-stories
+
+# Exact Stage 2 training quotas. Ultra-FineWeb L1 is spread evenly across all
+# six 2025 Common Crawl snapshots. L2 is stratified so ordinary 0.55-0.80 web
+# text is the largest band and score >= 0.95 is capped at 15% of its quota.
+sources:
+  - &ultra_l1
+    name: ultra_fineweb_l1_2025_30
+    dataset: openbmb/Ultra-FineWeb-L1
+    config: CC-MAIN-2025-30
+    split: train
+    text_field: content
+    token_budget: 50000000
+    local_subdir: ultra_fineweb_l1_2025_30
+    filters: {language: en, language_score_min: 0.5}
+
+  - <<: *ultra_l1
+    name: ultra_fineweb_l1_2025_33
+    config: CC-MAIN-2025-33
+    local_subdir: ultra_fineweb_l1_2025_33
+  - <<: *ultra_l1
+    name: ultra_fineweb_l1_2025_38
+    config: CC-MAIN-2025-38
+    local_subdir: ultra_fineweb_l1_2025_38
+  - <<: *ultra_l1
+    name: ultra_fineweb_l1_2025_43
+    config: CC-MAIN-2025-43
+    local_subdir: ultra_fineweb_l1_2025_43
+  - <<: *ultra_l1
+    name: ultra_fineweb_l1_2025_47
+    config: CC-MAIN-2025-47
+    local_subdir: ultra_fineweb_l1_2025_47
+  - <<: *ultra_l1
+    name: ultra_fineweb_l1_2025_51
+    config: CC-MAIN-2025-51
+    local_subdir: ultra_fineweb_l1_2025_51
+
+  - name: ultra_fineweb_l2_normal_web
+    dataset: openbmb/Ultra-FineWeb
+    config: default
+    split: en
+    text_field: content
+    token_budget: 125000000
+    local_subdir: ultra_fineweb_l2
+    filters: {score_min: 0.55, score_max: 0.8}
+
+  - name: ultra_fineweb_l2_elevated
+    dataset: openbmb/Ultra-FineWeb
+    config: default
+    split: en
+    text_field: content
+    token_budget: 87500000
+    local_subdir: ultra_fineweb_l2
+    filters: {score_min: 0.8, score_max: 0.95}
+
+  - name: ultra_fineweb_l2_high_capped
+    dataset: openbmb/Ultra-FineWeb
+    config: default
+    split: en
+    text_field: content
+    token_budget: 37500000
+    local_subdir: ultra_fineweb_l2
+    filters: {score_min: 0.95, score_max: 1.01}
+
+  - name: cosmopedia_v2_wikihow
+    dataset: HuggingFaceTB/smollm-corpus
+    config: cosmopedia-v2
+    split: train
+    text_field: text
+    token_budget: 100000000
+    local_subdir: cosmopedia_v2
+    filters: {format_in: [wikihow]}
+
+  - name: cosmopedia_v2_stories
+    dataset: HuggingFaceTB/smollm-corpus
+    config: cosmopedia-v2
+    split: train
+    text_field: text
+    token_budget: 100000000
+    local_subdir: cosmopedia_v2
+    filters:
+      format_in: [story, story_forums, story_reddit, story_life_lessons]
+
+  - name: pes2o_s2ag
+    dataset: allenai/peS2o
+    config: v2
+    split: train
+    text_field: text
+    token_budget: 100000000
+    local_subdir: pes2o_v2
+    local_pattern: "*.json.gz"
+    filters: {source_in: [s2ag/train]}
+
+  - name: common_corpus_open_culture_en
+    dataset: PleIAs/common_corpus
+    config: default
+    split: train
+    text_field: text
+    token_budget: 60000000
+    local_subdir: common_corpus
+    filters: {language: en, open_type_in: [OpenCulture, "Open Culture"]}
+
+  - name: common_corpus_open_web_en
+    dataset: PleIAs/common_corpus
+    config: default
+    split: train
+    text_field: text
+    token_budget: 40000000
+    local_subdir: common_corpus
+    filters: {language: en, open_type_in: [OpenWeb, "Open Web"]}
+
+  - name: tinystories_gpt4_v2
+    dataset: roneneldan/TinyStories
+    config: TinyStoriesV2-GPT4
+    split: train
+    text_field: text
+    token_budget: 50000000
+    local_subdir: tinystories_gpt4_v2
+    local_pattern: "*.txt"
+    filters: {}

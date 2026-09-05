@@ -77,6 +77,11 @@ class SentencePieceTokenizer:
         for text in texts:
             yield self.encode(text, add_bos=add_bos, add_eos=add_eos)
 
+    def encode_batch(
+        self, texts: list[str], add_bos: bool = False, add_eos: bool = True
+    ) -> list[list[int]]:
+        return [self.encode(text, add_bos=add_bos, add_eos=add_eos) for text in texts]
+
 
 class ByteLevelBPETokenizer:
     """Hugging Face byte-level BPE wrapper with the same training interface."""
@@ -122,6 +127,21 @@ class ByteLevelBPETokenizer:
     def encode_iter(self, texts: Iterable[str], add_bos: bool = False, add_eos: bool = True):
         for text in texts:
             yield self.encode(text, add_bos=add_bos, add_eos=add_eos)
+
+    def encode_batch(
+        self, texts: list[str], add_bos: bool = False, add_eos: bool = True
+    ) -> list[list[int]]:
+        """Encode a batch through the tokenizers/Rayon parallel hot path."""
+
+        encoded = self._tokenizer.encode_batch(texts, add_special_tokens=False)
+        batches = [[int(value) for value in item.ids] for item in encoded]
+        if add_bos:
+            for ids in batches:
+                ids.insert(0, self.bos_id)
+        if add_eos:
+            for ids in batches:
+                ids.append(self.eos_id)
+        return batches
 
 
 def load_tokenizer(path: str | Path) -> SentencePieceTokenizer | ByteLevelBPETokenizer:

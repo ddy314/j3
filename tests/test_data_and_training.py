@@ -321,6 +321,34 @@ def test_exact_resume_matches_uninterrupted(tmp_path: Path) -> None:
     assert resumed.state.step == uninterrupted.state.step == 9
 
 
+def test_initialize_from_checkpoint_resets_new_dataset_progress(tmp_path: Path) -> None:
+    model_config = _tiny_model_config()
+    data_config = DataConfig(eval_batches=0, synthetic=True)
+    torch.manual_seed(123)
+    source = Trainer(
+        DecoderLM(model_config),
+        model_config,
+        _tiny_train_config(2 * 16),
+        data_config,
+        tmp_path / "source",
+    )
+    source.run()
+    checkpoint = source.checkpoints.latest()
+    assert checkpoint is not None
+
+    target = Trainer(
+        DecoderLM(model_config),
+        model_config,
+        _tiny_train_config(2 * 16),
+        data_config,
+        tmp_path / "target",
+    )
+    target.initialize_from_checkpoint(checkpoint)
+    assert target.state.tokens_seen == 0
+    assert target.state.step == 0
+    assert target.train_stream.state_dict()["position"] == 0
+
+
 def test_exact_mmap_resume_matches_uninterrupted(tmp_path: Path) -> None:
     values = np.arange(256, dtype=np.uint16) % 32
     values[:96].tofile(tmp_path / "train_0.bin")

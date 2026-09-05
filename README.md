@@ -224,7 +224,7 @@ benchmark artifact verifies the resulting memory boundary.
 
 ## Pretraining
 
-After `data/tokenized/manifest.json` exists, inspect and adjust the LR proxy result, then start the formal 1.1B-token configuration:
+After `data/stage2_tokenized/manifest.json` exists, inspect and adjust the LR proxy result, then start the formal 1.0B-token Stage 2 configuration:
 
 ```bash
 ./scripts/train_pretrain_1b.sh
@@ -241,6 +241,18 @@ Resume the latest complete checkpoint:
 ```bash
 uv run python train.py --config configs/pretrain_1b.yaml --resume auto
 ```
+
+To continue pretraining from the completed first-stage model while starting
+the Stage 2 token stream at its beginning, initialize a new run from the
+first-stage checkpoint:
+
+```bash
+./scripts/train_pretrain_1b.sh --init-from runs/20260905-021323/checkpoints/latest
+```
+
+`--init-from` carries over model weights, Adam state, and RNG state but resets
+the Stage 2 data cursor and its additional-token counter. Use `--resume` only
+for an interrupted run on the same manifest.
 
 Or resume a specific checkpoint:
 

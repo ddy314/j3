@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import itertools
+import gzip
+import json
 import os
 import re
 import time
@@ -18,6 +20,8 @@ class HFMixSource:
     text_field: str
     token_budget: int
     filters: dict[str, Any]
+    local_subdir: str | None = None
+    local_pattern: str = "*.parquet"
 
     def as_dict(self) -> dict[str, Any]:
         return {
@@ -28,6 +32,8 @@ class HFMixSource:
             "text_field": self.text_field,
             "token_budget": self.token_budget,
             "filters": self.filters,
+            "local_subdir": self.local_subdir,
+            "local_pattern": self.local_pattern,
         }
 
 
@@ -67,6 +73,8 @@ def load_mix_config(path: str | Path) -> tuple[dict[str, Any], list[HFMixSource]
                 text_field=str(item.get("text_field", "text")),
                 token_budget=token_budget,
                 filters=dict(filters),
+                local_subdir=item.get("local_subdir"),
+                local_pattern=str(item.get("local_pattern", "*.parquet")),
             )
         )
     return raw, sources
@@ -86,6 +94,11 @@ def row_value(row: Mapping[str, Any], field: str) -> Any:
         return row[field]
     for container_name in ("metadata", "meta", "attributes"):
         container = row.get(container_name)
+        if isinstance(container, str):
+            try:
+                container = json.loads(container)
+            except json.JSONDecodeError:
+                container = None
         if isinstance(container, Mapping) and field in container:
             return container[field]
     return None
@@ -130,6 +143,27 @@ def row_matches_filters(row: Mapping[str, Any], filters: Mapping[str, Any]) -> b
                 return False
         except (TypeError, ValueError) as exc:
             raise ValueError(f"invalid language_score value: {value!r}") from exc
+
+    for suffix, comparator in (("_min", lambda left, right: left >= right), ("_max", lambda left, right: left < right)):
+        for key, threshold in filters.items():
+            if not key.endswith(suffix) or key in {"edu_int_score_min", "language_score_min"}:
+                continue
+            field = key[: -len(suffix)]
+            value = row_value(row, field)
+            try:
+                if value is None or not comparator(float(value), float(threshold)):
+                    return False
+            except (TypeError, ValueError) as exc:
+                raise ValueError(f"invalid numeric filter value for {field}: {value!r}") from exc
+
+    for key, expected in filters.items():
+        if not key.endswith("_in"):
+            continue
+        field = key[:-3]
+        if not isinstance(expected, (list, tuple, set)):
+            raise ValueError(f"{key} filter must be a sequence")
+        if row_value(row, field) not in expected:
+            return False
     return True
 
 
@@ -165,6 +199,50 @@ def iter_parquet_rows(
                     raise TypeError(f"parquet row is not a mapping: {type(row).__name__}")
                 raw_rows_seen += 1
                 yield raw_rows_seen, dict(row)
+
+
+def iter_local_rows(paths: Iterable[str | Path]) -> Iterator[tuple[int, dict[str, Any]]]:
+    """Stream supported local source files in deterministic path order."""
+
+    normalized_paths = [Path(path) for path in paths]
+    if normalized_paths and all(path.suffix == ".parquet" for path in normalized_paths):
+        yield from iter_parquet_rows(normalized_paths)
+        return
+    raw_rows_seen = 0
+    for path in normalized_paths:
+        if not path.is_file():
+            raise FileNotFoundError(path)
+        if path.name.endswith(".json.gz"):
+            with gzip.open(path, "rt", encoding="utf-8") as handle:
+                for line in handle:
+                    line = line.strip()
+                    if not line:
+                        continue
+                    row = json.loads(line)
+                    if not isinstance(row, Mapping):
+                        raise TypeError(f"JSON row is not a mapping: {type(row).__name__}")
+                    raw_rows_seen += 1
+                    yield raw_rows_seen, dict(row)
+        elif path.suffix == ".txt":
+            with path.open("rt", encoding="utf-8") as handle:
+                pending: list[str] = []
+                for line in handle:
+                    if "<|endoftext|>" not in line:
+                        pending.append(line)
+                        continue
+                    before, _, after = line.partition("<|endoftext|>")
+                    pending.append(before)
+                    text = "".join(pending).strip()
+                    if text:
+                        raw_rows_seen += 1
+                        yield raw_rows_seen, {"text": text}
+                    pending = [after] if after else []
+                text = "".join(pending).strip()
+                if text:
+                    raw_rows_seen += 1
+                    yield raw_rows_seen, {"text": text}
+        else:
+            raise ValueError(f"unsupported local source file: {path}")
 
 
 def _is_access_error(exc: Exception) -> bool:
