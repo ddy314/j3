@@ -1,0 +1,31 @@
+version: 1
+name: j3-non-target-multiple-choice-posttrain
+tokenizer: data/tokenized/tokenizer.json
+output_dir: data/mc_posttrain_tokenized
+max_seq_len: 512
+val_ratio: 0.02
+seed: 1337
+
+# Keep this empty when the raw records already contain the exact continuation
+# string expected by the benchmark scorer. Set it to " " only when every raw
+# option is a bare word/phrase that must be separated from the prompt.
+choice_prefix: ""
+decontamination_index: data/decontamination/public_benchmarks.npz
+
+# Input records use: {"id", "prompt", "choices": [..], "answer": 0}.
+# `answer` is zero-based or A/B/C/... . Explicit train/validation/dev splits
+# are respected; otherwise a deterministic 2% hash split is used. These are
+# local paths so non-target benchmark licensing and exclusion can be audited.
+sources:
+  - name: commonsense_physics_mc
+    category: commonsense_physics
+    path: data/mc_raw/commonsense_physics/*.json*
+  - name: elementary_science_knowledge_mc
+    category: elementary_science_knowledge
+    path: data/mc_raw/elementary_science_knowledge/*.json*
+  - name: coreference_reading_relation_mc
+    category: coreference_reading_relation
+    path: data/mc_raw/coreference_reading_relation/*.json*
+  - name: short_math_logic_mc
+    category: short_math_logic
+    path: data/mc_raw/short_math_logic/*.json*

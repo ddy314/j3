@@ -23,6 +23,17 @@ class DataConfig:
     shuffle_seed: int = 1337
     eval_batches: int = 20
     synthetic: bool = True
+    mc_train_manifest: str | None = None
+    mc_val_manifest: str | None = None
+    mc_batch_size: int = 2
+    mc_shuffle_seed: int = 1337
+    mc_eval_batches: int = 20
+
+    def __post_init__(self) -> None:
+        if self.mc_batch_size <= 0:
+            raise ValueError("mc_batch_size must be positive")
+        if self.mc_eval_batches < 0:
+            raise ValueError("mc_eval_batches must be non-negative")
 
 
 @dataclass
@@ -59,10 +70,18 @@ class TrainConfig:
     keep_last_n: int = 3
     pin_memory: bool = True
     num_workers: int = 0
+    objective: str = "lm"
+    lm_loss_weight: float = 1.0
+    ranking_loss_weight: float = 0.5
+    ranking_temperature: float = 0.1
+    ranking_negative_mode: str = "mean"
+    mc_sequence_length: int = 512
 
     def __post_init__(self) -> None:
         if self.precision not in {"bf16", "fp32"}:
             raise ValueError("precision must be bf16 or fp32")
+        if self.objective not in {"lm", "contrastive_mc"}:
+            raise ValueError("objective must be 'lm' or 'contrastive_mc'")
         if self.micro_batch_size <= 0 or self.gradient_accumulation_steps <= 0:
             raise ValueError("batch sizes must be positive")
         if self.sequence_length <= 0:
@@ -75,6 +94,16 @@ class TrainConfig:
             raise ValueError("max_steps must be positive when set")
         if self.global_batch_tokens is not None and self.global_batch_tokens != self.tokens_per_step:
             raise ValueError("global_batch_tokens must equal sequence_length * micro_batch_size * accumulation")
+        if self.lm_loss_weight < 0 or self.ranking_loss_weight < 0:
+            raise ValueError("loss weights must be non-negative")
+        if self.objective == "contrastive_mc" and self.ranking_loss_weight <= 0:
+            raise ValueError("contrastive_mc requires a positive ranking_loss_weight")
+        if self.ranking_temperature <= 0:
+            raise ValueError("ranking_temperature must be positive")
+        if self.ranking_negative_mode not in {"mean", "hardest"}:
+            raise ValueError("ranking_negative_mode must be 'mean' or 'hardest'")
+        if self.mc_sequence_length <= 1:
+            raise ValueError("mc_sequence_length must be at least 2")
 
     @property
     def tokens_per_step(self) -> int:

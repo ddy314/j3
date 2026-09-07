@@ -386,6 +386,7 @@ def _hf_source(item: dict[str, Any]) -> HFMixSource:
         local_pattern=str(item.get("local_pattern", "*.parquet")),
         text_template=text_template,
         min_text_chars=min_text_chars,
+        category=str(item.get("category", "unspecified")),
     )
 
 

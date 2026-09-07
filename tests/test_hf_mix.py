@@ -143,3 +143,49 @@ def test_prepare_source_writes_exact_token_quota(monkeypatch, tmp_path: Path) ->
     assert sum(entry["token_count"] for entry in result["train_shards"]) == 5
     for entry in result["train_shards"]:
         assert (tmp_path / entry["path"]).stat().st_size == 2 * entry["token_count"]
+
+
+def test_prepare_source_reads_local_jsonl_for_capability_mix(tmp_path: Path) -> None:
+    class FakeTokenizer:
+        vocab_size = 16
+        unk_id = 1
+        eos_id = 3
+
+        def encode(self, text: str, add_bos: bool = False, add_eos: bool = True) -> list[int]:
+            del text, add_bos, add_eos
+            return [4, 5]
+
+    raw_dir = tmp_path / "raw"
+    raw_dir.mkdir()
+    (raw_dir / "rows.jsonl").write_text(
+        '{"text":"first"}\n{"text":"second"}\n{"text":"third"}\n',
+        encoding="utf-8",
+    )
+    source = HFMixSource(
+        name="local_capability",
+        dataset="local",
+        config=None,
+        split="train",
+        text_field="text",
+        token_budget=5,
+        filters={},
+        local_subdir="raw",
+        local_pattern="*.jsonl",
+        kind="local",
+        category="fixture",
+    )
+    result = prepare_hf_mix._prepare_source(
+        source,
+        tokenizer=FakeTokenizer(),
+        output_dir=tmp_path / "tokenized",
+        scale=1.0,
+        val_ratio=0.0,
+        seed=1337,
+        shard_tokens=3,
+        deduplicate=False,
+        max_retries=0,
+        retry_backoff_seconds=0,
+        parquet_root=tmp_path,
+    )
+    assert result["train_token_count"] == 5
+    assert result["source"]["kind"] == "local"

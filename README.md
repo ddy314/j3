@@ -209,10 +209,12 @@ The training config uses `1e-4` peak LR and `1e-5` minimum LR, and starts from
 the completed Stage 2 checkpoint with `--init-from` so the Stage 3 data cursor
 starts at zero.
 
-### Final high-information 500M mixture
+### Historical Stage 4 candidate (not selected)
 
-For the final evaluation-oriented continuation, use
-`configs/stage3_final_500m.yaml`. It is an exact 500M-token train stream with
+The following 500M-token mixture was evaluated as a Stage 4 candidate, but it
+is not the selected continuation path. Keep it only as provenance; do not use
+`configs/pretrain_stage4_final_500m.yaml` for the next run. The candidate was
+an exact 500M-token train stream with
 no generic Web, SEO, template-page, or low-information fragment bucket:
 
 - 250M long-form FinePDF textbook tokens;
@@ -248,12 +250,65 @@ UV_CACHE_DIR=/tmp/j3-uv-cache uv run python scripts/mix_tokenized_manifest.py \
   --output-dir data/stage3_final_mixed_tokenized --verify-only
 ```
 
-After verification, `configs/pretrain_stage4_final_500m.yaml` points both train
-and validation streams at the mixed manifest and keeps the continuation LR at
-`1e-4` peak / `1e-5` minimum. Start it from the completed Stage 3 checkpoint
-with `--init-from`; do not use `--resume` across the manifest change. The
-earlier `pretrain_stage3_final_500m.yaml` filename is retained only for
-compatibility.
+The corresponding preparation and training configs remain available for
+reproducibility, but the selected route below uses the completed Stage 3
+checkpoint and a capability-oriented 125M-token CPT mix instead.
+
+### Capability-oriented continuation and MC post-training
+
+The next training path intentionally starts from the completed Stage 3
+checkpoint (`runs/20260906-225321/checkpoints/latest`) and does not use the
+Stage 4 manifest. The 125M-token CPT recipe is exactly 30% daily narrative/event
+continuation, 25% commonsense/physical explanations, 20% elementary science and
+knowledge QA, 15% coreference/reading/relation text, and 10% short math/logic.
+The raw CPT rows are read from local `data/capability_raw/<category>/` folders
+under the `text` field; the preparation path adds no chat template.
+
+```bash
+./scripts/prepare_capability_cpt.sh
+./scripts/mix_capability_cpt.sh
+./scripts/mix_capability_cpt.sh --verify-only
+
+./scripts/train_capability_cpt.sh \
+  --init-from runs/20260906-225321/checkpoints/latest
+
+# If this run is interrupted, resume only this same run/data manifest.
+./scripts/train_capability_cpt.sh \
+  --run runs/capability-cpt-125m --resume auto
+```
+
+For the second phase, put non-target multiple-choice records under the paths in
+`configs/mc_posttrain.yaml`. Each JSONL row is
+`{"id", "prompt", "choices": [..], "answer": 0}`; `answer` may also be
+`A/B/C/...`. The builder stores separate prompt and choice token IDs, and the
+trainer uses the same length-normalized continuation score as evaluation:
+
+```bash
+./scripts/prepare_mc_posttrain.sh
+./scripts/prepare_mc_posttrain.sh --verify-only
+
+./scripts/train_contrastive_mc.sh \
+  --init-from runs/capability-cpt-125m/checkpoints/latest
+
+# If this run is interrupted, resume only this same run/data manifest.
+./scripts/train_contrastive_mc.sh \
+  --run runs/contrastive-mc-posttrain --resume auto
+```
+
+The contrastive config uses `L = 1.0 * L_LM + 0.5 * L_rank`, mean negatives,
+`tau = 0.1`, and 50M Stage 3 replay tokens as a conservative starting horizon.
+`ranking_accuracy`, `validation_ranking_accuracy`, and positive margins are
+written to `metrics.jsonl`. Score a complete MC validation split with:
+
+```bash
+./scripts/score_multiple_choice.sh \
+  --config configs/contrastive_mc_posttrain.yaml \
+  --checkpoint runs/contrastive-mc-posttrain/checkpoints/latest
+```
+
+Both phases keep the original causal LM checkpoint format. Use `--init-from`
+for the phase transitions; use `--resume auto` only after an interrupted run
+with the same manifests and objective.
 
 ## Smoke training
 
@@ -383,10 +438,10 @@ Open `http://127.0.0.1:7860`. It shows overview/progress, interactive Plotly los
 
 ```text
 src/model/       model, attention, MLP/xIELU, RMSNorm, RoPE
-src/data/        tokenizer wrapper, raw readers, mmap token stream
-src/training/    trainer, atomic checkpoints, scheduler, metrics, telemetry
+src/data/        tokenizer wrapper, raw readers, mmap and MC token streams
+src/training/    trainer, LM/ranking objectives, atomic checkpoints, scheduler, metrics
 scripts/         environment, data, benchmark, profile, launch utilities
-configs/         smoke, benchmark, and 1.1B-token pretraining configs
+configs/         smoke, benchmark, CPT, MC post-training, and pretraining configs
 tests/           model, data, checkpoint, scheduler, RNG, and exact-resume tests
 ```
 

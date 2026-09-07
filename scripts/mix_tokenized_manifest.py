@@ -171,7 +171,14 @@ def _write_shuffled_chunks(
     }
 
 
-def _mix(input_manifest_path: Path, output_dir: Path, *, chunk_tokens: int, seed: int) -> dict[str, Any]:
+def _mix(
+    input_manifest_path: Path,
+    output_dir: Path,
+    *,
+    chunk_tokens: int,
+    seed: int,
+    dataset_type: str = "stage3_globally_mixed",
+) -> dict[str, Any]:
     if output_dir.exists() and any(output_dir.iterdir()):
         raise FileExistsError(f"output directory is not empty: {output_dir}")
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -229,11 +236,11 @@ def _mix(input_manifest_path: Path, output_dir: Path, *, chunk_tokens: int, seed
         "version": 1,
         "created_at": time.strftime("%Y-%m-%dT%H:%M:%S%z"),
         "dataset": {
-            "type": "stage3_globally_mixed",
+            "type": dataset_type,
             "input_manifest": str(input_manifest_path.resolve()),
             "input_manifest_sha256": mixing["input_manifest_sha256"],
         },
-        "source": {"type": "stage3_globally_mixed", "input_manifest": str(input_manifest_path.resolve())},
+        "source": {"type": dataset_type, "input_manifest": str(input_manifest_path.resolve())},
         "mix_config": "global_chunk_shuffle",
         "mix_config_sha256": mixing_hash,
         "mixing": mixing,
@@ -284,11 +291,16 @@ def _verify(output_dir: Path) -> dict[str, Any]:
 
 
 def _parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Globally shuffle Stage 3 token chunks into mixed shards")
+    parser = argparse.ArgumentParser(description="Globally shuffle token chunks into mixed shards")
     parser.add_argument("--input-manifest", default="data/stage3_tokenized/manifest.json")
     parser.add_argument("--output-dir", default="data/stage3_mixed_tokenized")
     parser.add_argument("--chunk-tokens", type=int, default=8_192)
     parser.add_argument("--seed", type=int, default=1337)
+    parser.add_argument(
+        "--dataset-type",
+        default="stage3_globally_mixed",
+        help="dataset metadata type for the output manifest",
+    )
     parser.add_argument("--verify-only", action="store_true")
     return parser.parse_args()
 
@@ -310,6 +322,7 @@ def main() -> None:
         output_dir,
         chunk_tokens=args.chunk_tokens,
         seed=args.seed,
+        dataset_type=args.dataset_type,
     )
     print(
         json.dumps(

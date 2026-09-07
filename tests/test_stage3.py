@@ -4,6 +4,7 @@ from pathlib import Path
 
 import yaml
 
+from src.data.hf_mix import load_mix_config
 from scripts.prepare_stage3 import load_stage3_config
 
 
@@ -79,3 +80,19 @@ def test_final_stage_training_config_is_stage4_and_uses_final_manifest() -> None
     assert config["training"]["total_tokens"] == 500_000_000
     assert config["data"]["train_manifest"] == "data/stage3_final_mixed_tokenized/manifest.json"
     assert config["data"]["val_manifest"] == "data/stage3_final_mixed_tokenized/manifest.json"
+
+
+def test_capability_cpt_recipe_has_requested_distribution() -> None:
+    repository = Path(__file__).resolve().parents[1]
+    raw, sources = load_mix_config(repository / "configs/capability_cpt_mix_125m.yaml")
+    assert raw["target_train_tokens"] == 125_000_000
+    assert sum(source.token_budget for source in sources) == 125_000_000
+    assert [source.token_budget for source in sources] == [
+        37_500_000,
+        31_250_000,
+        25_000_000,
+        18_750_000,
+        12_500_000,
+    ]
+    assert all(source.kind == "local" for source in sources)
+    assert all(source.text_template is None for source in sources)
