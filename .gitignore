@@ -35,4 +35,6 @@ env/
 /data/stage2_tokenized/
 /data/stage3_tokenized/
 /data/stage3_mixed_tokenized/
+/data/stage3_final_tokenized/
+/data/stage3_final_mixed_tokenized/
 /finepdfs_300m_tokenized/

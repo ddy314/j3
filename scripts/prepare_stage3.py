@@ -234,13 +234,22 @@ def _copy_tokenized_manifest_source(
         manifest_path, input_manifest, canonical_tokenizer
     )
     train_writer, val_writer = _new_writers(output_dir, name, shard_tokens)
+    requested_train = int(item.get("target_train_tokens", input_manifest.get("train_token_count", 0)))
+    if requested_train <= 0:
+        raise ValueError(f"{name!r} needs a positive target_train_tokens")
+    available_train = int(input_manifest.get("train_token_count", 0))
+    if requested_train > available_train:
+        raise ValueError(
+            f"{name!r} requests {requested_train:,} train tokens but input has only "
+            f"{available_train:,}"
+        )
     try:
         train_stats = _write_selected_entries(
             manifest_path=manifest_path,
             entries=input_manifest.get("train_shards", []),
             split="train",
             writer=train_writer,
-            limit=None,
+            limit=requested_train,
             vocab_size=int(input_manifest["vocab_size"]),
         )
         val_stats = _write_selected_entries(
@@ -260,7 +269,7 @@ def _copy_tokenized_manifest_source(
         "name": name,
         "kind": "tokenized_manifest",
         "category": str(item["category"]),
-        "declared_train_tokens": int(item["target_train_tokens"]),
+        "declared_train_tokens": requested_train,
         "actual_train_tokens": train_stats["token_count"],
         "actual_val_tokens": val_stats["token_count"],
         "train_shards": train_writer.entries,
@@ -359,6 +368,12 @@ def _hf_source(item: dict[str, Any]) -> HFMixSource:
     filters = item.get("filters", {})
     if not isinstance(filters, dict):
         raise ValueError(f"filters for {item['name']!r} must be a mapping")
+    text_template = item.get("text_template")
+    if text_template is not None and not isinstance(text_template, str):
+        raise ValueError(f"text_template for {item['name']!r} must be a string")
+    min_text_chars = int(item.get("min_text_chars", 0))
+    if min_text_chars < 0:
+        raise ValueError(f"min_text_chars for {item['name']!r} must be non-negative")
     return HFMixSource(
         name=str(item["name"]),
         dataset=str(item["dataset"]),
@@ -369,6 +384,8 @@ def _hf_source(item: dict[str, Any]) -> HFMixSource:
         filters=dict(filters),
         local_subdir=item.get("local_subdir"),
         local_pattern=str(item.get("local_pattern", "*.parquet")),
+        text_template=text_template,
+        min_text_chars=min_text_chars,
     )
 
 

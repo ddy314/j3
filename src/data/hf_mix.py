@@ -5,6 +5,7 @@ import gzip
 import json
 import os
 import re
+import string
 import time
 from dataclasses import dataclass
 from pathlib import Path
@@ -22,6 +23,8 @@ class HFMixSource:
     filters: dict[str, Any]
     local_subdir: str | None = None
     local_pattern: str = "*.parquet"
+    text_template: str | None = None
+    min_text_chars: int = 0
 
     def as_dict(self) -> dict[str, Any]:
         return {
@@ -34,6 +37,8 @@ class HFMixSource:
             "filters": self.filters,
             "local_subdir": self.local_subdir,
             "local_pattern": self.local_pattern,
+            "text_template": self.text_template,
+            "min_text_chars": self.min_text_chars,
         }
 
 
@@ -64,6 +69,12 @@ def load_mix_config(path: str | Path) -> tuple[dict[str, Any], list[HFMixSource]
         filters = item.get("filters", {})
         if not isinstance(filters, dict):
             raise ValueError(f"source {name} filters must be a mapping")
+        text_template = item.get("text_template")
+        if text_template is not None and not isinstance(text_template, str):
+            raise ValueError(f"source {name} text_template must be a string")
+        min_text_chars = int(item.get("min_text_chars", 0))
+        if min_text_chars < 0:
+            raise ValueError(f"source {name} min_text_chars must be non-negative")
         sources.append(
             HFMixSource(
                 name=name,
@@ -75,6 +86,8 @@ def load_mix_config(path: str | Path) -> tuple[dict[str, Any], list[HFMixSource]
                 filters=dict(filters),
                 local_subdir=item.get("local_subdir"),
                 local_pattern=str(item.get("local_pattern", "*.parquet")),
+                text_template=text_template,
+                min_text_chars=min_text_chars,
             )
         )
     return raw, sources
@@ -104,7 +117,30 @@ def row_value(row: Mapping[str, Any], field: str) -> Any:
     return None
 
 
-def row_text(row: Mapping[str, Any], text_field: str) -> str | None:
+def row_text(
+    row: Mapping[str, Any], text_field: str, text_template: str | None = None
+) -> str | None:
+    if text_template is not None:
+        fields: set[str] = set()
+        for _, field_name, _, _ in string.Formatter().parse(text_template):
+            if field_name is None:
+                continue
+            if not re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]*", field_name):
+                raise ValueError(
+                    f"text_template fields must be simple row names, got {field_name!r}"
+                )
+            fields.add(field_name)
+        values: dict[str, str] = {}
+        for field_name in fields:
+            value = row_value(row, field_name)
+            if not isinstance(value, str) or not value.strip():
+                return None
+            values[field_name] = value.strip()
+        try:
+            text = text_template.format(**values).strip()
+        except (KeyError, ValueError) as exc:
+            raise ValueError(f"cannot render text_template for row fields {sorted(fields)}") from exc
+        return text or None
     value = row_value(row, text_field)
     if isinstance(value, str):
         text = value.strip()

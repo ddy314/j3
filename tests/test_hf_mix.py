@@ -2,7 +2,13 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from src.data.hf_mix import HFMixSource, load_mix_config, row_matches_filters, source_slug
+from src.data.hf_mix import (
+    HFMixSource,
+    load_mix_config,
+    row_matches_filters,
+    row_text,
+    source_slug,
+)
 from scripts import prepare_hf_mix
 from scripts.prepare_hf_mix import take_exact
 
@@ -60,6 +66,36 @@ def test_take_exact_keeps_an_eos_boundary() -> None:
 
 def test_source_slug_is_stable_and_path_safe() -> None:
     assert source_slug("Source A / synthetic") == "source-a-synthetic"
+
+
+def test_row_text_can_render_question_answer_template() -> None:
+    rendered = row_text(
+        {"question": "Why?", "response": "Because."},
+        "question",
+        "Question: {question}\nAnswer: {response}",
+    )
+    assert rendered == "Question: Why?\nAnswer: Because."
+    assert row_text({"question": "Why?", "response": ""}, "question", "{question}\n{response}") is None
+
+
+def test_mix_config_preserves_template_and_short_text_policy(tmp_path: Path) -> None:
+    config = tmp_path / "mix.yaml"
+    config.write_text(
+        """
+sources:
+  - name: qa
+    dataset: example/qa
+    text_field: question
+    text_template: "Question: {question}\\nAnswer: {response}"
+    min_text_chars: 256
+    token_budget: 10
+    filters: {}
+""",
+        encoding="utf-8",
+    )
+    _, sources = load_mix_config(config)
+    assert sources[0].text_template == "Question: {question}\nAnswer: {response}"
+    assert sources[0].min_text_chars == 256
 
 
 def test_prepare_source_writes_exact_token_quota(monkeypatch, tmp_path: Path) -> None:

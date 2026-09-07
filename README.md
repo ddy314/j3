@@ -209,6 +209,52 @@ The training config uses `1e-4` peak LR and `1e-5` minimum LR, and starts from
 the completed Stage 2 checkpoint with `--init-from` so the Stage 3 data cursor
 starts at zero.
 
+### Final high-information 500M mixture
+
+For the final evaluation-oriented continuation, use
+`configs/stage3_final_500m.yaml`. It is an exact 500M-token train stream with
+no generic Web, SEO, template-page, or low-information fragment bucket:
+
+- 250M long-form FinePDF textbook tokens;
+- 40M curated synthetic textbook tokens from Cosmopedia;
+- 75M scientific-explanation tokens from the verified local peS2o slice;
+- 30M encyclopedic WikiText-103 tokens;
+- 55M OpenOrca question-answer knowledge tokens;
+- 30M coherent synthetic narrative tokens;
+- 15M synthetic procedural knowledge tokens from WikiHow;
+- 5M verified synthetic reasoning tokens, kept as a small auxiliary slice
+  because the final evaluation has no math-reasoning item.
+
+The new Hub inputs are downloaded in a resumable, size-checked way:
+
+```bash
+./scripts/download_stage3_final_sources.sh
+```
+
+Then assemble, globally mix, and verify the final artifact:
+
+```bash
+UV_CACHE_DIR=/tmp/j3-uv-cache uv run python scripts/prepare_stage3.py \
+  --config configs/stage3_final_500m.yaml \
+  --parquet-root /home/xia/.cache/j3-stage3-final-hf \
+  --workers 4 --batch-size 2048
+
+UV_CACHE_DIR=/tmp/j3-uv-cache uv run python scripts/mix_tokenized_manifest.py \
+  --input-manifest data/stage3_final_tokenized/manifest.json \
+  --output-dir data/stage3_final_mixed_tokenized \
+  --chunk-tokens 8192 --seed 1337
+
+UV_CACHE_DIR=/tmp/j3-uv-cache uv run python scripts/mix_tokenized_manifest.py \
+  --output-dir data/stage3_final_mixed_tokenized --verify-only
+```
+
+After verification, `configs/pretrain_stage4_final_500m.yaml` points both train
+and validation streams at the mixed manifest and keeps the continuation LR at
+`1e-4` peak / `1e-5` minimum. Start it from the completed Stage 3 checkpoint
+with `--init-from`; do not use `--resume` across the manifest change. The
+earlier `pretrain_stage3_final_500m.yaml` filename is retained only for
+compatibility.
+
 ## Smoke training
 
 The smoke configuration uses deterministic synthetic tokens when no manifest is supplied and runs about one million tokens:

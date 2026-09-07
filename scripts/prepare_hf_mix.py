@@ -186,6 +186,7 @@ def _prepare_source(
         "missing_or_nontext_rows": 0,
         "empty_document_count": 0,
         "duplicate_count": 0,
+        "short_document_count": 0,
         "accepted_document_count": 0,
         "train_document_count": 0,
         "val_document_count": 0,
@@ -238,7 +239,7 @@ def _prepare_source(
                 if not row_matches_filters(row, source.filters):
                     stats["filtered_rows"] += 1
                     continue
-                text = row_text(row, source.text_field)
+                text = row_text(row, source.text_field, source.text_template)
                 if text is None:
                     stats["missing_or_nontext_rows"] += 1
                     continue
@@ -262,6 +263,9 @@ def _prepare_source(
             for text, match_mask in cleaned_results:
                 if not text:
                     stats["empty_document_count"] += 1
+                    continue
+                if source.min_text_chars and len(text) < source.min_text_chars:
+                    stats["short_document_count"] += 1
                     continue
                 if deduplicate:
                     digest = hashlib.sha256(text.encode("utf-8")).hexdigest()
