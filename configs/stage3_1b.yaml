@@ -1,0 +1,69 @@
+version: 1
+name: j3-stage3-finepdf-clean-web-natural-wiki
+
+# The FinePDF artifact is nominally 300M tokens, but its usable train split is
+# 299,793,532 tokens. The FineWeb-Edu quota absorbs that 206,468-token
+# difference so the assembled Stage 3 train stream is exactly 1,000,000,000
+# tokens. DCLM-Edu is intentionally not used here because its public Parquet
+# route was previously too slow and memory-heavy in this environment.
+target_train_tokens: 1000000000
+output_dir: data/stage3_tokenized
+tokenizer: data/tokenized/tokenizer.json
+shard_tokens: 4194304
+val_ratio: 0.01
+seed: 1337
+deduplicate: true
+decontamination_index: data/decontamination/public_benchmarks.npz
+
+sources:
+  - name: finepdfs_300m
+    kind: tokenized_manifest
+    category: finepdf
+    manifest: finepdfs_300m_tokenized/manifest.json
+    target_train_tokens: 300000000
+
+  # Stage 1-style clean Web/Edu: 350,206,468 tokens from FineWeb-Edu.
+  - name: fineweb_edu
+    kind: hf
+    category: stage1_clean_web_edu
+    dataset: HuggingFaceFW/fineweb-edu
+    config: sample-10BT
+    split: train
+    text_field: text
+    token_budget: 350206468
+    filters:
+      language: en
+
+  # Stage 2-style natural Web / narrative / procedural text: 250M total.
+  # These are copied from the already verified local Stage 2 source shards and
+  # re-sharded into an independent Stage 3 artifact.
+  - name: stage2_natural_web
+    kind: existing_source
+    category: stage2_natural_web
+    manifest: data/stage2_tokenized/manifest.json
+    source_name: ultra_fineweb_l2_normal_web
+    token_budget: 125000000
+
+  - name: stage2_narrative
+    kind: existing_source
+    category: stage2_narrative
+    manifest: data/stage2_tokenized/manifest.json
+    source_name: cosmopedia_v2_stories
+    token_budget: 75000000
+
+  - name: stage2_procedural
+    kind: existing_source
+    category: stage2_procedural
+    manifest: data/stage2_tokenized/manifest.json
+    source_name: cosmopedia_v2_wikihow
+    token_budget: 50000000
+
+  - name: wikitext_103
+    kind: hf
+    category: wikipedia_encyclopedic
+    dataset: Salesforce/wikitext
+    config: wikitext-103-v1
+    split: train
+    text_field: text
+    token_budget: 100000000
+    filters: {}

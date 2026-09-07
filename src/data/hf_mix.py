@@ -290,14 +290,22 @@ def iter_hf_rows(
 
     raw_rows_seen = int(start_row)
     consecutive_failures = 0
+    hub_token = os.environ.get("HF_TOKEN")
+    if hub_token is None:
+        try:
+            from huggingface_hub import get_token
+
+            hub_token = get_token()
+        except ImportError:
+            hub_token = None
     while True:
         kwargs: dict[str, Any] = {
             "path": source.dataset,
             "split": source.split,
             "streaming": True,
-            # Reuse the token saved by `hf auth login` without exposing it in
-            # logs or requiring callers to place it in an environment variable.
-            "token": True,
+            # Reuse a configured/cached token without exposing it in logs. Public
+            # datasets remain usable on machines that have no HF login.
+            "token": hub_token or False,
         }
         if source.config:
             kwargs["name"] = source.config

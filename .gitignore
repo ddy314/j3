@@ -33,3 +33,6 @@ env/
 /artifacts/benchmark_smoke/
 /runs/
 /data/stage2_tokenized/
+/data/stage3_tokenized/
+/data/stage3_mixed_tokenized/
+/finepdfs_300m_tokenized/

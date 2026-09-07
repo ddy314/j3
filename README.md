@@ -118,8 +118,9 @@ export HF_HUB_DOWNLOAD_TIMEOUT=60
 export HF_HUB_ETAG_TIMEOUT=60
 ```
 
-`load_dataset` is called with `token=True`, so it reuses the credential saved
-by `hf auth login` without printing or copying the token.
+`load_dataset` uses `HF_TOKEN` or the credential saved by `hf auth login` when
+available, without printing or copying the token; public datasets fall back to
+anonymous access when no credential is present.
 
 If Hub/Xet metadata works but a streaming shard stalls, download only the
 needed parquet shards with a resumable downloader such as `aria2c`, placing
@@ -155,6 +156,58 @@ The legacy SentencePiece trainer remains available with
 English 1.1B-token artifact. `audit_tokenizer.py` treats the 256 byte alphabet
 as required infrastructure and audits only learned merges for corpus-specific
 garbage.
+
+### Stage 3 mixture
+
+Stage 3 is assembled by `configs/stage3_1b.yaml` into an exact 1.0B-token
+training stream:
+
+- FinePDF: the supplied nominal 300M-token artifact;
+- 350,206,468 Stage 1-style clean Web/Edu tokens from FineWeb-Edu;
+- 250M Stage 2-style tokens from natural Web, narrative, and procedural sources;
+- 100M WikiText-103 encyclopedic tokens.
+
+The Stage 2-style slices are copied from the verified local Stage 2 shards, while
+FineWeb-Edu and WikiText are streamed from the Hub. DCLM-Edu is deliberately
+omitted because its Parquet route was previously too slow and memory-heavy in
+this environment. The assembler
+reuses the canonical byte-level tokenizer, enables duplicate filtering and the
+existing benchmark decontamination index for new HF rows, and writes a separate
+auditable `manifest.json` plus `verification.json`:
+
+```bash
+UV_CACHE_DIR=/tmp/j3-uv-cache uv run python scripts/prepare_stage3.py \
+  --config configs/stage3_1b.yaml
+
+UV_CACHE_DIR=/tmp/j3-uv-cache uv run python scripts/prepare_stage3.py \
+  --config configs/stage3_1b.yaml --verify-only
+```
+
+The supplied FinePDF manifest has a validation-path typo (`shard_000000.bin`
+instead of `val/shard_000000.bin`). Stage 3 repairs this only in its assembled
+copy and records the correction in the source provenance; the original supplied
+directory is left untouched. Use `configs/pretrain_stage3_1b.yaml` only after
+the Stage 3 verification passes.
+
+Before training, make the mixture real rather than relying on the runtime's
+coarse shard permutation:
+
+```bash
+UV_CACHE_DIR=/tmp/j3-uv-cache uv run python scripts/mix_tokenized_manifest.py \
+  --input-manifest data/stage3_tokenized/manifest.json \
+  --output-dir data/stage3_mixed_tokenized \
+  --chunk-tokens 8192 \
+  --seed 1337
+
+UV_CACHE_DIR=/tmp/j3-uv-cache uv run python scripts/mix_tokenized_manifest.py \
+  --output-dir data/stage3_mixed_tokenized --verify-only
+```
+
+This globally shuffles 8,192-token chunks before writing new shards; it does
+not permute individual token IDs, so local language continuity is retained.
+The training config uses `1e-4` peak LR and `1e-5` minimum LR, and starts from
+the completed Stage 2 checkpoint with `--init-from` so the Stage 3 data cursor
+starts at zero.
 
 ## Smoke training
 
