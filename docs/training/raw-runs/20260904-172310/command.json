@@ -1,0 +1,10 @@
+{
+  "argv": [
+    "train.py",
+    "--config",
+    "configs/smoke.yaml",
+    "--max-steps",
+    "1"
+  ],
+  "config": "/home/xia/code/j3/configs/smoke.yaml"
+}

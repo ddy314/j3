@@ -1,5 +1,5 @@
 model:
-  model_name: D32-1216-R12
+  model_name: J3
   vocab_size: 16384
   d_model: 384
   depth: 32

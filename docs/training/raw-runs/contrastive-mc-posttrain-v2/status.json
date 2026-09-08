@@ -1,0 +1,30 @@
+{
+  "compile": true,
+  "compile_mode": "default",
+  "current_data": {
+    "epoch": 0,
+    "offset_in_shard": 589824,
+    "shard_index": 74
+  },
+  "current_multiple_choice_data": {
+    "epoch": 0,
+    "example_count": 223687,
+    "order_position": 144
+  },
+  "device": "cuda",
+  "elapsed_seconds": 36.3689273930504,
+  "epoch": 0,
+  "last_checkpoint_at": "2026-09-07T22:55:35+0800",
+  "last_checkpoint_tokens": 589824,
+  "learning_rate": 1.4745600000000002e-05,
+  "model_name": "D32-1216-R12",
+  "objective": "contrastive_mc",
+  "optimizer": "AdamW(fused=True)",
+  "parameters": 49001408,
+  "run_id": "contrastive-mc-posttrain-v2",
+  "started_at": "2026-09-07T22:55:00+0800",
+  "status": "completed",
+  "step": 9,
+  "tokens_seen": 589824,
+  "tokens_target": 589824
+}

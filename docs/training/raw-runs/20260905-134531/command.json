@@ -1,0 +1,8 @@
+{
+  "argv": [
+    "train.py",
+    "--config",
+    "configs/pretrain_1b.yaml"
+  ],
+  "config": "/home/xia/code/j3/configs/pretrain_1b.yaml"
+}

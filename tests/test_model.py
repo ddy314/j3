@@ -6,16 +6,25 @@ from src.model import DecoderLM, ModelConfig
 from src.model.attention import GQAAttention
 from src.model.mlp import XIELU
 from src.model.rope import RotaryEmbedding
+from src.training.checkpoint import model_config_compatible
 
 
 def test_frozen_parameter_count_and_breakdown() -> None:
     config = ModelConfig()
     model = DecoderLM(config)
+    assert config.model_name == "J3"
     report = model.parameter_report()
     assert report["total"] == 49_001_408
     assert report["target"] == 49_001_408
     assert report["matches_target"] is True
     assert report["breakdown"]["total"] == 49_001_408
+
+
+def test_public_rename_preserves_historical_checkpoint_compatibility() -> None:
+    current = ModelConfig().to_dict()
+    historical = {**current, "model_name": "D32-1216-R12"}
+    assert model_config_compatible(historical, current)
+    assert not model_config_compatible({**historical, "d_model": current["d_model"] + 1}, current)
 
 
 def test_output_shape_and_loss(tiny_config: ModelConfig) -> None:

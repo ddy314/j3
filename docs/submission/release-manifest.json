@@ -1,0 +1,77 @@
+{
+  "project": "J3",
+  "competition": "Global Innovation Build Challenge V2",
+  "track": "TECH (Foundational LLM Development)",
+  "model": {
+    "name": "J3",
+    "internal_shape_label": "D32-1216-R12",
+    "trainable_parameters": 49001408,
+    "parameter_cap": 50000000,
+    "trained_from_scratch": true,
+    "pretrained_initialization": false
+  },
+  "checkpoint": {
+    "selected_run": "20260906-225321",
+    "relative_state_path": "runs/20260906-225321/checkpoints/step_000007630/state.pt",
+    "state_sha256": "3fcdaf9517e6a847dd36a24dbf982c3ba5293d76bc6616a572662526655aeb27",
+    "state_bytes": 588414613,
+    "metadata_sha256": "9a7fbb81bd554d9460987ba2956b3cf11319cacaecdc0440eb7aabf6dcfa9ed1",
+    "not_committed_to_git": true,
+    "distribution_note": "The 588 MB state file is intentionally kept outside the Git tree. Publish it as a release asset or model-hub artifact and preserve this hash."
+  },
+  "training": {
+    "config": "configs/pretrain_stage3_1b.yaml",
+    "manifest": "docs/data/stage3-mixed-manifest.json",
+    "manifest_sha256": "6c6980a543263bd255d4470aaf467cb0675a9031e8886069828611618cdc7df1",
+    "tokenizer": "data/tokenized/tokenizer.json",
+    "tokenizer_sha256": "416267157bccdfa2bc6d5025aebf3b9a6a82271f4664f04f0d963337fec35023",
+    "tokens_target": 1000000000,
+    "tokens_seen": 1000079360,
+    "optimizer_steps": 7630,
+    "validation_loss": 3.177146828174591,
+    "validation_perplexity": 23.978241816690886,
+    "elapsed_seconds": 24595.263267228,
+    "hardware": "NVIDIA GeForce RTX 4060 Laptop GPU, 8 GiB class",
+    "precision": "BF16",
+    "compile": "torch.compile(default)",
+    "effective_batch_tokens": 131072,
+    "sequence_length": 512,
+    "seed": 1337
+  },
+  "evaluation": {
+    "harness": "lm-evaluation-harness",
+    "harness_version": "0.4.13",
+    "tasks": ["hellaswag", "arc_easy", "piqa", "winogrande", "j3_wikitext_103"],
+    "result_file": "docs/evaluation/results/j3-gibc.json",
+    "status": "complete",
+    "num_fewshot": 0,
+    "bootstrap_iters": 100000,
+    "results": {
+      "hellaswag": {
+        "acc": 0.2724556861183031,
+        "acc_norm": 0.2808205536745668,
+        "sample_len": 10042
+      },
+      "arc_easy": {
+        "acc": 0.406986531986532,
+        "acc_norm": 0.3766835016835017,
+        "sample_len": 2376
+      },
+      "piqa": {
+        "acc": 0.5968443960826986,
+        "acc_norm": 0.5914036996735582,
+        "sample_len": 1838
+      },
+      "winogrande": {
+        "acc": 0.516179952644041,
+        "sample_len": 1267
+      },
+      "j3_wikitext_103": {
+        "word_perplexity": 96.12302909712484,
+        "byte_perplexity": 2.4132204028619433,
+        "bits_per_byte": 1.2709596849672435,
+        "sample_len": 4358
+      }
+    }
+  }
+}

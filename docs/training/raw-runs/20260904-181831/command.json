@@ -1,0 +1,8 @@
+{
+  "argv": [
+    "train.py",
+    "--config",
+    "configs/smoke.yaml"
+  ],
+  "config": "/home/xia/code/j3/configs/smoke.yaml"
+}

@@ -1,0 +1,31 @@
+{
+  "compile": true,
+  "compile_mode": "default",
+  "current_data": {
+    "epoch": 0,
+    "offset_in_shard": 528384,
+    "shard_index": 74
+  },
+  "current_multiple_choice_data": {
+    "epoch": 0,
+    "example_count": 223687,
+    "order_position": 258
+  },
+  "device": "cuda",
+  "elapsed_seconds": 365.5729768180172,
+  "epoch": 0,
+  "error": "OutOfMemoryError: CUDA out of memory. Tried to allocate 32.00 MiB. GPU 0 has a total capacity of 7.65 GiB of which 69.06 MiB is free. Process 1572 has 7.30 MiB memory in use. Including non-PyTorch memory, this process has 7.53 GiB memory in use. Of the allocated memory 7.21 GiB is allocated by PyTorch, and 192.41 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://docs.pytorch.org/docs/stable/notes/cuda.html#optimizing-memory-usage-with-pytorch-cuda-alloc-conf)",
+  "last_checkpoint_at": null,
+  "last_checkpoint_tokens": 0,
+  "learning_rate": 1.31072e-05,
+  "model_name": "D32-1216-R12",
+  "objective": "contrastive_mc",
+  "optimizer": "AdamW(fused=True)",
+  "parameters": 49001408,
+  "run_id": "contrastive-mc-posttrain",
+  "started_at": "2026-09-07T22:34:25+0800",
+  "status": "error",
+  "step": 8,
+  "tokens_seen": 524288,
+  "tokens_target": 50000000
+}

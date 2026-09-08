@@ -1,0 +1,24 @@
+{
+  "compile": true,
+  "compile_mode": "default",
+  "current_data": {
+    "epoch": 1,
+    "offset_in_shard": 79360,
+    "shard_index": 54
+  },
+  "device": "cuda",
+  "elapsed_seconds": 24550.108078997,
+  "epoch": 1,
+  "last_checkpoint_at": "2026-09-05T20:44:39+0800",
+  "last_checkpoint_tokens": 1000079360,
+  "learning_rate": 3e-05,
+  "model_name": "D32-1216-R12",
+  "optimizer": "AdamW(fused=True)",
+  "parameters": 49001408,
+  "run_id": "20260905-135527",
+  "started_at": "2026-09-05T13:55:30+0800",
+  "status": "completed",
+  "step": 7630,
+  "tokens_seen": 1000079360,
+  "tokens_target": 1000000000
+}

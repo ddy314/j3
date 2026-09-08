@@ -1,0 +1,1821 @@
+{
+  "created_at": "2026-09-06T22:50:26+0800",
+  "dataset": {
+    "input_manifest": "/home/xia/code/j3/data/stage3_tokenized/manifest.json",
+    "input_manifest_sha256": "f4f3ac8904ae50bbb70c09a0834a74810d62a263f23359987a7aaa3fa39e16d0",
+    "type": "stage3_globally_mixed"
+  },
+  "dtype": "uint16",
+  "mix_config": "global_chunk_shuffle",
+  "mix_config_sha256": "6f7c55b96bcc548f85217bc432fee7094eba4889bb599944d450b0f0838a0a9a",
+  "mixing": {
+    "chunk_tokens": 8192,
+    "input_manifest": "/home/xia/code/j3/data/stage3_tokenized/manifest.json",
+    "input_manifest_sha256": "f4f3ac8904ae50bbb70c09a0834a74810d62a263f23359987a7aaa3fa39e16d0",
+    "mode": "global_chunk_shuffle",
+    "seed": 1337,
+    "train": {
+      "chunk_count": 122073,
+      "first_32_sources": [
+        "finepdfs_300m",
+        "stage2_natural_web",
+        "fineweb_edu",
+        "finepdfs_300m",
+        "finepdfs_300m",
+        "fineweb_edu",
+        "stage2_natural_web",
+        "wikitext_103",
+        "wikitext_103",
+        "stage2_narrative",
+        "finepdfs_300m",
+        "stage2_natural_web",
+        "finepdfs_300m",
+        "wikitext_103",
+        "finepdfs_300m",
+        "wikitext_103",
+        "finepdfs_300m",
+        "fineweb_edu",
+        "fineweb_edu",
+        "fineweb_edu",
+        "stage2_natural_web",
+        "stage2_procedural",
+        "fineweb_edu",
+        "wikitext_103",
+        "stage2_natural_web",
+        "stage2_natural_web",
+        "stage2_narrative",
+        "wikitext_103",
+        "stage2_natural_web",
+        "stage2_natural_web",
+        "finepdfs_300m",
+        "wikitext_103"
+      ],
+      "max_id": 16383,
+      "min_id": 3,
+      "seed": 1337,
+      "source_chunk_counts": {
+        "finepdfs_300m": 36596,
+        "fineweb_edu": 42750,
+        "stage2_narrative": 9156,
+        "stage2_natural_web": 15259,
+        "stage2_procedural": 6104,
+        "wikitext_103": 12208
+      },
+      "source_switches_first_1024_chunks": 766,
+      "written_tokens": 1000000000
+    },
+    "train_source_chunk_counts_before_shuffle": {
+      "finepdfs_300m": 36596,
+      "fineweb_edu": 42750,
+      "stage2_narrative": 9156,
+      "stage2_natural_web": 15259,
+      "stage2_procedural": 6104,
+      "wikitext_103": 12208
+    },
+    "val": {
+      "chunk_count": 885,
+      "first_32_sources": [
+        "fineweb_edu",
+        "fineweb_edu",
+        "fineweb_edu",
+        "fineweb_edu",
+        "stage2_narrative",
+        "fineweb_edu",
+        "stage2_procedural",
+        "fineweb_edu",
+        "fineweb_edu",
+        "fineweb_edu",
+        "fineweb_edu",
+        "fineweb_edu",
+        "stage2_natural_web",
+        "fineweb_edu",
+        "stage2_procedural",
+        "stage2_procedural",
+        "fineweb_edu",
+        "stage2_natural_web",
+        "wikitext_103",
+        "wikitext_103",
+        "fineweb_edu",
+        "finepdfs_300m",
+        "fineweb_edu",
+        "stage2_narrative",
+        "wikitext_103",
+        "stage2_natural_web",
+        "finepdfs_300m",
+        "fineweb_edu",
+        "wikitext_103",
+        "wikitext_103",
+        "fineweb_edu",
+        "fineweb_edu"
+      ],
+      "max_id": 16383,
+      "min_id": 3,
+      "seed": 1338,
+      "source_chunk_counts": {
+        "finepdfs_300m": 27,
+        "fineweb_edu": 428,
+        "stage2_narrative": 92,
+        "stage2_natural_web": 153,
+        "stage2_procedural": 62,
+        "wikitext_103": 123
+      },
+      "source_switches_first_1024_chunks": 619,
+      "written_tokens": 7216447
+    },
+    "val_source_chunk_counts_before_shuffle": {
+      "finepdfs_300m": 27,
+      "fineweb_edu": 428,
+      "stage2_narrative": 92,
+      "stage2_natural_web": 153,
+      "stage2_procedural": 62,
+      "wikitext_103": 123
+    }
+  },
+  "shard_token_target": 4194304,
+  "source": {
+    "input_manifest": "/home/xia/code/j3/data/stage3_tokenized/manifest.json",
+    "type": "stage3_globally_mixed"
+  },
+  "sources": [
+    {
+      "actual_train_tokens": 299793532,
+      "actual_val_tokens": 214382,
+      "category": "finepdf",
+      "declared_train_tokens": 300000000,
+      "kind": "tokenized_manifest",
+      "name": "finepdfs_300m",
+      "provenance": {
+        "dataset": {
+          "input_dir": "E:\\llm\\llm\\finepdfs-world\\clean",
+          "selection_order": "lexicographic part filename, then Parquet row order",
+          "selection_stop": "after the first complete document reaching target_tokens",
+          "source_files": [
+            {
+              "byte_count": 3845140,
+              "path": "part-00000.parquet",
+              "sha256": "4502497b9180320e87c02216df2cff89c3747d3c2c4a3bcc9606c2bc4c88efa8"
+            },
+            {
+              "byte_count": 6930234,
+              "path": "part-00001.parquet",
+              "sha256": "bf0232ee3bd66dce745541253e3387c40c3fd19668ebb7162dc3805e2ef2fe51"
+            },
+            {
+              "byte_count": 7738361,
+              "path": "part-00002.parquet",
+              "sha256": "457fc2a866d5519659ff52ef6ee462c7eeb5efa71f20d9c85df18bb2eb3c6cde"
+            },
+            {
+              "byte_count": 7270775,
+              "path": "part-00003.parquet",
+              "sha256": "e461a1af5464d252cade4a6a4414e5db00f40e7a195d0a848e1585ad9ad1431e"
+            },
+            {
+              "byte_count": 6706484,
+              "path": "part-00004.parquet",
+              "sha256": "135496703b209537790d74fbfc129528949714842e84a40a895de583c0faf67a"
+            },
+            {
+              "byte_count": 7177195,
+              "path": "part-00005.parquet",
+              "sha256": "b600f8c6d04f03b90dcf88d7ab3db0d79e25d575d2b8d1d2317bd4cf3c69596c"
+            },
+            {
+              "byte_count": 7069673,
+              "path": "part-00006.parquet",
+              "sha256": "de916a4589842d19c64132ccc9686bdfcef0b79e8f8e915c4d4afd2ff38505a1"
+            },
+            {
+              "byte_count": 7874102,
+              "path": "part-00007.parquet",
+              "sha256": "5ceff7d7d2e3074ad65d03a3e26d6656580ecb26140654129588eaa457bb0ece"
+            },
+            {
+              "byte_count": 7275151,
+              "path": "part-00008.parquet",
+              "sha256": "6b58859d4d0fff97fd28b71cf832bcdefc925e84a66a551a5938ddd102934588"
+            },
+            {
+              "byte_count": 7740504,
+              "path": "part-00009.parquet",
+              "sha256": "89a40deea805cefc320205eea5aa0a386295a33faa21c149d0eaa41121dacc97"
+            },
+            {
+              "byte_count": 7215385,
+              "path": "part-00010.parquet",
+              "sha256": "d9ee1995fd0600bf613f7d1629e9aaa39c40e758e59f6c0fba1e6ab0bda5016c"
+            },
+            {
+              "byte_count": 7080809,
+              "path": "part-00011.parquet",
+              "sha256": "45297bd24ffb27f20a145b90424caf7ecd167e187875f4408320f3e4fc41dd29"
+            },
+            {
+              "byte_count": 7522970,
+              "path": "part-00012.parquet",
+              "sha256": "33fbe36d9dec24ac1925f47668d307de4cc7440a7f17ef91d042dafc66900e4d"
+            },
+            {
+              "byte_count": 7729323,
+              "path": "part-00013.parquet",
+              "sha256": "e021156c8178432c7ed1a9ab2fbdbaf9c430ceb9666f7247f25b4b6c9ae61e52"
+            },
+            {
+              "byte_count": 6729720,
+              "path": "part-00014.parquet",
+              "sha256": "b6935179b6e0d2cb9b0e438020d62ae50d24209e97e8bb9375ca7bbdefc4376c"
+            },
+            {
+              "byte_count": 6981188,
+              "path": "part-00015.parquet",
+              "sha256": "634ba9e3837ee555239da45bac0622e20bc40250028d0c51e052500fb6576fad"
+            },
+            {
+              "byte_count": 7682644,
+              "path": "part-00016.parquet",
+              "sha256": "6e7f22da2eff265de9f5dfd8c6e3dd6319c329d83ec7038c70d420bddf615745"
+            },
+            {
+              "byte_count": 7111415,
+              "path": "part-00017.parquet",
+              "sha256": "b8ee4537185c004028f5a426c51540cec7eace72c532f240551f854bc39c9fba"
+            },
+            {
+              "byte_count": 7297242,
+              "path": "part-00018.parquet",
+              "sha256": "bca401043a14ca439e6f57799e05f488b6484051b4715be691e4734a7ce68a83"
+            },
+            {
+              "byte_count": 7292918,
+              "path": "part-00019.parquet",
+              "sha256": "75c31d38e482c227c5095740262c89110a074ad139b5080a9eccb5f5a8cbc634"
+            },
+            {
+              "byte_count": 7510725,
+              "path": "part-00020.parquet",
+              "sha256": "58923a2757409c3f218b47412a2205dd7a1d3865956d67b51826f7096e404a17"
+            },
+            {
+              "byte_count": 7309224,
+              "path": "part-00021.parquet",
+              "sha256": "a96252c2252b545ce16fa2d29bcd63867d5dabf92cab9b399042d915622eb4c9"
+            },
+            {
+              "byte_count": 7495265,
+              "path": "part-00022.parquet",
+              "sha256": "28bd2b93f0aff3c8825dde497113bf1e274c1b46eaec471d5054e3de1da4b547"
+            },
+            {
+              "byte_count": 7804481,
+              "path": "part-00023.parquet",
+              "sha256": "ce291676aebdeb177b11226b04f5175145b06cafa05b4a5052680d5fe679f953"
+            },
+            {
+              "byte_count": 7698263,
+              "path": "part-00024.parquet",
+              "sha256": "4a52e0453cd5ce033f42b38ef5c3f86928e767246ff21be97a0f7decfbbbf753"
+            },
+            {
+              "byte_count": 7724269,
+              "path": "part-00025.parquet",
+              "sha256": "23809d8d9a36b6d0f7c6d6a8830897412697daf72beab58b81a345d01d80d587"
+            },
+            {
+              "byte_count": 7597378,
+              "path": "part-00026.parquet",
+              "sha256": "8eac32099b7dbfa4e7b2dd6e15f6ea4cef01bcac5d26c6799e5a1a154e6650c7"
+            },
+            {
+              "byte_count": 7067760,
+              "path": "part-00027.parquet",
+              "sha256": "7b7ac0e51e01e9ed6334cfc6a5b722a2ef77f092550ade78c58a1695cbbd8dc3"
+            },
+            {
+              "byte_count": 7794942,
+              "path": "part-00028.parquet",
+              "sha256": "6f4b3bc3354f321c270bf68964b030be074fcb5ae3c0e97aaa63fd6623a382c5"
+            },
+            {
+              "byte_count": 7539439,
+              "path": "part-00029.parquet",
+              "sha256": "13570371b1565049c4fc54eed9ed5dea347848fa6648a7a61df1ed71b4b0964b"
+            },
+            {
+              "byte_count": 8019336,
+              "path": "part-00030.parquet",
+              "sha256": "573782df8d0744b22094a6ffd756dbcc6c3afc8ba739ec3e1154b7825973da3d"
+            },
+            {
+              "byte_count": 7254665,
+              "path": "part-00031.parquet",
+              "sha256": "89b4751f6e0325ae8fc8b9fa1a8c1a18700776112f5564a7aaa7de22ebcdc78a"
+            },
+            {
+              "byte_count": 7557424,
+              "path": "part-00032.parquet",
+              "sha256": "41cfcd6599dcd0ebb0e217d7efea4b9b5fb93bef881baeef86043d8edf921fe9"
+            },
+            {
+              "byte_count": 7617452,
+              "path": "part-00033.parquet",
+              "sha256": "114c7790280ff12b410437d392d74bb6f50fd6d708eee82348695eafe8632667"
+            },
+            {
+              "byte_count": 7398453,
+              "path": "part-00034.parquet",
+              "sha256": "e89bb18aed4af6158f67f8051c2fb4b4f54650128bf46463d5400bad1e450f9d"
+            },
+            {
+              "byte_count": 7520733,
+              "path": "part-00035.parquet",
+              "sha256": "f4820245f1d64f86a385ca980d35dffe5dbdecdde9b20f817e61c137cbab1b0b"
+            },
+            {
+              "byte_count": 7215423,
+              "path": "part-00036.parquet",
+              "sha256": "1302d319c0ed91429230ffedcd0328fa5b816276db09fced68b82e67f78e7c17"
+            },
+            {
+              "byte_count": 7376966,
+              "path": "part-00037.parquet",
+              "sha256": "e887a1559b6ba43589dcf17f97d1539e2769259d05be426c7517c8f34f20cbeb"
+            },
+            {
+              "byte_count": 7275802,
+              "path": "part-00038.parquet",
+              "sha256": "eaa3fd109a78fd93069a81b0218396b50dd5c6a20dd23e051ab6765cb9157e81"
+            },
+            {
+              "byte_count": 8325055,
+              "path": "part-00039.parquet",
+              "sha256": "eed3993052a20b54c9525d2f90d846866555759b87edb1a2bb4658d5f59b2720"
+            },
+            {
+              "byte_count": 7282273,
+              "path": "part-00040.parquet",
+              "sha256": "2e8885d9456045222ac44da61795ee5982a0b6db9d083fbb7876920568c0346b"
+            },
+            {
+              "byte_count": 7557355,
+              "path": "part-00041.parquet",
+              "sha256": "440d6aadcb4055d33afd15548618ff5687a1b98e2922e53b775339ab2c7e6941"
+            },
+            {
+              "byte_count": 7148513,
+              "path": "part-00042.parquet",
+              "sha256": "a6bf74ac3e65d00f6963086f59ff148a8e38b4b19061ae83a821887a6ba63f63"
+            },
+            {
+              "byte_count": 7112086,
+              "path": "part-00043.parquet",
+              "sha256": "8abe6936b85c76c2627b13094b096be2f4fc2fad1d4281a7fe18177fd5ab3c80"
+            },
+            {
+              "byte_count": 7588515,
+              "path": "part-00044.parquet",
+              "sha256": "db641cdd66ba61cd96cc4930c8fd3e778f6962b5c2677640aa59338abd920637"
+            },
+            {
+              "byte_count": 7283485,
+              "path": "part-00045.parquet",
+              "sha256": "acec748e79fa2671bcd06caee19f44df5f74b8b184966d710bfcf373c4b2d931"
+            },
+            {
+              "byte_count": 7003465,
+              "path": "part-00046.parquet",
+              "sha256": "0e33c8235bf32fa4128d7961308796998992447c7c670a1a34ea730ab6a179bb"
+            },
+            {
+              "byte_count": 7231620,
+              "path": "part-00047.parquet",
+              "sha256": "8de555ec7cc17b0b80079bd56decf54b6bd3e62c5deeb5b84bac6cd0559c2482"
+            },
+            {
+              "byte_count": 7352860,
+              "path": "part-00048.parquet",
+              "sha256": "e57aaad6d56c260cae25624bd20ef415e126a976216e6b8d12debad67311cece"
+            },
+            {
+              "byte_count": 7820961,
+              "path": "part-00049.parquet",
+              "sha256": "02ad66bd46fa8385abbb78ccbca989f0c5dea6102ed2644071447e097cfd7d9d"
+            },
+            {
+              "byte_count": 7758137,
+              "path": "part-00050.parquet",
+              "sha256": "7acf982f02d169cb28970dae0f5a8730b358bcd06a930464e2a6612bbb1f3a84"
+            },
+            {
+              "byte_count": 7442992,
+              "path": "part-00051.parquet",
+              "sha256": "b93b45dade6a5fbab33796b37bbe390480e09902e77ea9eca4a45dd930f42900"
+            },
+            {
+              "byte_count": 6967283,
+              "path": "part-00052.parquet",
+              "sha256": "c0ceb04830c8d2af81a9269c871229821e5da768213d3d6c7010bf8f8efbf50a"
+            },
+            {
+              "byte_count": 7471961,
+              "path": "part-00053.parquet",
+              "sha256": "72253ed674347000fcc0463df3ab22bc6ea86ae6d2815aead080545d869fb1ca"
+            },
+            {
+              "byte_count": 7129797,
+              "path": "part-00054.parquet",
+              "sha256": "6e27873b5ca4872d8d010443e0de2c2d0e679d84da3754dd653f4568350609b6"
+            },
+            {
+              "byte_count": 7682075,
+              "path": "part-00055.parquet",
+              "sha256": "2efefe62047b4261d2e6352fc60962f279f2d8b29f0a5af3e50e04a0144804b9"
+            },
+            {
+              "byte_count": 6995851,
+              "path": "part-00056.parquet",
+              "sha256": "842241d48933d53602b2ac95a6e4ed500a79f381d103ce21245a8c46b69e78c9"
+            },
+            {
+              "byte_count": 7671184,
+              "path": "part-00057.parquet",
+              "sha256": "6b7c9a79758dbf9aa4abe369c69e05d3ac1bda40feb6831ca2c1bcde2861143c"
+            },
+            {
+              "byte_count": 7772778,
+              "path": "part-00058.parquet",
+              "sha256": "9764dd7afc77205b439c20f307d5e804cf2964d485d349205fb5a78ef8817d1b"
+            },
+            {
+              "byte_count": 7578047,
+              "path": "part-00059.parquet",
+              "sha256": "28c13bf67260719cd67ac4e6b7d00751448a113ba816c6de9927ed6b4f275922"
+            },
+            {
+              "byte_count": 7005969,
+              "path": "part-00060.parquet",
+              "sha256": "e0891f5d6b7a97a0f0ceb8ff16a0a622d3ca31edf9a569c61f095d12c5e7fa0b"
+            },
+            {
+              "byte_count": 7564278,
+              "path": "part-00061.parquet",
+              "sha256": "0891e5cae04e0edc71f8ee10fb1e561ff13fe37461e64df5f1afefdd40cbfa0a"
+            },
+            {
+              "byte_count": 7056656,
+              "path": "part-00062.parquet",
+              "sha256": "ad9611725897f264eeb5764214c7ef64df47b2a939d309e0f06f047f4821ab6d"
+            },
+            {
+              "byte_count": 7398672,
+              "path": "part-00063.parquet",
+              "sha256": "8bb7d5f34a799ce3529ab8f21f696d7eae0020766aaa34edc9cdbf6f873b7685"
+            },
+            {
+              "byte_count": 7163098,
+              "path": "part-00064.parquet",
+              "sha256": "65986c2bc39988091bedceea12eae3282840478d56b7181010178714b24cf276"
+            },
+            {
+              "byte_count": 7110341,
+              "path": "part-00065.parquet",
+              "sha256": "d948b53d9183a11fdf49ff2878feb87ad4dfd3c5e0734be5cb958f67201f5cf9"
+            },
+            {
+              "byte_count": 7273538,
+              "path": "part-00066.parquet",
+              "sha256": "a0e8f852d27bb494db107bb74c2359ce623dfcd601ee19466ffd481464d68a65"
+            },
+            {
+              "byte_count": 7193688,
+              "path": "part-00067.parquet",
+              "sha256": "d04ea4693d06c8cc19be809580164383422a9dc1e2005f356b3bc5673c82ab99"
+            },
+            {
+              "byte_count": 7437429,
+              "path": "part-00068.parquet",
+              "sha256": "6ed8c9f732f9f56e0bef2d884f134d3b6ff9ae72a9d7eb60b17d678bba3d02d2"
+            },
+            {
+              "byte_count": 7663573,
+              "path": "part-00069.parquet",
+              "sha256": "a91e6231a48576072cc7ec14092a4e178a0186e8a258c946dbd2b098d2d8e0b5"
+            },
+            {
+              "byte_count": 7634461,
+              "path": "part-00070.parquet",
+              "sha256": "b57a9e1139f853a72e584698cf104553f7a3e832653fd7daec855b0291fb0b7a"
+            },
+            {
+              "byte_count": 7576609,
+              "path": "part-00071.parquet",
+              "sha256": "02f809e8fb71f0da7db4edf3489e50c8b1290e9a7e33805b2ef40a3865fd813e"
+            },
+            {
+              "byte_count": 7880160,
+              "path": "part-00072.parquet",
+              "sha256": "bd40c3060322012453a8f10a2fec3d2209a08a17d9e239ff52a39a8207c25911"
+            },
+            {
+              "byte_count": 7798635,
+              "path": "part-00073.parquet",
+              "sha256": "4db84e4f66fc58ec9576b2b682e3da0ab389daaaee0c8769a91221eb8e5f8012"
+            },
+            {
+              "byte_count": 7249182,
+              "path": "part-00074.parquet",
+              "sha256": "36ca53b5dc5f7ed7315a35257acfdfd59f80a5c20ddb3260239db2b60ac7debf"
+            },
+            {
+              "byte_count": 7857675,
+              "path": "part-00075.parquet",
+              "sha256": "75829c1119b5390a915255096c93740d01babcf425b6642766d63e80065a8844"
+            },
+            {
+              "byte_count": 6912991,
+              "path": "part-00076.parquet",
+              "sha256": "d51d4f19cd596211fecb11cbbb4731556a239561b6f7fa263760046b903236fb"
+            },
+            {
+              "byte_count": 7490223,
+              "path": "part-00077.parquet",
+              "sha256": "32e18d5d8ac684b0448a51ca3c1fee85a4ab188a2805e6c9513b993a4dbd1ccc"
+            },
+            {
+              "byte_count": 7420728,
+              "path": "part-00078.parquet",
+              "sha256": "78fa9f4dc69df0159d3b0a7c91c13b73b5827c2d5c54f7bf712a14dc2a1dc25a"
+            },
+            {
+              "byte_count": 7886862,
+              "path": "part-00079.parquet",
+              "sha256": "c2a344dee5600688c9afe6ee4615c8476f8327c38c9780858a0076dadb409b2a"
+            },
+            {
+              "byte_count": 7845132,
+              "path": "part-00080.parquet",
+              "sha256": "feaf5e75780f50645e451354b9a382aa7145494eac48942933d2f93cbdded97e"
+            },
+            {
+              "byte_count": 6924784,
+              "path": "part-00081.parquet",
+              "sha256": "2941e880f1eed6c06ccb157fc022fea0ffb47341e918ab6bd3d4587e7b25e392"
+            },
+            {
+              "byte_count": 7431855,
+              "path": "part-00082.parquet",
+              "sha256": "589eed8132b4fec8cfd2efcc88516c5217deaa12d0429dfb83230e689deae8e8"
+            },
+            {
+              "byte_count": 7191764,
+              "path": "part-00083.parquet",
+              "sha256": "0253e25c981bbb379f775484da4f252ce442a2db963ad4faa7f51926f115550e"
+            },
+            {
+              "byte_count": 7858788,
+              "path": "part-00084.parquet",
+              "sha256": "0858ee12a995b45e9e3fee9c632e01ec68c729b4232c6f26f5f81a666b845892"
+            },
+            {
+              "byte_count": 7497266,
+              "path": "part-00085.parquet",
+              "sha256": "798056eed12c9ca3c275410905287b0d0c43c7c0dc3382a57d5aba0410f02275"
+            },
+            {
+              "byte_count": 7571712,
+              "path": "part-00086.parquet",
+              "sha256": "a187f008175be25db175b4fe0aed5696823e3a016684273483e087be04ad845b"
+            },
+            {
+              "byte_count": 7169722,
+              "path": "part-00087.parquet",
+              "sha256": "4e5fc5f1f17c0050e92a0f3b6df0e83eae4f86841a73a9944cbffa8089cb8c69"
+            },
+            {
+              "byte_count": 7679154,
+              "path": "part-00088.parquet",
+              "sha256": "835763b49e047249504f0206e80bae294640ed50dede9b906435cf05bb15003f"
+            },
+            {
+              "byte_count": 7479056,
+              "path": "part-00089.parquet",
+              "sha256": "5d5fad91951c348c42f27920905397fe7505282443154023d9f7a76a1031e57b"
+            },
+            {
+              "byte_count": 7893138,
+              "path": "part-00090.parquet",
+              "sha256": "ba137c1d1a67a81d827c102533398890c55aa1f65c0a0fd500b56be1cee1c4c5"
+            },
+            {
+              "byte_count": 3130781,
+              "path": "part-00091.parquet",
+              "sha256": "4cbcd630ab2bcb6f3647a82e49dd796f80dab0a0f08e77096cd28f0cdefea54c"
+            },
+            {
+              "byte_count": 7340036,
+              "path": "part-00092.parquet",
+              "sha256": "091dfc3a6ab6c79727cb71d24bba30766adf7e34f59a484c5d7fd4997a80832d"
+            },
+            {
+              "byte_count": 5814660,
+              "path": "part-00093.parquet",
+              "sha256": "9dffb8298249b4bc087bd48ff8a8a2359a09b884e092b3b6dde5c8949d0c887b"
+            },
+            {
+              "byte_count": 7002561,
+              "path": "part-00094.parquet",
+              "sha256": "77f7545afeb1571f86f8a3848f48c2f28352fe6672354431681b99083f3843bc"
+            },
+            {
+              "byte_count": 7396676,
+              "path": "part-00095.parquet",
+              "sha256": "3e770543f12cfa0af0ce2fc1b9610ab72b0c849db0b2088cb0505c4eefe8a846"
+            },
+            {
+              "byte_count": 7211469,
+              "path": "part-00096.parquet",
+              "sha256": "8ee7df045495ebaf4f34788451d1d070fd88bce1323ae4483d5c240b7100601d"
+            },
+            {
+              "byte_count": 7412595,
+              "path": "part-00097.parquet",
+              "sha256": "e2c68398ee018ce95d708cb99524d24cb2f225db9745c2643e31d26d663a2202"
+            },
+            {
+              "byte_count": 7203534,
+              "path": "part-00098.parquet",
+              "sha256": "1f4a239bd8058fc74c5117b7f1c1e393cae63bb0de8b926ff6c3f3c5ce3396d0"
+            },
+            {
+              "byte_count": 6958122,
+              "path": "part-00099.parquet",
+              "sha256": "bbe25b849c01dfb8b427e0c02c5c5634c0d33542ca013ca0be161a7bcab9a09f"
+            },
+            {
+              "byte_count": 7784595,
+              "path": "part-00100.parquet",
+              "sha256": "b271186aad7fe6f6d6759798406043f0561ac1b31cae19e32abe8dbd6a92b2d4"
+            },
+            {
+              "byte_count": 7186923,
+              "path": "part-00101.parquet",
+              "sha256": "9a2606084445e3ec24c0a5ffc71d168bf23921b29fe789f8d4d28d56a7d2c201"
+            },
+            {
+              "byte_count": 7916907,
+              "path": "part-00102.parquet",
+              "sha256": "836365b4aca84e5ac99dec612ca92b4d5e2f41f7f80698eaa50afe1870a9c2f5"
+            }
+          ],
+          "type": "finepdfs_clean_parquet"
+        },
+        "manifest": "/home/xia/code/j3/finepdfs_300m_tokenized/manifest.json",
+        "manifest_sha256": "f03328b2fc8cc44e0679e361a4d49353adb28fcbe830021b46788fedcc656f13",
+        "source": null,
+        "tokenizer": {
+          "canonical_tokenizer_hash": "416267157bccdfa2bc6d5025aebf3b9a6a82271f4664f04f0d963337fec35023",
+          "hash_equal": false,
+          "manifest_tokenizer_hash": "dc5c8220b7f49adda698462992b1018b9ef4f65047bae60a323f3a1d85cb5c20",
+          "semantic_json_equal": true,
+          "tokenizer_path": "/home/xia/code/j3/finepdfs_300m_tokenized/tokenizer.json"
+        },
+        "val_path_fallback_used": true
+      }
+    },
+    {
+      "actual_train_tokens": 350206468,
+      "actual_val_tokens": 3502065,
+      "category": "stage1_clean_web_edu",
+      "declared_train_tokens": 350206468,
+      "kind": "hf",
+      "name": "fineweb_edu",
+      "provenance": {
+        "config": "sample-10BT",
+        "dataset": "HuggingFaceFW/fineweb-edu",
+        "filters": {
+          "language": "en"
+        },
+        "local_pattern": "*.parquet",
+        "local_subdir": null,
+        "name": "fineweb_edu",
+        "split": "train",
+        "text_field": "text",
+        "token_budget": 350206468
+      }
+    },
+    {
+      "actual_train_tokens": 125000000,
+      "actual_val_tokens": 1250000,
+      "category": "stage2_natural_web",
+      "declared_train_tokens": 125000000,
+      "kind": "existing_source",
+      "name": "stage2_natural_web",
+      "provenance": {
+        "manifest": "/home/xia/code/j3/data/stage2_tokenized/manifest.json",
+        "manifest_sha256": "99044b00de8f37ec6d43d8171c1f9b49757b05fa3a1d9d035f2f1bc1d0e70586",
+        "source_name": "ultra_fineweb_l2_normal_web",
+        "source_record": {
+          "actual_train_tokens": 125000000,
+          "actual_val_tokens": 1250000,
+          "config": "default",
+          "dataset": "openbmb/Ultra-FineWeb",
+          "filters": {
+            "score_max": 0.8,
+            "score_min": 0.55
+          },
+          "local_pattern": "*.parquet",
+          "local_subdir": "ultra_fineweb_l2",
+          "name": "ultra_fineweb_l2_normal_web",
+          "requested_token_budget": 125000000,
+          "split": "en",
+          "target_train_tokens": 125000000,
+          "text_field": "content",
+          "token_budget": 125000000
+        },
+        "tokenizer": {
+          "canonical_tokenizer_hash": "416267157bccdfa2bc6d5025aebf3b9a6a82271f4664f04f0d963337fec35023",
+          "hash_equal": true,
+          "manifest_tokenizer_hash": "416267157bccdfa2bc6d5025aebf3b9a6a82271f4664f04f0d963337fec35023",
+          "semantic_json_equal": true,
+          "tokenizer_path": "/home/xia/code/j3/data/tokenized/tokenizer.json"
+        }
+      }
+    },
+    {
+      "actual_train_tokens": 75000000,
+      "actual_val_tokens": 750000,
+      "category": "stage2_narrative",
+      "declared_train_tokens": 75000000,
+      "kind": "existing_source",
+      "name": "stage2_narrative",
+      "provenance": {
+        "manifest": "/home/xia/code/j3/data/stage2_tokenized/manifest.json",
+        "manifest_sha256": "99044b00de8f37ec6d43d8171c1f9b49757b05fa3a1d9d035f2f1bc1d0e70586",
+        "source_name": "cosmopedia_v2_stories",
+        "source_record": {
+          "actual_train_tokens": 100000000,
+          "actual_val_tokens": 1000000,
+          "config": "cosmopedia-v2",
+          "dataset": "HuggingFaceTB/smollm-corpus",
+          "filters": {
+            "format_in": [
+              "story",
+              "story_forums",
+              "story_reddit",
+              "story_life_lessons"
+            ]
+          },
+          "local_pattern": "*.parquet",
+          "local_subdir": "cosmopedia_v2",
+          "name": "cosmopedia_v2_stories",
+          "requested_token_budget": 100000000,
+          "split": "train",
+          "target_train_tokens": 100000000,
+          "text_field": "text",
+          "token_budget": 100000000
+        },
+        "tokenizer": {
+          "canonical_tokenizer_hash": "416267157bccdfa2bc6d5025aebf3b9a6a82271f4664f04f0d963337fec35023",
+          "hash_equal": true,
+          "manifest_tokenizer_hash": "416267157bccdfa2bc6d5025aebf3b9a6a82271f4664f04f0d963337fec35023",
+          "semantic_json_equal": true,
+          "tokenizer_path": "/home/xia/code/j3/data/tokenized/tokenizer.json"
+        }
+      }
+    },
+    {
+      "actual_train_tokens": 50000000,
+      "actual_val_tokens": 500000,
+      "category": "stage2_procedural",
+      "declared_train_tokens": 50000000,
+      "kind": "existing_source",
+      "name": "stage2_procedural",
+      "provenance": {
+        "manifest": "/home/xia/code/j3/data/stage2_tokenized/manifest.json",
+        "manifest_sha256": "99044b00de8f37ec6d43d8171c1f9b49757b05fa3a1d9d035f2f1bc1d0e70586",
+        "source_name": "cosmopedia_v2_wikihow",
+        "source_record": {
+          "actual_train_tokens": 100000000,
+          "actual_val_tokens": 1000000,
+          "config": "cosmopedia-v2",
+          "dataset": "HuggingFaceTB/smollm-corpus",
+          "filters": {
+            "format_in": [
+              "wikihow"
+            ]
+          },
+          "local_pattern": "*.parquet",
+          "local_subdir": "cosmopedia_v2",
+          "name": "cosmopedia_v2_wikihow",
+          "requested_token_budget": 100000000,
+          "split": "train",
+          "target_train_tokens": 100000000,
+          "text_field": "text",
+          "token_budget": 100000000
+        },
+        "tokenizer": {
+          "canonical_tokenizer_hash": "416267157bccdfa2bc6d5025aebf3b9a6a82271f4664f04f0d963337fec35023",
+          "hash_equal": true,
+          "manifest_tokenizer_hash": "416267157bccdfa2bc6d5025aebf3b9a6a82271f4664f04f0d963337fec35023",
+          "semantic_json_equal": true,
+          "tokenizer_path": "/home/xia/code/j3/data/tokenized/tokenizer.json"
+        }
+      }
+    },
+    {
+      "actual_train_tokens": 100000000,
+      "actual_val_tokens": 1000000,
+      "category": "wikipedia_encyclopedic",
+      "declared_train_tokens": 100000000,
+      "kind": "hf",
+      "name": "wikitext_103",
+      "provenance": {
+        "config": "wikitext-103-v1",
+        "dataset": "Salesforce/wikitext",
+        "filters": {},
+        "local_pattern": "*.parquet",
+        "local_subdir": null,
+        "name": "wikitext_103",
+        "split": "train",
+        "text_field": "text",
+        "token_budget": 100000000
+      }
+    }
+  ],
+  "target_train_tokens": 1000000000,
+  "tokenizer": "/home/xia/code/j3/data/tokenized/tokenizer.json",
+  "tokenizer_hash": "416267157bccdfa2bc6d5025aebf3b9a6a82271f4664f04f0d963337fec35023",
+  "total_token_count": 1007216447,
+  "train_shards": [
+    {
+      "path": "train/train_000000.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000001.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000002.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000003.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000004.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000005.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000006.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000007.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000008.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000009.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000010.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000011.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000012.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000013.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000014.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000015.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000016.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000017.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000018.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000019.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000020.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000021.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000022.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000023.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000024.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000025.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000026.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000027.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000028.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000029.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000030.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000031.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000032.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000033.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000034.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000035.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000036.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000037.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000038.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000039.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000040.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000041.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000042.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000043.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000044.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000045.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000046.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000047.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000048.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000049.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000050.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000051.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000052.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000053.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000054.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000055.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000056.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000057.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000058.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000059.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000060.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000061.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000062.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000063.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000064.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000065.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000066.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000067.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000068.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000069.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000070.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000071.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000072.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000073.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000074.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000075.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000076.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000077.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000078.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000079.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000080.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000081.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000082.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000083.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000084.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000085.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000086.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000087.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000088.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000089.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000090.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000091.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000092.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000093.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000094.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000095.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000096.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000097.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000098.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000099.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000100.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000101.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000102.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000103.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000104.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000105.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000106.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000107.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000108.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000109.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000110.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000111.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000112.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000113.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000114.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000115.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000116.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000117.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000118.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000119.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000120.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000121.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000122.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000123.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000124.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000125.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000126.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000127.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000128.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000129.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000130.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000131.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000132.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000133.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000134.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000135.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000136.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000137.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000138.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000139.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000140.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000141.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000142.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000143.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000144.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000145.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000146.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000147.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000148.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000149.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000150.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000151.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000152.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000153.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000154.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000155.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000156.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000157.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000158.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000159.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000160.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000161.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000162.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000163.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000164.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000165.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000166.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000167.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000168.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000169.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000170.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000171.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000172.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000173.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000174.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000175.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000176.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000177.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000178.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000179.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000180.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000181.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000182.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000183.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000184.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000185.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000186.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000187.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000188.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000189.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000190.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000191.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000192.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000193.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000194.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000195.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000196.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000197.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000198.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000199.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000200.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000201.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000202.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000203.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000204.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000205.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000206.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000207.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000208.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000209.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000210.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000211.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000212.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000213.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000214.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000215.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000216.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000217.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000218.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000219.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000220.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000221.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000222.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000223.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000224.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000225.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000226.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000227.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000228.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000229.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000230.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000231.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000232.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000233.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000234.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000235.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000236.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000237.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "train/train_000238.bin",
+      "token_count": 1755648
+    }
+  ],
+  "train_token_count": 1000000000,
+  "val_ratio": 0.01,
+  "val_shards": [
+    {
+      "path": "val/val_000000.bin",
+      "token_count": 4194304
+    },
+    {
+      "path": "val/val_000001.bin",
+      "token_count": 3022143
+    }
+  ],
+  "val_token_count": 7216447,
+  "version": 1,
+  "vocab_size": 16384
+}

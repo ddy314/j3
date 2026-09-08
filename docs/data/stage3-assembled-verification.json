@@ -1,0 +1,426 @@
+{
+  "actual_total_tokens": 1007216447,
+  "actual_train_tokens": 1000000000,
+  "actual_val_tokens": 7216447,
+  "errors": [],
+  "id_range": [
+    3,
+    16383
+  ],
+  "manifest": "/home/xia/code/j3/data/stage3_tokenized/manifest.json",
+  "manifest_total_tokens": 1007216447,
+  "missing_listed_bin_files": [],
+  "passed": true,
+  "special_token_counts": {
+    "0": 0,
+    "1": 0,
+    "2": 0,
+    "3": 1497808
+  },
+  "tokenizer_hash": "416267157bccdfa2bc6d5025aebf3b9a6a82271f4664f04f0d963337fec35023",
+  "top_frequency": [
+    {
+      "count": 35245159,
+      "token_id": 266
+    },
+    {
+      "count": 33521238,
+      "token_id": 15
+    },
+    {
+      "count": 33454700,
+      "token_id": 17
+    },
+    {
+      "count": 21363103,
+      "token_id": 286
+    },
+    {
+      "count": 20423331,
+      "token_id": 291
+    },
+    {
+      "count": 17521718,
+      "token_id": 294
+    },
+    {
+      "count": 12518581,
+      "token_id": 261
+    },
+    {
+      "count": 11977753,
+      "token_id": 289
+    },
+    {
+      "count": 6938401,
+      "token_id": 325
+    },
+    {
+      "count": 6669306,
+      "token_id": 16
+    },
+    {
+      "count": 6215716,
+      "token_id": 335
+    },
+    {
+      "count": 6138713,
+      "token_id": 338
+    },
+    {
+      "count": 5371651,
+      "token_id": 370
+    },
+    {
+      "count": 4683718,
+      "token_id": 358
+    },
+    {
+      "count": 4359543,
+      "token_id": 348
+    },
+    {
+      "count": 4347139,
+      "token_id": 339
+    },
+    {
+      "count": 4220671,
+      "token_id": 352
+    },
+    {
+      "count": 4093325,
+      "token_id": 588
+    },
+    {
+      "count": 4048534,
+      "token_id": 29
+    },
+    {
+      "count": 3958070,
+      "token_id": 86
+    },
+    {
+      "count": 3901522,
+      "token_id": 361
+    },
+    {
+      "count": 3674729,
+      "token_id": 376
+    },
+    {
+      "count": 3606351,
+      "token_id": 321
+    },
+    {
+      "count": 3499865,
+      "token_id": 412
+    },
+    {
+      "count": 3178449,
+      "token_id": 616
+    },
+    {
+      "count": 3154106,
+      "token_id": 422
+    },
+    {
+      "count": 3033334,
+      "token_id": 12
+    },
+    {
+      "count": 3023158,
+      "token_id": 359
+    },
+    {
+      "count": 2900074,
+      "token_id": 433
+    },
+    {
+      "count": 2551329,
+      "token_id": 456
+    },
+    {
+      "count": 2476612,
+      "token_id": 417
+    },
+    {
+      "count": 2429592,
+      "token_id": 362
+    },
+    {
+      "count": 2399317,
+      "token_id": 522
+    },
+    {
+      "count": 2391923,
+      "token_id": 357
+    },
+    {
+      "count": 2294797,
+      "token_id": 279
+    },
+    {
+      "count": 2278808,
+      "token_id": 451
+    },
+    {
+      "count": 2175309,
+      "token_id": 452
+    },
+    {
+      "count": 2090186,
+      "token_id": 439
+    },
+    {
+      "count": 2085365,
+      "token_id": 463
+    },
+    {
+      "count": 1996675,
+      "token_id": 329
+    },
+    {
+      "count": 1964529,
+      "token_id": 1404
+    },
+    {
+      "count": 1949916,
+      "token_id": 476
+    },
+    {
+      "count": 1944137,
+      "token_id": 282
+    },
+    {
+      "count": 1918756,
+      "token_id": 515
+    },
+    {
+      "count": 1909562,
+      "token_id": 508
+    },
+    {
+      "count": 1775551,
+      "token_id": 438
+    },
+    {
+      "count": 1715430,
+      "token_id": 492
+    },
+    {
+      "count": 1687356,
+      "token_id": 319
+    },
+    {
+      "count": 1686024,
+      "token_id": 516
+    },
+    {
+      "count": 1587894,
+      "token_id": 548
+    },
+    {
+      "count": 1526204,
+      "token_id": 18
+    },
+    {
+      "count": 1497808,
+      "token_id": 3
+    },
+    {
+      "count": 1485524,
+      "token_id": 563
+    },
+    {
+      "count": 1454123,
+      "token_id": 469
+    },
+    {
+      "count": 1401770,
+      "token_id": 457
+    },
+    {
+      "count": 1381601,
+      "token_id": 30
+    },
+    {
+      "count": 1380696,
+      "token_id": 564
+    },
+    {
+      "count": 1371072,
+      "token_id": 541
+    },
+    {
+      "count": 1309108,
+      "token_id": 510
+    },
+    {
+      "count": 1298809,
+      "token_id": 540
+    },
+    {
+      "count": 1279323,
+      "token_id": 575
+    },
+    {
+      "count": 1264677,
+      "token_id": 68
+    },
+    {
+      "count": 1259053,
+      "token_id": 337
+    },
+    {
+      "count": 1246960,
+      "token_id": 567
+    },
+    {
+      "count": 1240407,
+      "token_id": 267
+    },
+    {
+      "count": 1225069,
+      "token_id": 557
+    },
+    {
+      "count": 1221353,
+      "token_id": 636
+    },
+    {
+      "count": 1208746,
+      "token_id": 332
+    },
+    {
+      "count": 1204321,
+      "token_id": 360
+    },
+    {
+      "count": 1185865,
+      "token_id": 619
+    },
+    {
+      "count": 1177870,
+      "token_id": 76
+    },
+    {
+      "count": 1174121,
+      "token_id": 543
+    },
+    {
+      "count": 1171569,
+      "token_id": 366
+    },
+    {
+      "count": 1146458,
+      "token_id": 606
+    },
+    {
+      "count": 1140027,
+      "token_id": 388
+    },
+    {
+      "count": 1135461,
+      "token_id": 371
+    },
+    {
+      "count": 1111215,
+      "token_id": 365
+    },
+    {
+      "count": 1095148,
+      "token_id": 413
+    },
+    {
+      "count": 1070646,
+      "token_id": 54
+    },
+    {
+      "count": 1065105,
+      "token_id": 870
+    },
+    {
+      "count": 1060133,
+      "token_id": 92
+    },
+    {
+      "count": 1031416,
+      "token_id": 262
+    },
+    {
+      "count": 1028730,
+      "token_id": 82
+    },
+    {
+      "count": 1023006,
+      "token_id": 668
+    },
+    {
+      "count": 1012816,
+      "token_id": 416
+    },
+    {
+      "count": 1003988,
+      "token_id": 280
+    },
+    {
+      "count": 1000809,
+      "token_id": 87
+    },
+    {
+      "count": 999878,
+      "token_id": 613
+    },
+    {
+      "count": 999811,
+      "token_id": 582
+    },
+    {
+      "count": 999434,
+      "token_id": 627
+    },
+    {
+      "count": 994460,
+      "token_id": 630
+    },
+    {
+      "count": 992421,
+      "token_id": 20
+    },
+    {
+      "count": 989412,
+      "token_id": 758
+    },
+    {
+      "count": 987794,
+      "token_id": 664
+    },
+    {
+      "count": 977326,
+      "token_id": 406
+    },
+    {
+      "count": 976252,
+      "token_id": 673
+    },
+    {
+      "count": 975291,
+      "token_id": 312
+    },
+    {
+      "count": 970107,
+      "token_id": 34
+    },
+    {
+      "count": 969949,
+      "token_id": 631
+    },
+    {
+      "count": 961371,
+      "token_id": 604
+    }
+  ],
+  "train_shard_count": 240,
+  "unlisted_bin_files": [],
+  "val_shard_count": 6
+}

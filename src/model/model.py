@@ -41,7 +41,7 @@ class DecoderBlock(nn.Module):
 
 
 class DecoderLM(nn.Module):
-    """D32-1216-R12 decoder-only causal language model."""
+    """J3 decoder-only causal language model."""
 
     def __init__(self, config: ModelConfig | None = None) -> None:
         super().__init__()

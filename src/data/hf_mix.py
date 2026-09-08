@@ -25,14 +25,10 @@ class HFMixSource:
     local_pattern: str = "*.parquet"
     text_template: str | None = None
     min_text_chars: int = 0
-    kind: str = "hf"
-    category: str = "unspecified"
 
     def as_dict(self) -> dict[str, Any]:
         return {
             "name": self.name,
-            "kind": self.kind,
-            "category": self.category,
             "dataset": self.dataset,
             "config": self.config,
             "split": self.split,
@@ -61,11 +57,7 @@ def load_mix_config(path: str | Path) -> tuple[dict[str, Any], list[HFMixSource]
         if not isinstance(item, dict):
             raise ValueError(f"source {index} is not a mapping")
         name = str(item.get("name", "")).strip()
-        kind = str(item.get("kind", "hf")).strip()
-        dataset = str(item.get("dataset", "local" if kind == "local" else "")).strip()
-        category = str(item.get("category", "unspecified")).strip() or "unspecified"
-        if kind not in {"hf", "local"}:
-            raise ValueError(f"source {name or index} has unsupported kind {kind!r}")
+        dataset = str(item.get("dataset", "")).strip()
         if not name or not dataset:
             raise ValueError(f"source {index} needs name and dataset")
         if name in names:
@@ -83,9 +75,6 @@ def load_mix_config(path: str | Path) -> tuple[dict[str, Any], list[HFMixSource]
         min_text_chars = int(item.get("min_text_chars", 0))
         if min_text_chars < 0:
             raise ValueError(f"source {name} min_text_chars must be non-negative")
-        local_subdir = item.get("local_subdir")
-        if kind == "local" and not isinstance(local_subdir, str):
-            raise ValueError(f"local source {name} needs local_subdir")
         sources.append(
             HFMixSource(
                 name=name,
@@ -95,21 +84,12 @@ def load_mix_config(path: str | Path) -> tuple[dict[str, Any], list[HFMixSource]
                 text_field=str(item.get("text_field", "text")),
                 token_budget=token_budget,
                 filters=dict(filters),
-                local_subdir=local_subdir,
+                local_subdir=item.get("local_subdir"),
                 local_pattern=str(item.get("local_pattern", "*.parquet")),
                 text_template=text_template,
                 min_text_chars=min_text_chars,
-                kind=kind,
-                category=category,
             )
         )
-    declared_target = raw.get("target_train_tokens")
-    if declared_target is not None:
-        target = int(declared_target)
-        if target <= 0 or sum(source.token_budget for source in sources) != target:
-            raise ValueError(
-                f"target_train_tokens {target} does not equal the sum of source token budgets"
-            )
     return raw, sources
 
 
@@ -268,7 +248,7 @@ def iter_local_rows(paths: Iterable[str | Path]) -> Iterator[tuple[int, dict[str
     for path in normalized_paths:
         if not path.is_file():
             raise FileNotFoundError(path)
-        if path.name.endswith((".json.gz", ".jsonl.gz", ".ndjson.gz")):
+        if path.name.endswith(".json.gz"):
             with gzip.open(path, "rt", encoding="utf-8") as handle:
                 for line in handle:
                     line = line.strip()
@@ -279,25 +259,6 @@ def iter_local_rows(paths: Iterable[str | Path]) -> Iterator[tuple[int, dict[str
                         raise TypeError(f"JSON row is not a mapping: {type(row).__name__}")
                     raw_rows_seen += 1
                     yield raw_rows_seen, dict(row)
-        elif path.suffix.lower() in {".jsonl", ".ndjson"}:
-            with path.open("rt", encoding="utf-8") as handle:
-                for line in handle:
-                    line = line.strip()
-                    if not line:
-                        continue
-                    row = json.loads(line)
-                    if not isinstance(row, Mapping):
-                        raise TypeError(f"JSON row is not a mapping: {type(row).__name__}")
-                    raw_rows_seen += 1
-                    yield raw_rows_seen, dict(row)
-        elif path.suffix.lower() == ".json":
-            value = json.loads(path.read_text(encoding="utf-8"))
-            rows = value if isinstance(value, list) else [value]
-            for row in rows:
-                if not isinstance(row, Mapping):
-                    raise TypeError(f"JSON row is not a mapping: {type(row).__name__}")
-                raw_rows_seen += 1
-                yield raw_rows_seen, dict(row)
         elif path.suffix == ".txt":
             with path.open("rt", encoding="utf-8") as handle:
                 pending: list[str] = []

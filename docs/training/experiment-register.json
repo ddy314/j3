@@ -1,0 +1,1147 @@
+{
+  "generated_at": "2026-09-08T11:45:11.723078+00:00",
+  "record_scope": "all local runs present at export time; checkpoint state.pt files are intentionally excluded",
+  "runs": [
+    {
+      "checkpoint_metadata": [
+        "20260904-172310/checkpoints/latest/metadata.json",
+        "20260904-172310/checkpoints/step_000000001/metadata.json"
+      ],
+      "command": {
+        "argv": [
+          "train.py",
+          "--config",
+          "configs/smoke.yaml",
+          "--max-steps",
+          "1"
+        ],
+        "config": "/home/xia/code/j3/configs/smoke.yaml"
+      },
+      "environment": {
+        "cuda_devices": [
+          {
+            "capability": "8.9",
+            "index": 0,
+            "multi_processor_count": 24,
+            "name": "NVIDIA GeForce RTX 4060 Laptop GPU",
+            "total_memory_mb": 7834.375
+          }
+        ],
+        "git_commit": null,
+        "hostname": "xiaArch",
+        "python": "3.13.11 (main, Jan 14 2026, 19:38:04) [Clang 21.1.4 ]",
+        "torch_cuda_version": "13.0",
+        "torch_version": "2.14.0+cu130"
+      },
+      "last_metrics": {
+        "checkpoint_status": null,
+        "current_offset": 1024,
+        "current_shard": null,
+        "elapsed_time": 0.35273673799929384,
+        "epoch": 0,
+        "eta_seconds": 0.0,
+        "global_batch_tokens": 1024,
+        "gpu_memory_allocated_mb": 813.517578125,
+        "gpu_memory_used_mb": 1846.0,
+        "gpu_power_w": 14.48,
+        "gpu_temperature_c": 58.0,
+        "gpu_utilization_pct": 0.0,
+        "grad_norm": 2.251692533493042,
+        "gradient_accumulation_steps": 1,
+        "learning_rate": 1.875e-05,
+        "micro_batch_size": 1,
+        "optimizer": "AdamW(fused=True)",
+        "perplexity": null,
+        "sequence_length": 1024,
+        "smoothed_loss": 9.780717849731445,
+        "step": 1,
+        "step_time": 0.34815087000060885,
+        "timestamp": "2026-09-04T17:23:13+0800",
+        "tokens_per_sec": 2941.2536007685667,
+        "tokens_seen": 1024,
+        "tokens_target": 1024,
+        "train_loss": 9.780717849731445,
+        "validation_loss": null
+      },
+      "raw_record_dir": "docs/training/raw-runs/20260904-172310",
+      "run_id": "20260904-172310",
+      "selected": false,
+      "status": {
+        "compile": false,
+        "compile_mode": null,
+        "current_data": {
+          "epoch": 0,
+          "offset_in_shard": 1024,
+          "shard_index": null
+        },
+        "device": "cuda",
+        "elapsed_seconds": 1.0117191369990906,
+        "epoch": 0,
+        "last_checkpoint_at": "2026-09-04T17:23:13+0800",
+        "last_checkpoint_tokens": 1024,
+        "learning_rate": 1.875e-05,
+        "model_name": "D32-1216-R12",
+        "optimizer": "AdamW(fused=True)",
+        "parameters": 49001408,
+        "run_id": "20260904-172310",
+        "status": "completed",
+        "step": 1,
+        "tokens_seen": 1024,
+        "tokens_target": 1024
+      }
+    },
+    {
+      "checkpoint_metadata": [
+        "20260904-181831/checkpoints/latest/metadata.json",
+        "20260904-181831/checkpoints/step_000000128/metadata.json"
+      ],
+      "command": {
+        "argv": [
+          "train.py",
+          "--config",
+          "configs/smoke.yaml"
+        ],
+        "config": "/home/xia/code/j3/configs/smoke.yaml"
+      },
+      "environment": {
+        "cuda_devices": [
+          {
+            "capability": "8.9",
+            "index": 0,
+            "multi_processor_count": 24,
+            "name": "NVIDIA GeForce RTX 4060 Laptop GPU",
+            "total_memory_mb": 7834.375
+          }
+        ],
+        "git_commit": null,
+        "hostname": "xiaArch",
+        "python": "3.13.11 (main, Jan 14 2026, 19:38:04) [Clang 21.1.4 ]",
+        "torch_cuda_version": "13.0",
+        "torch_version": "2.14.0+cu130"
+      },
+      "last_metrics": {
+        "checkpoint_status": null,
+        "current_offset": 1048576,
+        "current_shard": null,
+        "elapsed_time": 50.10051254599966,
+        "epoch": 0,
+        "eta_seconds": 0.0,
+        "global_batch_tokens": 8192,
+        "gpu_memory_allocated_mb": 1046.033203125,
+        "gpu_memory_used_mb": 5570.0,
+        "gpu_power_w": 91.71,
+        "gpu_temperature_c": 80.0,
+        "gpu_utilization_pct": 100.0,
+        "grad_norm": 0.6231617331504822,
+        "gradient_accumulation_steps": 1,
+        "learning_rate": 3e-05,
+        "micro_batch_size": 8,
+        "optimizer": "AdamW(fused=True)",
+        "perplexity": 361.9618640737392,
+        "sequence_length": 1024,
+        "smoothed_loss": 7.513702746968496,
+        "step": 128,
+        "step_time": 0.24041801837483945,
+        "timestamp": "2026-09-04T18:19:24+0800",
+        "tokens_per_sec": 34073.98520034271,
+        "tokens_seen": 1048576,
+        "tokens_target": 1048576,
+        "train_loss": 3.399005651473999,
+        "validation_loss": 5.891538858413696
+      },
+      "raw_record_dir": "docs/training/raw-runs/20260904-181831",
+      "run_id": "20260904-181831",
+      "selected": false,
+      "status": {
+        "compile": true,
+        "compile_mode": "default",
+        "current_data": {
+          "epoch": 0,
+          "offset_in_shard": 1048576,
+          "shard_index": null
+        },
+        "device": "cuda",
+        "elapsed_seconds": 0.022489555998618016,
+        "epoch": 0,
+        "last_checkpoint_at": null,
+        "last_checkpoint_tokens": 0,
+        "learning_rate": 3e-05,
+        "model_name": "D32-1216-R12",
+        "optimizer": "AdamW(fused=True)",
+        "parameters": 49001408,
+        "run_id": "20260904-181831",
+        "status": "completed",
+        "step": 128,
+        "tokens_seen": 1048576,
+        "tokens_target": 1048576
+      }
+    },
+    {
+      "checkpoint_metadata": [
+        "20260904-212216/checkpoints/latest/metadata.json",
+        "20260904-212216/checkpoints/step_000000128/metadata.json"
+      ],
+      "command": {
+        "argv": [
+          "train.py",
+          "--config",
+          "configs/smoke.yaml"
+        ],
+        "config": "/home/xia/code/j3/configs/smoke.yaml"
+      },
+      "environment": {
+        "cuda_devices": [
+          {
+            "capability": "8.9",
+            "index": 0,
+            "multi_processor_count": 24,
+            "name": "NVIDIA GeForce RTX 4060 Laptop GPU",
+            "total_memory_mb": 7834.375
+          }
+        ],
+        "git_commit": "4b5e3e23d0b18788619928461580e8b8cae6e6eb",
+        "hostname": "xiaArch",
+        "python": "3.13.11 (main, Jan 14 2026, 19:38:04) [Clang 21.1.4 ]",
+        "torch_cuda_version": "13.0",
+        "torch_version": "2.14.0+cu130"
+      },
+      "last_metrics": {
+        "checkpoint_status": null,
+        "current_offset": 1048576,
+        "current_shard": null,
+        "elapsed_time": 51.43972320800094,
+        "epoch": 0,
+        "eta_seconds": 0.0,
+        "global_batch_tokens": 8192,
+        "gpu_memory_allocated_mb": 4002.16455078125,
+        "gpu_memory_used_mb": 5578.0,
+        "gpu_power_w": 90.78,
+        "gpu_temperature_c": 82.0,
+        "gpu_utilization_pct": 100.0,
+        "grad_norm": 0.6220622658729553,
+        "gradient_accumulation_steps": 1,
+        "learning_rate": 3e-05,
+        "micro_batch_size": 8,
+        "optimizer": "AdamW(fused=True)",
+        "perplexity": 364.1468639325953,
+        "sequence_length": 1024,
+        "smoothed_loss": 7.5113684978452175,
+        "step": 128,
+        "step_time": 0.23222166487494178,
+        "timestamp": "2026-09-04T21:23:10+0800",
+        "tokens_per_sec": 35276.63968997739,
+        "tokens_seen": 1048576,
+        "tokens_target": 1048576,
+        "train_loss": 3.3937346935272217,
+        "validation_loss": 5.897557258605957
+      },
+      "raw_record_dir": "docs/training/raw-runs/20260904-212216",
+      "run_id": "20260904-212216",
+      "selected": false,
+      "status": {
+        "compile": true,
+        "compile_mode": "default",
+        "current_data": {
+          "epoch": 0,
+          "offset_in_shard": 1048576,
+          "shard_index": null
+        },
+        "device": "cuda",
+        "elapsed_seconds": 0.02287095700012287,
+        "epoch": 0,
+        "last_checkpoint_at": "2026-09-04T21:23:10+0800",
+        "last_checkpoint_tokens": 1048576,
+        "learning_rate": 3e-05,
+        "model_name": "D32-1216-R12",
+        "optimizer": "AdamW(fused=True)",
+        "parameters": 49001408,
+        "run_id": "20260904-212216",
+        "started_at": "2026-09-04T21:22:19+0800",
+        "status": "completed",
+        "step": 128,
+        "tokens_seen": 1048576,
+        "tokens_target": 1048576
+      }
+    },
+    {
+      "checkpoint_metadata": [
+        "20260905-021323/checkpoints/latest/metadata.json",
+        "20260905-021323/checkpoints/step_000008393/metadata.json"
+      ],
+      "command": {
+        "argv": [
+          "train.py",
+          "--config",
+          "configs/pretrain_1b.yaml"
+        ],
+        "config": "/home/xia/code/j3/configs/pretrain_1b.yaml"
+      },
+      "environment": {
+        "cuda_devices": [
+          {
+            "capability": "8.9",
+            "index": 0,
+            "multi_processor_count": 24,
+            "name": "NVIDIA GeForce RTX 4060 Laptop GPU",
+            "total_memory_mb": 7834.375
+          }
+        ],
+        "git_commit": "1b549af45620fbd0808bf33dea2f7fba3dea74bc",
+        "hostname": "xiaArch",
+        "python": "3.13.11 (main, Jan 14 2026, 19:38:04) [Clang 21.1.4 ]",
+        "torch_cuda_version": "13.0",
+        "torch_version": "2.14.0+cu130"
+      },
+      "last_metrics": {
+        "checkpoint_status": "2026-09-05T09:34:25+0800",
+        "current_offset": 87296,
+        "current_shard": 172,
+        "elapsed_time": 26774.926235024002,
+        "epoch": 1,
+        "eta_seconds": 0.0,
+        "global_batch_tokens": 131072,
+        "gpu_memory_allocated_mb": 1303.72119140625,
+        "gpu_memory_used_mb": 5634.0,
+        "gpu_power_w": 72.64,
+        "gpu_temperature_c": 87.0,
+        "gpu_utilization_pct": 99.0,
+        "grad_norm": 0.4246775507926941,
+        "gradient_accumulation_steps": 16,
+        "learning_rate": 3e-05,
+        "micro_batch_size": 16,
+        "optimizer": "AdamW(fused=True)",
+        "perplexity": 39.225977854460844,
+        "sequence_length": 512,
+        "smoothed_loss": 3.6031579955254514,
+        "step": 8393,
+        "step_time": 4.393627438010299,
+        "timestamp": "2026-09-05T09:39:42+0800",
+        "tokens_per_sec": 29832.297309977963,
+        "tokens_seen": 1100087296,
+        "tokens_target": 1100000000,
+        "train_loss": 3.5157999992370605,
+        "validation_loss": 3.6693392276763914
+      },
+      "raw_record_dir": "docs/training/raw-runs/20260905-021323",
+      "run_id": "20260905-021323",
+      "selected": false,
+      "status": {
+        "compile": true,
+        "compile_mode": "default",
+        "current_data": {
+          "epoch": 1,
+          "offset_in_shard": 87296,
+          "shard_index": 172
+        },
+        "device": "cuda",
+        "elapsed_seconds": 26776.230395021994,
+        "epoch": 1,
+        "last_checkpoint_at": "2026-09-05T09:39:42+0800",
+        "last_checkpoint_tokens": 1100087296,
+        "learning_rate": 3e-05,
+        "model_name": "D32-1216-R12",
+        "optimizer": "AdamW(fused=True)",
+        "parameters": 49001408,
+        "run_id": "20260905-021323",
+        "started_at": "2026-09-05T02:13:27+0800",
+        "status": "completed",
+        "step": 8393,
+        "tokens_seen": 1100087296,
+        "tokens_target": 1100000000
+      }
+    },
+    {
+      "checkpoint_metadata": [],
+      "command": {
+        "argv": [
+          "train.py",
+          "--config",
+          "configs/pretrain_1b.yaml"
+        ],
+        "config": "/home/xia/code/j3/configs/pretrain_1b.yaml"
+      },
+      "environment": {
+        "cuda_devices": [
+          {
+            "capability": "8.9",
+            "index": 0,
+            "multi_processor_count": 24,
+            "name": "NVIDIA GeForce RTX 4060 Laptop GPU",
+            "total_memory_mb": 7834.375
+          }
+        ],
+        "git_commit": "75b024e52cbbcdcacb9d02734ce8ab6b79931b4e",
+        "hostname": "xiaArch",
+        "python": "3.13.11 (main, Jan 14 2026, 19:38:04) [Clang 21.1.4 ]",
+        "torch_cuda_version": "13.0",
+        "torch_version": "2.14.0+cu130"
+      },
+      "last_metrics": {
+        "checkpoint_status": null,
+        "current_offset": 1572864,
+        "current_shard": 62,
+        "elapsed_time": 137.03117727700737,
+        "epoch": 0,
+        "eta_seconds": 24067.525968133978,
+        "global_batch_tokens": 131072,
+        "gpu_memory_allocated_mb": 2488.04541015625,
+        "gpu_memory_used_mb": 5378.0,
+        "gpu_power_w": 74.91,
+        "gpu_temperature_c": 86.0,
+        "gpu_utilization_pct": 100.0,
+        "grad_norm": 1.3760216236114502,
+        "gradient_accumulation_steps": 16,
+        "learning_rate": 8.650751999999999e-05,
+        "micro_batch_size": 16,
+        "optimizer": "AdamW(fused=True)",
+        "perplexity": null,
+        "sequence_length": 512,
+        "smoothed_loss": 9.046682001949755,
+        "step": 44,
+        "step_time": 3.1728772800124716,
+        "timestamp": "2026-09-05T13:47:51+0800",
+        "tokens_per_sec": 41310.1385375626,
+        "tokens_seen": 5767168,
+        "tokens_target": 1000000000,
+        "train_loss": 8.643993377685547,
+        "validation_loss": null
+      },
+      "raw_record_dir": "docs/training/raw-runs/20260905-134531",
+      "run_id": "20260905-134531",
+      "selected": false,
+      "status": {
+        "compile": true,
+        "compile_mode": "default",
+        "current_data": {
+          "epoch": 0,
+          "offset_in_shard": 1572864,
+          "shard_index": 62
+        },
+        "device": "cuda",
+        "elapsed_seconds": 137.64919116500823,
+        "epoch": 0,
+        "last_checkpoint_at": "2026-09-05T13:47:51+0800",
+        "last_checkpoint_tokens": 5767168,
+        "learning_rate": 8.650751999999999e-05,
+        "model_name": "D32-1216-R12",
+        "optimizer": "AdamW(fused=True)",
+        "parameters": 49001408,
+        "run_id": "20260905-134531",
+        "started_at": "2026-09-05T13:45:34+0800",
+        "status": "stopped",
+        "step": 44,
+        "tokens_seen": 5767168,
+        "tokens_target": 1000000000
+      }
+    },
+    {
+      "checkpoint_metadata": [
+        "20260905-135527/checkpoints/latest/metadata.json",
+        "20260905-135527/checkpoints/step_000007630/metadata.json"
+      ],
+      "command": {
+        "argv": [
+          "train.py",
+          "--config",
+          "configs/pretrain_1b.yaml",
+          "--init-from",
+          "runs/20260905-021323/checkpoints/latest"
+        ],
+        "config": "/home/xia/code/j3/configs/pretrain_1b.yaml"
+      },
+      "environment": {
+        "cuda_devices": [
+          {
+            "capability": "8.9",
+            "index": 0,
+            "multi_processor_count": 24,
+            "name": "NVIDIA GeForce RTX 4060 Laptop GPU",
+            "total_memory_mb": 7834.375
+          }
+        ],
+        "git_commit": "75b024e52cbbcdcacb9d02734ce8ab6b79931b4e",
+        "hostname": "xiaArch",
+        "python": "3.13.11 (main, Jan 14 2026, 19:38:04) [Clang 21.1.4 ]",
+        "torch_cuda_version": "13.0",
+        "torch_version": "2.14.0+cu130"
+      },
+      "last_metrics": {
+        "checkpoint_status": "2026-09-05T20:38:51+0800",
+        "current_offset": 79360,
+        "current_shard": 54,
+        "elapsed_time": 24549.167856501997,
+        "epoch": 1,
+        "eta_seconds": 0.0,
+        "global_batch_tokens": 131072,
+        "gpu_memory_allocated_mb": 3923.1328125,
+        "gpu_memory_used_mb": 5660.0,
+        "gpu_power_w": 70.61,
+        "gpu_temperature_c": 87.0,
+        "gpu_utilization_pct": 100.0,
+        "grad_norm": 0.7445405125617981,
+        "gradient_accumulation_steps": 16,
+        "learning_rate": 3e-05,
+        "micro_batch_size": 16,
+        "optimizer": "AdamW(fused=True)",
+        "perplexity": 34.303775881742375,
+        "sequence_length": 512,
+        "smoothed_loss": 2.5872563617552253,
+        "step": 7630,
+        "step_time": 4.496119233008358,
+        "timestamp": "2026-09-05T20:44:39+0800",
+        "tokens_per_sec": 29152.25179922544,
+        "tokens_seen": 1000079360,
+        "tokens_target": 1000000000,
+        "train_loss": 3.135202407836914,
+        "validation_loss": 3.5352554321289062
+      },
+      "raw_record_dir": "docs/training/raw-runs/20260905-135527",
+      "run_id": "20260905-135527",
+      "selected": false,
+      "status": {
+        "compile": true,
+        "compile_mode": "default",
+        "current_data": {
+          "epoch": 1,
+          "offset_in_shard": 79360,
+          "shard_index": 54
+        },
+        "device": "cuda",
+        "elapsed_seconds": 24550.108078997,
+        "epoch": 1,
+        "last_checkpoint_at": "2026-09-05T20:44:39+0800",
+        "last_checkpoint_tokens": 1000079360,
+        "learning_rate": 3e-05,
+        "model_name": "D32-1216-R12",
+        "optimizer": "AdamW(fused=True)",
+        "parameters": 49001408,
+        "run_id": "20260905-135527",
+        "started_at": "2026-09-05T13:55:30+0800",
+        "status": "completed",
+        "step": 7630,
+        "tokens_seen": 1000079360,
+        "tokens_target": 1000000000
+      }
+    },
+    {
+      "checkpoint_metadata": [
+        "20260906-225321/checkpoints/latest/metadata.json",
+        "20260906-225321/checkpoints/step_000007630/metadata.json"
+      ],
+      "command": {
+        "argv": [
+          "train.py",
+          "--config",
+          "/home/xia/code/j3/configs/pretrain_stage3_1b.yaml",
+          "--init-from",
+          "/home/xia/code/j3/runs/20260905-135527/checkpoints/latest"
+        ],
+        "config": "/home/xia/code/j3/configs/pretrain_stage3_1b.yaml"
+      },
+      "environment": {
+        "cuda_devices": [
+          {
+            "capability": "8.9",
+            "index": 0,
+            "multi_processor_count": 24,
+            "name": "NVIDIA GeForce RTX 4060 Laptop GPU",
+            "total_memory_mb": 7834.375
+          }
+        ],
+        "git_commit": "44d9394a15ccb056297515570a3f7532a43d6219",
+        "hostname": "xiaArch",
+        "python": "3.13.11 (main, Jan 14 2026, 19:38:04) [Clang 21.1.4 ]",
+        "torch_cuda_version": "13.0",
+        "torch_version": "2.14.0+cu130"
+      },
+      "last_metrics": {
+        "checkpoint_status": "2026-09-07T05:37:54+0800",
+        "current_offset": 79360,
+        "current_shard": 158,
+        "elapsed_time": 24594.30841310302,
+        "epoch": 1,
+        "eta_seconds": 0.0,
+        "global_batch_tokens": 131072,
+        "gpu_memory_allocated_mb": 2283.93017578125,
+        "gpu_memory_used_mb": 5660.0,
+        "gpu_power_w": 75.2,
+        "gpu_temperature_c": 87.0,
+        "gpu_utilization_pct": 100.0,
+        "grad_norm": 0.48379942774772644,
+        "gradient_accumulation_steps": 16,
+        "learning_rate": 1e-05,
+        "micro_batch_size": 16,
+        "optimizer": "AdamW(fused=True)",
+        "perplexity": 23.978241816690886,
+        "sequence_length": 512,
+        "smoothed_loss": 3.220153810443846,
+        "step": 7630,
+        "step_time": 4.394306271016831,
+        "timestamp": "2026-09-07T05:43:19+0800",
+        "tokens_per_sec": 29827.688812794175,
+        "tokens_seen": 1000079360,
+        "tokens_target": 1000000000,
+        "train_loss": 3.284200668334961,
+        "validation_loss": 3.177146828174591
+      },
+      "raw_record_dir": "docs/training/raw-runs/20260906-225321",
+      "run_id": "20260906-225321",
+      "selected": true,
+      "status": {
+        "compile": true,
+        "compile_mode": "default",
+        "current_data": {
+          "epoch": 1,
+          "offset_in_shard": 79360,
+          "shard_index": 158
+        },
+        "device": "cuda",
+        "elapsed_seconds": 24595.263267228,
+        "epoch": 1,
+        "last_checkpoint_at": "2026-09-07T05:43:19+0800",
+        "last_checkpoint_tokens": 1000079360,
+        "learning_rate": 1e-05,
+        "model_name": "D32-1216-R12",
+        "optimizer": "AdamW(fused=True)",
+        "parameters": 49001408,
+        "run_id": "20260906-225321",
+        "started_at": "2026-09-06T22:53:25+0800",
+        "status": "completed",
+        "step": 7630,
+        "tokens_seen": 1000079360,
+        "tokens_target": 1000000000
+      }
+    },
+    {
+      "checkpoint_metadata": [
+        "20260907-112712/checkpoints/latest/metadata.json",
+        "20260907-112712/checkpoints/step_000003815/metadata.json",
+        "20260907-112712/checkpoints/tokens_000025m/metadata.json",
+        "20260907-112712/checkpoints/tokens_000050m/metadata.json",
+        "20260907-112712/checkpoints/tokens_000075m/metadata.json",
+        "20260907-112712/checkpoints/tokens_000100m/metadata.json",
+        "20260907-112712/checkpoints/tokens_000125m/metadata.json",
+        "20260907-112712/checkpoints/tokens_000150m/metadata.json",
+        "20260907-112712/checkpoints/tokens_000175m/metadata.json",
+        "20260907-112712/checkpoints/tokens_000200m/metadata.json",
+        "20260907-112712/checkpoints/tokens_000225m/metadata.json",
+        "20260907-112712/checkpoints/tokens_000250m/metadata.json",
+        "20260907-112712/checkpoints/tokens_000275m/metadata.json",
+        "20260907-112712/checkpoints/tokens_000300m/metadata.json",
+        "20260907-112712/checkpoints/tokens_000325m/metadata.json",
+        "20260907-112712/checkpoints/tokens_000350m/metadata.json",
+        "20260907-112712/checkpoints/tokens_000375m/metadata.json",
+        "20260907-112712/checkpoints/tokens_000400m/metadata.json",
+        "20260907-112712/checkpoints/tokens_000425m/metadata.json",
+        "20260907-112712/checkpoints/tokens_000450m/metadata.json",
+        "20260907-112712/checkpoints/tokens_000475m/metadata.json",
+        "20260907-112712/checkpoints/tokens_000500m/metadata.json"
+      ],
+      "command": {
+        "argv": [
+          "train.py",
+          "--config",
+          "configs/pretrain_stage4_final_500m.yaml",
+          "--init-from",
+          "runs/20260906-225321/checkpoints/latest"
+        ],
+        "config": "/home/xia/code/j3/configs/pretrain_stage4_final_500m.yaml"
+      },
+      "environment": {
+        "cuda_devices": [
+          {
+            "capability": "8.9",
+            "index": 0,
+            "multi_processor_count": 24,
+            "name": "NVIDIA GeForce RTX 4060 Laptop GPU",
+            "total_memory_mb": 7834.375
+          }
+        ],
+        "git_commit": "1fa3e911d596e0dfb47dbb728c46829219193b40",
+        "hostname": "xiaArch",
+        "python": "3.13.11 (main, Jan 14 2026, 19:38:04) [Clang 21.1.4 ]",
+        "torch_cuda_version": "13.0",
+        "torch_version": "2.14.0+cu130"
+      },
+      "last_metrics": {
+        "checkpoint_status": "2026-09-07T14:41:22+0800",
+        "current_offset": 39680,
+        "current_shard": 76,
+        "elapsed_time": 12261.015870928997,
+        "epoch": 1,
+        "eta_seconds": 0.0,
+        "global_batch_tokens": 131072,
+        "gpu_memory_allocated_mb": 3647.787109375,
+        "gpu_memory_used_mb": 5662.0,
+        "gpu_power_w": 69.94,
+        "gpu_temperature_c": 86.0,
+        "gpu_utilization_pct": 100.0,
+        "grad_norm": 0.545007586479187,
+        "gradient_accumulation_steps": 16,
+        "learning_rate": 1e-05,
+        "micro_batch_size": 16,
+        "optimizer": "AdamW(fused=True)",
+        "perplexity": 19.38416575080097,
+        "sequence_length": 512,
+        "smoothed_loss": 3.020161226866316,
+        "step": 3815,
+        "step_time": 4.491759458964225,
+        "timestamp": "2026-09-07T14:51:36+0800",
+        "tokens_per_sec": 29180.54744414664,
+        "tokens_seen": 500039680,
+        "tokens_target": 500000000,
+        "train_loss": 2.9301328659057617,
+        "validation_loss": 2.9644565343856812
+      },
+      "raw_record_dir": "docs/training/raw-runs/20260907-112712",
+      "run_id": "20260907-112712",
+      "selected": false,
+      "status": {
+        "compile": true,
+        "compile_mode": "default",
+        "current_data": {
+          "epoch": 1,
+          "offset_in_shard": 39680,
+          "shard_index": 76
+        },
+        "device": "cuda",
+        "elapsed_seconds": 12262.000628757,
+        "epoch": 1,
+        "last_checkpoint_at": "2026-09-07T14:51:37+0800",
+        "last_checkpoint_tokens": 500039680,
+        "learning_rate": 1e-05,
+        "model_name": "D32-1216-R12",
+        "optimizer": "AdamW(fused=True)",
+        "parameters": 49001408,
+        "run_id": "20260907-112712",
+        "started_at": "2026-09-07T11:27:16+0800",
+        "status": "completed",
+        "step": 3815,
+        "tokens_seen": 500039680,
+        "tokens_target": 500000000
+      }
+    },
+    {
+      "checkpoint_metadata": [
+        "capability-cpt-125m/checkpoints/latest/metadata.json",
+        "capability-cpt-125m/checkpoints/step_000000954/metadata.json",
+        "capability-cpt-125m/checkpoints/tokens_000025m/metadata.json",
+        "capability-cpt-125m/checkpoints/tokens_000050m/metadata.json",
+        "capability-cpt-125m/checkpoints/tokens_000075m/metadata.json",
+        "capability-cpt-125m/checkpoints/tokens_000100m/metadata.json",
+        "capability-cpt-125m/checkpoints/tokens_000125m/metadata.json"
+      ],
+      "command": {
+        "argv": [
+          "train.py",
+          "--config",
+          "configs/pretrain_capability_cpt_125m.yaml",
+          "--init-from",
+          "runs/20260906-225321/checkpoints/latest"
+        ],
+        "config": "/home/xia/code/j3/configs/pretrain_capability_cpt_125m.yaml"
+      },
+      "environment": {
+        "cuda_devices": [
+          {
+            "capability": "8.9",
+            "index": 0,
+            "multi_processor_count": 24,
+            "name": "NVIDIA GeForce RTX 4060 Laptop GPU",
+            "total_memory_mb": 7834.375
+          }
+        ],
+        "git_commit": "44cd0662c081c02cd666a0fe605ac98b294fdd26",
+        "hostname": "xiaArch",
+        "python": "3.13.11 (main, Jan 14 2026, 19:38:04) [Clang 21.1.4 ]",
+        "torch_cuda_version": "13.0",
+        "torch_version": "2.14.0+cu130"
+      },
+      "last_metrics": {
+        "checkpoint_status": "2026-09-07T18:41:22+0800",
+        "current_offset": 42688,
+        "current_shard": 29,
+        "elapsed_time": 3059.737907500996,
+        "epoch": 1,
+        "eta_seconds": 0.0,
+        "global_batch_tokens": 131072,
+        "gpu_memory_allocated_mb": 1305.12744140625,
+        "gpu_memory_used_mb": 5662.0,
+        "gpu_power_w": 74.67,
+        "gpu_temperature_c": 87.0,
+        "gpu_utilization_pct": 99.0,
+        "grad_norm": 0.5204396843910217,
+        "gradient_accumulation_steps": 16,
+        "learning_rate": 1e-05,
+        "micro_batch_size": 16,
+        "objective": "lm",
+        "optimizer": "AdamW(fused=True)",
+        "perplexity": 12.357140399641045,
+        "sequence_length": 512,
+        "smoothed_loss": 2.4900327405569973,
+        "step": 954,
+        "step_time": 4.3899103259900585,
+        "timestamp": "2026-09-07T18:51:38+0800",
+        "tokens_per_sec": 29857.557504990553,
+        "tokens_seen": 125042688,
+        "tokens_target": 125000000,
+        "train_loss": 2.415691614151001,
+        "validation_loss": 2.5142340660095215
+      },
+      "raw_record_dir": "docs/training/raw-runs/capability-cpt-125m",
+      "run_id": "capability-cpt-125m",
+      "selected": false,
+      "status": {
+        "compile": true,
+        "compile_mode": "default",
+        "current_data": {
+          "epoch": 1,
+          "offset_in_shard": 42688,
+          "shard_index": 29
+        },
+        "current_multiple_choice_data": null,
+        "device": "cuda",
+        "elapsed_seconds": 3061.439806557959,
+        "epoch": 1,
+        "last_checkpoint_at": "2026-09-07T18:51:38+0800",
+        "last_checkpoint_tokens": 125042688,
+        "learning_rate": 1e-05,
+        "model_name": "D32-1216-R12",
+        "objective": "lm",
+        "optimizer": "AdamW(fused=True)",
+        "parameters": 49001408,
+        "run_id": "capability-cpt-125m",
+        "started_at": "2026-09-07T18:00:38+0800",
+        "status": "completed",
+        "step": 954,
+        "tokens_seen": 125042688,
+        "tokens_target": 125000000
+      }
+    },
+    {
+      "checkpoint_metadata": [],
+      "command": {
+        "argv": [
+          "train.py",
+          "--config",
+          "configs/contrastive_mc_posttrain.yaml",
+          "--init-from",
+          "runs/20260906-225321/checkpoints/latest"
+        ],
+        "config": "/home/xia/code/j3/configs/contrastive_mc_posttrain.yaml"
+      },
+      "environment": {
+        "cuda_devices": [
+          {
+            "capability": "8.9",
+            "index": 0,
+            "multi_processor_count": 24,
+            "name": "NVIDIA GeForce RTX 4060 Laptop GPU",
+            "total_memory_mb": 7834.375
+          }
+        ],
+        "git_commit": "44cd0662c081c02cd666a0fe605ac98b294fdd26",
+        "hostname": "xiaArch",
+        "python": "3.13.11 (main, Jan 14 2026, 19:38:04) [Clang 21.1.4 ]",
+        "torch_cuda_version": "13.0",
+        "torch_version": "2.14.0+cu130"
+      },
+      "last_metrics": {
+        "checkpoint_status": null,
+        "current_offset": 524288,
+        "current_shard": 74,
+        "elapsed_time": 365.2745654429891,
+        "epoch": 0,
+        "eta_seconds": 2324.118924368615,
+        "global_batch_tokens": 65536,
+        "gpu_memory_allocated_mb": 1085.25341796875,
+        "gpu_memory_used_mb": 4702.0,
+        "gpu_power_w": 81.47,
+        "gpu_temperature_c": 77.0,
+        "gpu_utilization_pct": 98.0,
+        "grad_norm": 139.34803771972656,
+        "gradient_accumulation_steps": 16,
+        "learning_rate": 1.31072e-05,
+        "lm_loss": 3.3400731086730957,
+        "lm_loss_weight": 1.0,
+        "micro_batch_size": 8,
+        "objective": "contrastive_mc",
+        "optimizer": "AdamW(fused=True)",
+        "perplexity": null,
+        "positive_margin": 0.5811290740966797,
+        "ranking_accuracy": 0.25,
+        "ranking_loss": 6.122634410858154,
+        "ranking_loss_weight": 0.5,
+        "ranking_negative_mode": "mean",
+        "ranking_temperature": 0.1,
+        "sequence_length": 512,
+        "smoothed_loss": 8.577330959995486,
+        "step": 8,
+        "step_time": 3.078550093981903,
+        "timestamp": "2026-09-07T22:40:30+0800",
+        "tokens_per_sec": 21287.943349732366,
+        "tokens_seen": 524288,
+        "tokens_target": 50000000,
+        "train_loss": 6.401390075683594,
+        "validation_loss": null
+      },
+      "raw_record_dir": "docs/training/raw-runs/contrastive-mc-posttrain",
+      "run_id": "contrastive-mc-posttrain",
+      "selected": false,
+      "status": {
+        "compile": true,
+        "compile_mode": "default",
+        "current_data": {
+          "epoch": 0,
+          "offset_in_shard": 528384,
+          "shard_index": 74
+        },
+        "current_multiple_choice_data": {
+          "epoch": 0,
+          "example_count": 223687,
+          "order_position": 258
+        },
+        "device": "cuda",
+        "elapsed_seconds": 365.5729768180172,
+        "epoch": 0,
+        "error": "OutOfMemoryError: CUDA out of memory. Tried to allocate 32.00 MiB. GPU 0 has a total capacity of 7.65 GiB of which 69.06 MiB is free. Process 1572 has 7.30 MiB memory in use. Including non-PyTorch memory, this process has 7.53 GiB memory in use. Of the allocated memory 7.21 GiB is allocated by PyTorch, and 192.41 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://docs.pytorch.org/docs/stable/notes/cuda.html#optimizing-memory-usage-with-pytorch-cuda-alloc-conf)",
+        "last_checkpoint_at": null,
+        "last_checkpoint_tokens": 0,
+        "learning_rate": 1.31072e-05,
+        "model_name": "D32-1216-R12",
+        "objective": "contrastive_mc",
+        "optimizer": "AdamW(fused=True)",
+        "parameters": 49001408,
+        "run_id": "contrastive-mc-posttrain",
+        "started_at": "2026-09-07T22:34:25+0800",
+        "status": "error",
+        "step": 8,
+        "tokens_seen": 524288,
+        "tokens_target": 50000000
+      }
+    },
+    {
+      "checkpoint_metadata": [
+        "contrastive-mc-posttrain-v2/checkpoints/latest/metadata.json",
+        "contrastive-mc-posttrain-v2/checkpoints/step_000000009/metadata.json"
+      ],
+      "command": {
+        "argv": [
+          "train.py",
+          "--config",
+          "configs/contrastive_mc_posttrain.yaml",
+          "--run",
+          "runs/contrastive-mc-posttrain-v2",
+          "--init-from",
+          "runs/20260906-225321/checkpoints/latest",
+          "--max-steps",
+          "9"
+        ],
+        "config": "/home/xia/code/j3/configs/contrastive_mc_posttrain.yaml"
+      },
+      "environment": {
+        "cuda_devices": [
+          {
+            "capability": "8.9",
+            "index": 0,
+            "multi_processor_count": 24,
+            "name": "NVIDIA GeForce RTX 4060 Laptop GPU",
+            "total_memory_mb": 7834.375
+          }
+        ],
+        "git_commit": "44cd0662c081c02cd666a0fe605ac98b294fdd26",
+        "hostname": "xiaArch",
+        "python": "3.13.11 (main, Jan 14 2026, 19:38:04) [Clang 21.1.4 ]",
+        "torch_cuda_version": "13.0",
+        "torch_version": "2.14.0+cu130"
+      },
+      "last_metrics": {
+        "checkpoint_status": null,
+        "current_offset": 589824,
+        "current_shard": 74,
+        "elapsed_time": 35.38343588099815,
+        "epoch": 0,
+        "eta_seconds": 0.0,
+        "global_batch_tokens": 65536,
+        "gpu_memory_allocated_mb": 3009.357421875,
+        "gpu_memory_used_mb": 5614.0,
+        "gpu_power_w": 82.66,
+        "gpu_temperature_c": 81.0,
+        "gpu_utilization_pct": 98.0,
+        "grad_norm": 132.8751678466797,
+        "gradient_accumulation_steps": 16,
+        "learning_rate": 1.4745600000000002e-05,
+        "lm_loss": 3.027998208999634,
+        "lm_loss_weight": 1.0,
+        "micro_batch_size": 8,
+        "objective": "contrastive_mc",
+        "optimizer": "AdamW(fused=True)",
+        "perplexity": null,
+        "positive_margin": -0.48566123843193054,
+        "ranking_accuracy": 0.3125,
+        "ranking_loss": 12.818370819091797,
+        "ranking_loss_weight": 0.5,
+        "ranking_negative_mode": "mean",
+        "ranking_temperature": 0.1,
+        "sequence_length": 512,
+        "smoothed_loss": 9.843636500823498,
+        "step": 9,
+        "step_time": 3.288417458999902,
+        "timestamp": "2026-09-07T22:55:35+0800",
+        "tokens_per_sec": 19929.34316190235,
+        "tokens_seen": 589824,
+        "tokens_target": 589824,
+        "train_loss": 9.437183380126953,
+        "validation_loss": null
+      },
+      "raw_record_dir": "docs/training/raw-runs/contrastive-mc-posttrain-v2",
+      "run_id": "contrastive-mc-posttrain-v2",
+      "selected": false,
+      "status": {
+        "compile": true,
+        "compile_mode": "default",
+        "current_data": {
+          "epoch": 0,
+          "offset_in_shard": 589824,
+          "shard_index": 74
+        },
+        "current_multiple_choice_data": {
+          "epoch": 0,
+          "example_count": 223687,
+          "order_position": 144
+        },
+        "device": "cuda",
+        "elapsed_seconds": 36.3689273930504,
+        "epoch": 0,
+        "last_checkpoint_at": "2026-09-07T22:55:35+0800",
+        "last_checkpoint_tokens": 589824,
+        "learning_rate": 1.4745600000000002e-05,
+        "model_name": "D32-1216-R12",
+        "objective": "contrastive_mc",
+        "optimizer": "AdamW(fused=True)",
+        "parameters": 49001408,
+        "run_id": "contrastive-mc-posttrain-v2",
+        "started_at": "2026-09-07T22:55:00+0800",
+        "status": "completed",
+        "step": 9,
+        "tokens_seen": 589824,
+        "tokens_target": 589824
+      }
+    },
+    {
+      "checkpoint_metadata": [
+        "contrastive-mc-posttrain-v3/checkpoints/latest/metadata.json",
+        "contrastive-mc-posttrain-v3/checkpoints/step_000000763/metadata.json",
+        "contrastive-mc-posttrain-v3/checkpoints/tokens_000010m/metadata.json",
+        "contrastive-mc-posttrain-v3/checkpoints/tokens_000020m/metadata.json",
+        "contrastive-mc-posttrain-v3/checkpoints/tokens_000030m/metadata.json",
+        "contrastive-mc-posttrain-v3/checkpoints/tokens_000040m/metadata.json",
+        "contrastive-mc-posttrain-v3/checkpoints/tokens_000050m/metadata.json"
+      ],
+      "command": {
+        "argv": [
+          "train.py",
+          "--config",
+          "configs/contrastive_mc_posttrain.yaml",
+          "--run",
+          "runs/contrastive-mc-posttrain-v3",
+          "--init-from",
+          "runs/20260906-225321/checkpoints/latest"
+        ],
+        "config": "/home/xia/code/j3/configs/contrastive_mc_posttrain.yaml"
+      },
+      "environment": {
+        "cuda_devices": [
+          {
+            "capability": "8.9",
+            "index": 0,
+            "multi_processor_count": 24,
+            "name": "NVIDIA GeForce RTX 4060 Laptop GPU",
+            "total_memory_mb": 7834.375
+          }
+        ],
+        "git_commit": "44cd0662c081c02cd666a0fe605ac98b294fdd26",
+        "hostname": "xiaArch",
+        "python": "3.13.11 (main, Jan 14 2026, 19:38:04) [Clang 21.1.4 ]",
+        "torch_cuda_version": "13.0",
+        "torch_version": "2.14.0+cu130"
+      },
+      "last_metrics": {
+        "checkpoint_status": "2026-09-07T23:37:02+0800",
+        "current_offset": 3866624,
+        "current_shard": 35,
+        "elapsed_time": 2806.560089092003,
+        "epoch": 0,
+        "eta_seconds": 0.0,
+        "global_batch_tokens": 65536,
+        "gpu_memory_allocated_mb": 1761.376953125,
+        "gpu_memory_used_mb": 5618.0,
+        "gpu_power_w": 70.45,
+        "gpu_temperature_c": 86.0,
+        "gpu_utilization_pct": 100.0,
+        "grad_norm": 39.56801986694336,
+        "gradient_accumulation_steps": 16,
+        "learning_rate": 5e-06,
+        "lm_loss": 3.353468894958496,
+        "lm_loss_weight": 1.0,
+        "micro_batch_size": 8,
+        "objective": "contrastive_mc",
+        "optimizer": "AdamW(fused=True)",
+        "perplexity": 25.2483068506431,
+        "positive_margin": 0.41867947578430176,
+        "ranking_accuracy": 0.5625,
+        "ranking_loss": 0.9287935495376587,
+        "ranking_loss_weight": 0.5,
+        "ranking_negative_mode": "mean",
+        "ranking_temperature": 0.1,
+        "sequence_length": 512,
+        "smoothed_loss": 3.8344474529855406,
+        "step": 763,
+        "step_time": 5.2529386870446615,
+        "timestamp": "2026-09-07T23:46:20+0800",
+        "tokens_per_sec": 12476.064143225512,
+        "tokens_seen": 50003968,
+        "tokens_target": 50000000,
+        "train_loss": 3.8178656101226807,
+        "validation_loss": 3.2287590980529783,
+        "validation_positive_margin": 0.0569026954472065,
+        "validation_ranking_accuracy": 0.30000001192092896,
+        "validation_ranking_loss": 1.2374216318130493
+      },
+      "raw_record_dir": "docs/training/raw-runs/contrastive-mc-posttrain-v3",
+      "run_id": "contrastive-mc-posttrain-v3",
+      "selected": false,
+      "status": {
+        "compile": true,
+        "compile_mode": "default",
+        "current_data": {
+          "epoch": 0,
+          "offset_in_shard": 3866624,
+          "shard_index": 35
+        },
+        "current_multiple_choice_data": {
+          "epoch": 0,
+          "example_count": 223687,
+          "order_position": 12208
+        },
+        "device": "cuda",
+        "elapsed_seconds": 2808.536006263981,
+        "epoch": 0,
+        "last_checkpoint_at": "2026-09-07T23:46:21+0800",
+        "last_checkpoint_tokens": 50003968,
+        "learning_rate": 5e-06,
+        "model_name": "D32-1216-R12",
+        "objective": "contrastive_mc",
+        "optimizer": "AdamW(fused=True)",
+        "parameters": 49001408,
+        "run_id": "contrastive-mc-posttrain-v3",
+        "started_at": "2026-09-07T22:59:34+0800",
+        "status": "completed",
+        "step": 763,
+        "tokens_seen": 50003968,
+        "tokens_target": 50000000
+      }
+    }
+  ],
+  "selected_run": "20260906-225321"
+}

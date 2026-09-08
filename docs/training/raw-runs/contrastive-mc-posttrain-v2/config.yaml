@@ -1,0 +1,82 @@
+# Joint replay + correct-option-margin post-training.
+# `total_tokens` counts only the ordinary Stage 3 replay stream; MC examples
+# are consumed once per accumulation and have their own resumable cursor.
+model:
+  model_name: D32-1216-R12
+  vocab_size: 16384
+  d_model: 384
+  depth: 32
+  num_q_heads: 6
+  num_kv_heads: 2
+  head_dim: 64
+  mlp_hidden_dim: 1216
+  output_residual_rank: 12
+  max_seq_len: 1024
+  rope_theta: 10000.0
+  norm_eps: 1.0e-5
+  initializer_range: 0.02
+  xielu_alpha_p_init: 0.5
+  xielu_alpha_n_init: 1.0
+  xielu_beta: 0.5
+  xielu_eps: -1.0e-6
+  xielu_parameterization: softplus_constrained_v1
+  tie_embeddings: true
+  use_qk_norm: true
+  use_bias: false
+
+training:
+  run_id: contrastive-mc-posttrain
+  runs_dir: runs
+  seed: 1337
+  device: cuda
+  precision: bf16
+  compile: true
+  compile_mode: default
+  tf32: true
+  sequence_length: 512
+  micro_batch_size: 8
+  gradient_accumulation_steps: 16
+  global_batch_tokens: 65536
+  max_tokens: null
+  max_steps: null
+  learning_rate: 5.0e-5
+  min_learning_rate: 5.0e-6
+  warmup_tokens: 2000000
+  total_tokens: 50000000
+  weight_decay: 0.1
+  beta1: 0.9
+  beta2: 0.95
+  adam_eps: 1.0e-8
+  grad_clip: 1.0
+  log_every_steps: 1
+  eval_every_tokens: 1000000
+  checkpoint_every_steps: 0
+  checkpoint_every_tokens: 0
+  checkpoint_every_minutes: 15
+  permanent_checkpoint_every_tokens: 10000000
+  keep_last_n: 3
+  pin_memory: true
+  num_workers: 0
+  objective: contrastive_mc
+  lm_loss_weight: 1.0
+  ranking_loss_weight: 0.5
+  ranking_temperature: 0.1
+  ranking_negative_mode: mean
+  mc_sequence_length: 512
+
+data:
+  # Replay stays Stage 3, never the rejected Stage 4 manifest.
+  train_manifest: data/stage3_mixed_tokenized/manifest.json
+  val_manifest: data/stage3_mixed_tokenized/manifest.json
+  tokenizer: data/tokenized/tokenizer.json
+  shuffle_shards: true
+  shuffle_seed: 1337
+  eval_batches: 20
+  synthetic: false
+  mc_train_manifest: data/mc_posttrain_tokenized/manifest.json
+  mc_val_manifest: data/mc_posttrain_tokenized/manifest.json
+  # Keep candidate activations below the 8-GiB RTX 4060 budget; ranking
+  # gradients still accumulate across 16 microbatches.
+  mc_batch_size: 1
+  mc_shuffle_seed: 2027
+  mc_eval_batches: 20

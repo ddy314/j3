@@ -19,7 +19,7 @@ from src.utils.environment import collect_environment
 
 
 def _parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Train D32-1216-R12 with resumable direct PyTorch loop")
+    parser = argparse.ArgumentParser(description="Train J3 with the resumable direct PyTorch loop")
     parser.add_argument("--config", required=True, help="YAML training configuration")
     parser.add_argument("--resume", default=None, help="auto or a checkpoint directory")
     parser.add_argument(

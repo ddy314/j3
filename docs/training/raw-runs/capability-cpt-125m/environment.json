@@ -1,0 +1,40 @@
+{
+  "cuda_available": true,
+  "cuda_device_count": 1,
+  "cuda_devices": [
+    {
+      "capability": "8.9",
+      "index": 0,
+      "multi_processor_count": 24,
+      "name": "NVIDIA GeForce RTX 4060 Laptop GPU",
+      "total_memory_mb": 7834.375
+    }
+  ],
+  "flash_attn": {
+    "available": false,
+    "error": "No module named 'flash_attn'"
+  },
+  "float32_matmul_precision": "highest",
+  "git_commit": "44cd0662c081c02cd666a0fe605ac98b294fdd26",
+  "hostname": "xiaArch",
+  "nvidia_smi": {
+    "available": true,
+    "output": "Mon Sep  7 18:00:37 2026       \n+-----------------------------------------------------------------------------------------+\n| NVIDIA-SMI 610.57.04              KMD Version: 610.57.04     CUDA UMD Version: 13.3     |\n+-----------------------------------------+------------------------+----------------------+\n| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |\n| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |\n|                                         |                        |               MIG M. |\n|=========================================+========================+======================|\n|   0  NVIDIA GeForce RTX 4060 ...    Off |   00000000:01:00.0 Off |                  N/A |\n| N/A   47C    P0             12W /  115W |      47MiB /   8188MiB |     14%      Default |\n|                                         |                        |                  N/A |\n+-----------------------------------------+------------------------+----------------------+\n\n+-----------------------------------------------------------------------------------------+\n| Processes:                                                                              |\n|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |\n|        ID   ID                                                               Usage      |\n|=========================================================================================|\n|    0   N/A  N/A            1572    C+G   /usr/bin/kwin_wayland                     7MiB |\n+-----------------------------------------------------------------------------------------+\n"
+  },
+  "platform": "Linux-7.1.9-arch1-2-x86_64-with-glibc2.44",
+  "python": "3.13.11 (main, Jan 14 2026, 19:38:04) [Clang 21.1.4 ]",
+  "python_executable": "/home/xia/code/j3/.venv/bin/python3",
+  "sdpa_flash_enabled": true,
+  "sdpa_math_enabled": true,
+  "sdpa_mem_efficient_enabled": true,
+  "tf32_cudnn": true,
+  "tf32_matmul": false,
+  "timestamp": "2026-09-07T18:00:35+0800",
+  "torch_cuda_version": "13.0",
+  "torch_file": "/home/xia/code/j3/.venv/lib/python3.13/site-packages/torch/__init__.py",
+  "torch_version": "2.14.0+cu130",
+  "triton": {
+    "available": true,
+    "version": "3.8.0"
+  }
+}

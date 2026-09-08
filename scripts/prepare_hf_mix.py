@@ -207,11 +207,6 @@ def _prepare_source(
         )
 
     try:
-        if source.kind == "local" and parquet_root is None:
-            raise RuntimeError(
-                f"local source {source.name!r} requires --parquet-root; "
-                "the extractor never falls back to Hub for kind: local"
-            )
         if parquet_root is None:
             rows = iter_hf_rows(
                 source,
@@ -456,9 +451,6 @@ def _finalize_manifest(
         "source": {"type": "hf_mix", "config": str(config_path.resolve())},
         "mix_config": raw_config.get("name", config_path.stem),
         "mix_config_sha256": _sha256(config_path),
-        "target_train_tokens": sum(
-            max(2, int(round(source.token_budget * scale))) for source in sources
-        ),
         "sources": source_manifest,
         "tokenizer": str(tokenizer_path.resolve()),
         "tokenizer_hash": tokenizer_sha256(tokenizer_path),

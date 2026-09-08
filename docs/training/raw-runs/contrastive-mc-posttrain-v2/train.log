@@ -1,0 +1,11 @@
+initialized from checkpoint: previous step=7630, tokens=1000079360, source=/home/xia/code/j3/runs/20260906-225321/checkpoints/step_000007630
+step=1 tokens=65536/589824 loss=10.4000 lr=1.64e-06 tok/s=8,118 eta=64.58709182403982
+step=2 tokens=131072/589824 loss=6.3827 lr=3.28e-06 tok/s=18,195 eta=25.21304492023774
+step=3 tokens=196608/589824 loss=7.7630 lr=4.92e-06 tok/s=20,048 eta=19.61372723383829
+step=4 tokens=262144/589824 loss=13.8017 lr=6.55e-06 tok/s=19,299 eta=16.979064815095626
+step=5 tokens=327680/589824 loss=11.9445 lr=8.19e-06 tok/s=20,315 eta=12.904093516059222
+step=6 tokens=393216/589824 loss=7.0845 lr=9.83e-06 tok/s=19,372 eta=10.1488709130208
+step=7 tokens=458752/589824 loss=5.9635 lr=1.15e-05 tok/s=19,531 eta=6.710814641905017
+step=8 tokens=524288/589824 loss=7.8056 lr=1.31e-05 tok/s=19,497 eta=3.361295901995618
+step=9 tokens=589824/589824 loss=9.4372 lr=1.47e-05 tok/s=19,929 eta=0.0
+checkpoint saved: runs/contrastive-mc-posttrain-v2/checkpoints/step_000000009 (final)

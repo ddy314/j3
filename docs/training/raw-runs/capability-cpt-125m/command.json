@@ -1,0 +1,10 @@
+{
+  "argv": [
+    "train.py",
+    "--config",
+    "configs/pretrain_capability_cpt_125m.yaml",
+    "--init-from",
+    "runs/20260906-225321/checkpoints/latest"
+  ],
+  "config": "/home/xia/code/j3/configs/pretrain_capability_cpt_125m.yaml"
+}

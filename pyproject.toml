@@ -21,6 +21,9 @@ data = [
     "datasets>=5.0.0",
     "huggingface-hub>=0.30.0",
 ]
+eval = [
+    "lm-eval>=0.4.13",
+]
 
 [dependency-groups]
 dev = [

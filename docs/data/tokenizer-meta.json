@@ -1,0 +1,34 @@
+{
+  "actual_vocab_size": 16384,
+  "byte_fallback": false,
+  "character_coverage": null,
+  "document_count": 40000,
+  "max_sentence_length": 16384,
+  "max_token_length": 32,
+  "min_token_frequency": 50,
+  "model_sha256": "416267157bccdfa2bc6d5025aebf3b9a6a82271f4664f04f0d963337fec35023",
+  "parquet_root": "/home/xia/.cache/j3-hf-parquet",
+  "source": {
+    "max_documents_per_source": 10000,
+    "mix_config": "/home/xia/code/j3/configs/hf_mix_1b.yaml"
+  },
+  "special_token_pieces": {
+    "bos": "<|j3_bos|>",
+    "eos": "<|j3_eos|>",
+    "pad": "<|j3_pad|>",
+    "unk": "<|j3_unk|>"
+  },
+  "special_tokens": {
+    "bos": 2,
+    "eos": 3,
+    "pad": 0,
+    "unk": 1
+  },
+  "text_cleanup": "NFKC; remove Cc/Cf/Co; collapse whitespace",
+  "tokenizer": "/home/xia/code/j3/data/tokenized/tokenizer.json",
+  "tokenizer_type": "byte-bpe",
+  "training_line_count": 41874,
+  "type": "byte_level_bpe",
+  "version": 1,
+  "vocab_size": 16384
+}

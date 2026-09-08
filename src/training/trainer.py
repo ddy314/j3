@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 import contextlib
+import inspect
 import math
+import os
 import signal
 import time
 from dataclasses import asdict, dataclass
@@ -11,25 +13,19 @@ from typing import Any
 import torch
 
 from src.data.mmap_dataset import MMapTokenStream, SyntheticTokenStream
-from src.data.multiple_choice import (
-    MultipleChoiceBatch,
-    MultipleChoiceStream,
-    collate_multiple_choice,
-    combined_manifest_hash,
-)
 from src.model import DecoderLM, ModelConfig
 
 from .checkpoint import (
     CheckpointManager,
     capture_rng_state,
     default_checkpoint_metadata,
+    model_config_compatible,
     restore_rng_state,
 )
-from .config import DataConfig, TrainConfig
+from .config import DataConfig, TrainConfig, config_as_dict
 from .metrics import MetricsWriter, atomic_json_write
 from .scheduler import TokenCosineScheduler
 from .telemetry import GPUTelemetry
-from .contrastive import batch_ranking_loss
 
 
 def configure_torch(tf32: bool = True) -> None:
@@ -142,47 +138,9 @@ class Trainer:
         self.checkpoint_requested = False
         self.train_stream = train_stream or self._make_stream(False)
         self.val_stream = val_stream or self._make_stream(True)
-        self.mc_stream: MultipleChoiceStream | None = None
-        self.mc_val_stream: MultipleChoiceStream | None = None
-        if self.config.objective == "contrastive_mc":
-            if not data_config.mc_train_manifest:
-                raise ValueError("contrastive_mc requires data.mc_train_manifest")
-            if data_config.mc_batch_size <= 0:
-                raise ValueError("data.mc_batch_size must be positive")
-            if data_config.mc_eval_batches < 0:
-                raise ValueError("data.mc_eval_batches must be non-negative")
-            if self.config.mc_sequence_length > self.model_config.max_seq_len:
-                raise ValueError("mc_sequence_length exceeds model max_seq_len")
-            self.mc_stream = MultipleChoiceStream(
-                data_config.mc_train_manifest,
-                split="train",
-                shuffle=True,
-                shuffle_seed=data_config.mc_shuffle_seed,
-            )
-            if data_config.mc_val_manifest:
-                self.mc_val_stream = MultipleChoiceStream(
-                    data_config.mc_val_manifest,
-                    split="val",
-                    shuffle=False,
-                    shuffle_seed=data_config.mc_shuffle_seed,
-                )
         self.tokenizer_hash = tokenizer_hash
-        base_manifest_hash = dataset_manifest_hash or getattr(self.train_stream, "manifest_hash", None)
-        if self.mc_stream is not None:
-            self.dataset_manifest_hash = combined_manifest_hash(
-                base_manifest_hash,
-                self.mc_stream.manifest_hash,
-                self.mc_val_stream.manifest_hash if self.mc_val_stream is not None else None,
-            )
-        else:
-            self.dataset_manifest_hash = base_manifest_hash
-        if self.mc_stream is not None and self.tokenizer_hash is not None:
-            if self.mc_stream.tokenizer_hash != self.tokenizer_hash:
-                raise ValueError("multiple-choice tokenizer hash differs from training tokenizer")
+        self.dataset_manifest_hash = dataset_manifest_hash or getattr(self.train_stream, "manifest_hash", None)
         self._val_initial_state = self.val_stream.state_dict() if self.val_stream is not None else None
-        self._mc_val_initial_state = (
-            self.mc_val_stream.state_dict() if self.mc_val_stream is not None else None
-        )
         self.telemetry = GPUTelemetry(self.device)
         self.control_path = self.run_dir / "control.json"
         self._started_monotonic = time.monotonic()
@@ -254,38 +212,12 @@ class Trainer:
             targets = targets.to(self.device)
         return inputs, targets
 
-    def _multiple_choice_batch_to_device(self) -> MultipleChoiceBatch:
-        if self.mc_stream is None:
-            raise RuntimeError("multiple-choice stream is not configured")
-        batch = collate_multiple_choice(
-            self.mc_stream.next_batch(self.data_config.mc_batch_size),
-            pad_id=self.mc_stream.pad_id,
-            pad_to_length=self.config.mc_sequence_length,
-        )
-        return MultipleChoiceBatch(
-            input_ids=batch.input_ids.to(self.device),
-            continuation_mask=batch.continuation_mask.to(self.device),
-            group_offsets=batch.group_offsets,
-            positive_indices=batch.positive_indices,
-            example_ids=batch.example_ids,
-        )
-
     def _data_position(self) -> dict[str, Any]:
         state = self.train_stream.state_dict()
         return {
             "epoch": state.get("epoch", 0),
             "shard_index": state.get("shard_index"),
             "offset_in_shard": state.get("offset_in_shard", state.get("position")),
-        }
-
-    def _mc_data_position(self) -> dict[str, Any] | None:
-        if self.mc_stream is None:
-            return None
-        state = self.mc_stream.state_dict()
-        return {
-            "epoch": state["epoch"],
-            "order_position": state["order_position"],
-            "example_count": len(self.mc_stream.examples),
         }
 
     def _write_status(self, status: str | None = None, **extra: Any) -> None:
@@ -297,7 +229,6 @@ class Trainer:
             "status": self.state.status,
             "model_name": self.model_config.model_name,
             "parameters": self.raw_model.parameter_count,
-            "objective": self.config.objective,
             "device": str(self.device),
             "step": self.state.step,
             "tokens_seen": self.state.tokens_seen,
@@ -309,7 +240,6 @@ class Trainer:
             "last_checkpoint_at": self.state.last_checkpoint_at,
             "last_checkpoint_tokens": self.state.last_checkpoint_tokens,
             "current_data": self._data_position(),
-            "current_multiple_choice_data": self._mc_data_position(),
             "optimizer": self.optimizer_impl,
             "compile": self.config.compile,
             "compile_mode": self.config.compile_mode if self.config.compile else None,
@@ -318,7 +248,7 @@ class Trainer:
         atomic_json_write(self.run_dir / "status.json", payload)
 
     def _checkpoint_payload(self) -> dict[str, Any]:
-        payload = {
+        return {
             "format_version": 1,
             "model": self.raw_model.state_dict(),
             "optimizer": self.optimizer.state_dict(),
@@ -327,9 +257,6 @@ class Trainer:
             "data": self.train_stream.state_dict(),
             "rng": capture_rng_state(),
         }
-        if self.mc_stream is not None:
-            payload["multiple_choice_data"] = self.mc_stream.state_dict()
-        return payload
 
     def _checkpoint(self, reason: str, *, permanent_name: str | None = None) -> Path:
         base = permanent_name or f"step_{self.state.step:09d}"
@@ -372,7 +299,7 @@ class Trainer:
         payload, path = self.checkpoints.load(reference)
         metadata = self.checkpoints.metadata(path)
         checkpoint_model_config = metadata.get("model_config")
-        if checkpoint_model_config is not None and checkpoint_model_config != self.model_config.to_dict():
+        if not model_config_compatible(checkpoint_model_config, self.model_config.to_dict()):
             raise ValueError("model config differs from checkpoint")
         checkpoint_tokenizer_hash = metadata.get("tokenizer_hash")
         if "tokenizer_hash" in metadata and checkpoint_tokenizer_hash != self.tokenizer_hash:
@@ -387,11 +314,6 @@ class Trainer:
         known = {field for field in asdict(self.state)}
         self.state = TrainerState(**{key: value for key, value in trainer_values.items() if key in known})
         self.train_stream.load_state_dict(payload["data"])
-        if self.mc_stream is not None:
-            multiple_choice_state = payload.get("multiple_choice_data")
-            if not isinstance(multiple_choice_state, dict):
-                raise ValueError("checkpoint has no multiple-choice data state")
-            self.mc_stream.load_state_dict(multiple_choice_state)
         restore_rng_state(payload["rng"])
         self._next_eval_tokens = (
             ((self.state.tokens_seen // self.config.eval_every_tokens) + 1) * self.config.eval_every_tokens
@@ -414,14 +336,14 @@ class Trainer:
         """Transfer a trained model to a new dataset without resuming its cursor.
 
         This intentionally preserves model/optimizer/RNG state while resetting
-        the new dataset progress to zero. Exact ``load_checkpoint`` remains strict and
+        Stage 2 progress to zero. Exact ``load_checkpoint`` remains strict and
         is still the path for resuming an interrupted run on the same manifest.
         """
 
         payload, path = self.checkpoints.load(reference)
         metadata = self.checkpoints.metadata(path)
         checkpoint_model_config = metadata.get("model_config")
-        if checkpoint_model_config is not None and checkpoint_model_config != self.model_config.to_dict():
+        if not model_config_compatible(checkpoint_model_config, self.model_config.to_dict()):
             raise ValueError("model config differs from checkpoint")
         checkpoint_tokenizer_hash = metadata.get("tokenizer_hash")
         if (
@@ -485,54 +407,6 @@ class Trainer:
             self.train_model.train()
         return loss_sum / batches if batches else None
 
-    def evaluate_multiple_choice(self) -> dict[str, float] | None:
-        if self.mc_val_stream is None or self.data_config.mc_eval_batches <= 0:
-            return None
-        if self._mc_val_initial_state is not None:
-            self.mc_val_stream.load_state_dict(self._mc_val_initial_state)
-        was_training = self.train_model.training
-        self.train_model.eval()
-        loss_sum = 0.0
-        correct = 0.0
-        examples = 0.0
-        margins: list[float] = []
-        batches = 0
-        with torch.no_grad():
-            for _ in range(self.data_config.mc_eval_batches):
-                raw_batch = collate_multiple_choice(
-                    self.mc_val_stream.next_batch(self.data_config.mc_batch_size),
-                    pad_id=self.mc_val_stream.pad_id,
-                    pad_to_length=self.config.mc_sequence_length,
-                )
-                batch = MultipleChoiceBatch(
-                    input_ids=raw_batch.input_ids.to(self.device),
-                    continuation_mask=raw_batch.continuation_mask.to(self.device),
-                    group_offsets=raw_batch.group_offsets,
-                    positive_indices=raw_batch.positive_indices,
-                    example_ids=raw_batch.example_ids,
-                )
-                with self._autocast():
-                    rank_loss, diagnostics = batch_ranking_loss(
-                        self.train_model,
-                        batch,
-                        temperature=self.config.ranking_temperature,
-                        negative_mode=self.config.ranking_negative_mode,
-                    )
-                loss_sum += float(rank_loss.detach().float().cpu())
-                correct += float(diagnostics["correct"].detach().cpu())
-                examples += float(diagnostics["examples"].detach().cpu())
-                margins.append(float(diagnostics["mean_positive_margin"].detach().float().cpu()))
-                batches += 1
-        if was_training:
-            self.train_model.train()
-        if not batches:
-            return None
-        return {
-            "validation_ranking_loss": loss_sum / batches,
-            "validation_ranking_accuracy": correct / max(1.0, examples),
-            "validation_positive_margin": sum(margins) / len(margins),
-        }
-
     def _log_interval(
         self,
         interval_loss: torch.Tensor,
@@ -540,7 +414,6 @@ class Trainer:
         interval_started: float,
         last_grad_norm: torch.Tensor | None,
         validation_loss: float | None,
-        extra_metrics: dict[str, Any] | None = None,
     ) -> tuple[float, float]:
         if self.device.type == "cuda":
             torch.cuda.synchronize(self.device)
@@ -582,11 +455,8 @@ class Trainer:
             "gradient_accumulation_steps": self.config.gradient_accumulation_steps,
             "sequence_length": self.config.sequence_length,
             "optimizer": self.optimizer_impl,
-            "objective": self.config.objective,
             **telemetry,
         }
-        if extra_metrics:
-            record.update(extra_metrics)
         self.metrics.write(record)
         self._write_status(
             current_metrics={key: value for key, value in record.items() if key not in {"timestamp"}},
@@ -598,194 +468,7 @@ class Trainer:
         )
         return now, throughput
 
-    def _run_contrastive(self) -> TrainerState:
-        """Train replay LM and multiple-choice ranking losses together."""
-
-        self.train_model.train()
-        if self.state.tokens_seen >= self.target_tokens:
-            self.state.status = "completed"
-            self._write_status()
-            self.telemetry.close()
-            self.metrics.close()
-            self.log_handle.close()
-            return self.state
-        self.state.status = "running"
-        self._write_status()
-        interval_started = time.monotonic()
-        interval_steps = 0
-        interval_loss = torch.zeros((), device=self.device)
-        interval_lm_loss = torch.zeros((), device=self.device)
-        interval_ranking_loss = torch.zeros((), device=self.device)
-        interval_correct = 0.0
-        interval_examples = 0.0
-        interval_margins: list[float] = []
-        last_grad_norm: torch.Tensor | None = None
-        try:
-            while self.state.tokens_seen < self.target_tokens:
-                self.optimizer.zero_grad(set_to_none=True)
-                step_lm_loss = torch.zeros((), device=self.device)
-                step_ranking_loss = torch.zeros((), device=self.device)
-                step_correct = 0.0
-                step_examples = 0.0
-                step_margins: list[float] = []
-                for _ in range(self.config.gradient_accumulation_steps):
-                    inputs, targets = self._batch_to_device()
-                    with self._autocast():
-                        output = self.train_model(inputs, targets)
-                        if output.loss is None:
-                            raise RuntimeError("model did not return a loss")
-                        lm_loss = output.loss
-                    (self.config.lm_loss_weight * lm_loss / self.config.gradient_accumulation_steps).backward()
-
-                    multiple_choice_batch = self._multiple_choice_batch_to_device()
-                    with self._autocast():
-                        ranking_loss, diagnostics = batch_ranking_loss(
-                            self.train_model,
-                            multiple_choice_batch,
-                            temperature=self.config.ranking_temperature,
-                            negative_mode=self.config.ranking_negative_mode,
-                        )
-                    (
-                        self.config.ranking_loss_weight
-                        * ranking_loss
-                        / self.config.gradient_accumulation_steps
-                    ).backward()
-                    step_lm_loss = step_lm_loss + lm_loss.detach()
-                    step_ranking_loss = step_ranking_loss + ranking_loss.detach()
-                    step_correct += float(diagnostics["correct"].detach().cpu())
-                    step_examples += float(diagnostics["examples"].detach().cpu())
-                    step_margins.append(
-                        float(diagnostics["mean_positive_margin"].detach().float().cpu())
-                    )
-
-                if self.config.grad_clip > 0:
-                    last_grad_norm = torch.nn.utils.clip_grad_norm_(
-                        self.raw_model.parameters(), self.config.grad_clip, foreach=True
-                    )
-                self.optimizer.step()
-                self.state.step += 1
-                self.state.tokens_seen += self.effective_global_batch_tokens
-                self.state.epoch = int(self._data_position()["epoch"])
-                self.scheduler.step(self.state.tokens_seen)
-
-                mean_lm_loss = step_lm_loss / self.config.gradient_accumulation_steps
-                mean_ranking_loss = step_ranking_loss / self.config.gradient_accumulation_steps
-                weighted_loss = (
-                    self.config.lm_loss_weight * mean_lm_loss
-                    + self.config.ranking_loss_weight * mean_ranking_loss
-                )
-                interval_steps += 1
-                interval_loss = interval_loss + weighted_loss
-                interval_lm_loss = interval_lm_loss + mean_lm_loss
-                interval_ranking_loss = interval_ranking_loss + mean_ranking_loss
-                interval_correct += step_correct
-                interval_examples += step_examples
-                interval_margins.extend(step_margins)
-
-                validation_mc: dict[str, float] | None = None
-                if self.state.tokens_seen >= self._next_eval_tokens:
-                    self.state.validation_loss = self.evaluate()
-                    validation_mc = self.evaluate_multiple_choice()
-                    self.state.last_eval_tokens = self.state.tokens_seen
-                    self._next_eval_tokens = (
-                        ((self.state.tokens_seen // self.config.eval_every_tokens) + 1)
-                        * self.config.eval_every_tokens
-                        if self.config.eval_every_tokens > 0
-                        else math.inf
-                    )
-
-                if interval_steps >= max(1, self.config.log_every_steps):
-                    extras: dict[str, Any] = {
-                        "lm_loss": float(
-                            (interval_lm_loss / interval_steps).float().cpu()
-                        ),
-                        "ranking_loss": float(
-                            (interval_ranking_loss / interval_steps).float().cpu()
-                        ),
-                        "lm_loss_weight": self.config.lm_loss_weight,
-                        "ranking_loss_weight": self.config.ranking_loss_weight,
-                        "ranking_temperature": self.config.ranking_temperature,
-                        "ranking_negative_mode": self.config.ranking_negative_mode,
-                        "ranking_accuracy": interval_correct / max(1.0, interval_examples),
-                        "positive_margin": (
-                            sum(interval_margins) / len(interval_margins)
-                            if interval_margins
-                            else None
-                        ),
-                    }
-                    if validation_mc is not None:
-                        extras.update(validation_mc)
-                    interval_started, _ = self._log_interval(
-                        interval_loss,
-                        interval_steps,
-                        interval_started,
-                        last_grad_norm,
-                        self.state.validation_loss,
-                        extras,
-                    )
-                    interval_steps = 0
-                    interval_loss = torch.zeros((), device=self.device)
-                    interval_lm_loss = torch.zeros((), device=self.device)
-                    interval_ranking_loss = torch.zeros((), device=self.device)
-                    interval_correct = 0.0
-                    interval_examples = 0.0
-                    interval_margins = []
-                    self._check_control()
-
-                due, reason, permanent_name = self._should_checkpoint()
-                if due:
-                    self._checkpoint(reason, permanent_name=permanent_name)
-                if self.checkpoint_requested:
-                    self._checkpoint("control")
-                    self.checkpoint_requested = False
-                if self.stop_requested:
-                    self._emit(f"Received {self.stop_reason}; Saving emergency checkpoint...")
-                    self.state.status = "stopping"
-                    self._checkpoint("emergency")
-                    self.state.status = "stopped"
-                    self._write_status()
-                    return self.state
-
-            if interval_steps:
-                self._log_interval(
-                    interval_loss,
-                    interval_steps,
-                    interval_started,
-                    last_grad_norm,
-                    self.state.validation_loss,
-                    {
-                        "lm_loss": float((interval_lm_loss / interval_steps).float().cpu()),
-                        "ranking_loss": float(
-                            (interval_ranking_loss / interval_steps).float().cpu()
-                        ),
-                        "lm_loss_weight": self.config.lm_loss_weight,
-                        "ranking_loss_weight": self.config.ranking_loss_weight,
-                        "ranking_temperature": self.config.ranking_temperature,
-                        "ranking_negative_mode": self.config.ranking_negative_mode,
-                        "ranking_accuracy": interval_correct / max(1.0, interval_examples),
-                        "positive_margin": (
-                            sum(interval_margins) / len(interval_margins)
-                            if interval_margins
-                            else None
-                        ),
-                    },
-                )
-            self._checkpoint("final")
-            self.state.status = "completed"
-            self._write_status()
-            return self.state
-        except BaseException as exc:
-            self.state.status = "error"
-            self._write_status(error=f"{type(exc).__name__}: {exc}")
-            raise
-        finally:
-            self.telemetry.close()
-            self.metrics.close()
-            self.log_handle.close()
-
     def run(self) -> TrainerState:
-        if self.config.objective == "contrastive_mc":
-            return self._run_contrastive()
         self.train_model.train()
         if self.state.tokens_seen >= self.target_tokens:
             self.state.status = "completed"

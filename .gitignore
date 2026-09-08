@@ -38,3 +38,7 @@ env/
 /data/stage3_final_tokenized/
 /data/stage3_final_mixed_tokenized/
 /finepdfs_300m_tokenized/
+
+# Auditable submission records are intentionally committed, including logs.
+!/docs/
+!/docs/**

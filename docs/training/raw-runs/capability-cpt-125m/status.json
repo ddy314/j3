@@ -1,0 +1,26 @@
+{
+  "compile": true,
+  "compile_mode": "default",
+  "current_data": {
+    "epoch": 1,
+    "offset_in_shard": 42688,
+    "shard_index": 29
+  },
+  "current_multiple_choice_data": null,
+  "device": "cuda",
+  "elapsed_seconds": 3061.439806557959,
+  "epoch": 1,
+  "last_checkpoint_at": "2026-09-07T18:51:38+0800",
+  "last_checkpoint_tokens": 125042688,
+  "learning_rate": 1e-05,
+  "model_name": "D32-1216-R12",
+  "objective": "lm",
+  "optimizer": "AdamW(fused=True)",
+  "parameters": 49001408,
+  "run_id": "capability-cpt-125m",
+  "started_at": "2026-09-07T18:00:38+0800",
+  "status": "completed",
+  "step": 954,
+  "tokens_seen": 125042688,
+  "tokens_target": 125000000
+}

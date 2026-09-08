@@ -194,3 +194,23 @@ def default_checkpoint_metadata(
         "tokens_seen": tokens_seen,
         "reason": reason,
     }
+
+
+def model_config_compatible(
+    stored: dict[str, Any] | None, current: dict[str, Any]
+) -> bool:
+    """Compare architecture fields while allowing the public model name to change.
+
+    The first J3 runs recorded the internal shape label ``D32-1216-R12``.
+    Renaming the public model to ``J3`` does not change any tensor shape or
+    training behavior, so the identity field is intentionally excluded from
+    checkpoint compatibility checks.
+    """
+
+    if stored is None:
+        return True
+    stored_shape = dict(stored)
+    current_shape = dict(current)
+    stored_shape.pop("model_name", None)
+    current_shape.pop("model_name", None)
+    return stored_shape == current_shape

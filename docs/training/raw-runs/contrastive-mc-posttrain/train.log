@@ -1,0 +1,10 @@
+initialized from checkpoint: previous step=7630, tokens=1000079360, source=/home/xia/code/j3/runs/20260906-225321/checkpoints/step_000007630
+initialized from checkpoint: previous step=7630, tokens=1000079360, source=/home/xia/code/j3/runs/20260906-225321/checkpoints/step_000007630
+step=1 tokens=65536/50000000 loss=8.4656 lr=1.64e-06 tok/s=225 eta=222411.79787720164
+step=2 tokens=131072/50000000 loss=10.6323 lr=3.28e-06 tok/s=21,639 eta=2304.5963445600482
+step=3 tokens=196608/50000000 loss=9.8836 lr=4.92e-06 tok/s=1,200 eta=41517.81655193461
+step=4 tokens=262144/50000000 loss=7.4805 lr=6.55e-06 tok/s=21,703 eta=2291.7608313719775
+step=5 tokens=327680/50000000 loss=9.5270 lr=8.19e-06 tok/s=21,912 eta=2266.8917606466252
+step=6 tokens=393216/50000000 loss=11.1230 lr=9.83e-06 tok/s=20,977 eta=2364.841350569448
+step=7 tokens=458752/50000000 loss=7.5209 lr=1.15e-05 tok/s=20,988 eta=2360.4032171379517
+step=8 tokens=524288/50000000 loss=6.4014 lr=1.31e-05 tok/s=21,288 eta=2324.118924368615

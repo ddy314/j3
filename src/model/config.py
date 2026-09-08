@@ -6,7 +6,10 @@ from dataclasses import asdict, dataclass
 
 @dataclass(frozen=True)
 class ModelConfig:
-    """Architecture configuration for D32-1216-R12.
+    """Architecture configuration for the J3 49M decoder-only model.
+
+    ``D32-1216-R12`` is retained only as an internal shape shorthand in the
+    historical training records; the submitted model name is J3.
 
     The Q/K RMS statistic is computed per head vector, with one affine scale
     per projected channel, while each xIELU owns two trainable scalar
@@ -14,7 +17,7 @@ class ModelConfig:
     contract.
     """
 
-    model_name: str = "D32-1216-R12"
+    model_name: str = "J3"
     vocab_size: int = 16_384
     d_model: int = 384
     depth: int = 32
@@ -50,11 +53,11 @@ class ModelConfig:
         if self.head_dim % 2:
             raise ValueError("head_dim must be even for RoPE")
         if not self.tie_embeddings:
-            raise ValueError("the frozen D32-1216-R12 architecture requires tied embeddings")
+            raise ValueError("the frozen J3 architecture requires tied embeddings")
         if not self.use_qk_norm:
-            raise ValueError("the frozen D32-1216-R12 architecture requires Q/K RMSNorm")
+            raise ValueError("the frozen J3 architecture requires Q/K RMSNorm")
         if self.use_bias:
-            raise ValueError("the frozen D32-1216-R12 architecture is bias-free")
+            raise ValueError("the frozen J3 architecture is bias-free")
         if self.xielu_beta <= 0 or not math.isfinite(self.xielu_beta):
             raise ValueError("xielu_beta must be finite and positive")
         if self.xielu_eps > 0 or not math.isfinite(self.xielu_eps):

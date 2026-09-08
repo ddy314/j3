@@ -1,0 +1,10 @@
+{
+  "argv": [
+    "train.py",
+    "--config",
+    "/home/xia/code/j3/configs/pretrain_stage3_1b.yaml",
+    "--init-from",
+    "/home/xia/code/j3/runs/20260905-135527/checkpoints/latest"
+  ],
+  "config": "/home/xia/code/j3/configs/pretrain_stage3_1b.yaml"
+}

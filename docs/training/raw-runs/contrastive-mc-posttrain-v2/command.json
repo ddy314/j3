@@ -1,0 +1,14 @@
+{
+  "argv": [
+    "train.py",
+    "--config",
+    "configs/contrastive_mc_posttrain.yaml",
+    "--run",
+    "runs/contrastive-mc-posttrain-v2",
+    "--init-from",
+    "runs/20260906-225321/checkpoints/latest",
+    "--max-steps",
+    "9"
+  ],
+  "config": "/home/xia/code/j3/configs/contrastive_mc_posttrain.yaml"
+}
