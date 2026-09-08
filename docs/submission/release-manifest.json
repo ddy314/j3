@@ -17,7 +17,16 @@
     "state_bytes": 588414613,
     "metadata_sha256": "9a7fbb81bd554d9460987ba2956b3cf11319cacaecdc0440eb7aabf6dcfa9ed1",
     "not_committed_to_git": true,
-    "distribution_note": "The 588 MB state file is intentionally kept outside the Git tree. Publish it as a release asset or model-hub artifact and preserve this hash."
+    "distribution": {
+      "status": "published",
+      "release_tag": "j3-stage3-final",
+      "release_url": "https://github.com/ddy314/j3/releases/tag/j3-stage3-final",
+      "asset_name": "state.pt",
+      "asset_url": "https://github.com/ddy314/j3/releases/download/j3-stage3-final/state.pt",
+      "asset_bytes": 588414613,
+      "asset_sha256": "3fcdaf9517e6a847dd36a24dbf982c3ba5293d76bc6616a572662526655aeb27"
+    },
+    "distribution_note": "The 588 MB state file is intentionally kept outside the Git tree and is published as the j3-stage3-final GitHub Release asset. Preserve this hash when downloading it."
   },
   "training": {
     "config": "configs/pretrain_stage3_1b.yaml",

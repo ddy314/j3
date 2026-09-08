@@ -22,7 +22,7 @@ The official rules are the authority; this checklist is the repository-side prep
 - [ ] Team members, roles, and contact information: **TO BE COMPLETED**.
 - [ ] At least three final screenshots showing the project in use: **TO BE REVIEWED**.
 - [ ] Confirm the public repository and release asset are accessible without login.
-- [ ] Publish the 588 MB checkpoint as a release/model artifact and verify its SHA-256 against [`release-manifest.json`](release-manifest.json).
+- [x] Publish the 588 MB checkpoint as a GitHub Release asset and verify its SHA-256 against [`release-manifest.json`](release-manifest.json).
 - [ ] Re-check the official deadline and submission form immediately before submitting.
 
 ## Evidence boundaries

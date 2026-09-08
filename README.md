@@ -12,7 +12,7 @@ J3 is a decoder-only language model trained from scratch for the **Global Innova
 | Training tokens | `1,000,079,360` seen; `1,000,000,000` target |
 | Validation loss / perplexity | `3.177146828174591` / `23.978241816690886` |
 | GIBC evaluation | HellaSwag `0.27246` acc-norm; ARC-Easy `0.40699` acc; PIQA `0.59684` acc; WinoGrande `0.51618` acc; WikiText-103 `96.1230` word-PPL |
-| Checkpoint | 588,414,613 bytes; SHA-256 is recorded in [`release-manifest.json`](docs/submission/release-manifest.json) |
+| Checkpoint | 588,414,613 bytes; [GitHub Release asset](https://github.com/ddy314/j3/releases/download/j3-stage3-final/state.pt); SHA-256 is recorded in [`release-manifest.json`](docs/submission/release-manifest.json) |
 | Training hardware | NVIDIA GeForce RTX 4060 Laptop GPU, 8 GiB class |
 | External pretrained weights | None |
 
@@ -30,7 +30,7 @@ The model is instantiated locally by `src/model`. No hosted inference endpoint o
 
 The selected one-billion-token training stream is a deterministic, globally mixed stream of 8,192-token chunks with seed `1337`. Its exact quotas, filters, source provenance, tokenizer hash, validation split, benchmark decontamination rule, and license notes are in [`docs/data/datasets.md`](docs/data/datasets.md) and [`docs/data/stage3-mixed-manifest.json`](docs/data/stage3-mixed-manifest.json).
 
-The repository discloses all local training runs that were present when the record was exported. Raw JSON metadata, commands, environment snapshots, status files, metrics, and checkpoint metadata are under [`docs/training/raw-runs`](docs/training/raw-runs); the searchable register is [`docs/training/experiment-register.json`](docs/training/experiment-register.json). Checkpoint tensor files are intentionally excluded from Git. Their selected release hash and publication instructions are in [`docs/submission/release-manifest.json`](docs/submission/release-manifest.json).
+The repository discloses all local training runs that were present when the record was exported. Raw JSON metadata, commands, environment snapshots, status files, metrics, and checkpoint metadata are under [`docs/training/raw-runs`](docs/training/raw-runs); the searchable register is [`docs/training/experiment-register.json`](docs/training/experiment-register.json). Checkpoint tensor files are intentionally excluded from Git. The selected checkpoint is published as the [J3 Stage 3 GitHub Release asset](https://github.com/ddy314/j3/releases/tag/j3-stage3-final), with its hash and source binding in [`docs/submission/release-manifest.json`](docs/submission/release-manifest.json).
 
 The full zero-shot evaluation completed with `lm-evaluation-harness` 0.4.13, `num_fewshot=0`, and the default 100,000 bootstrap iterations. The complete JSON, including standard errors and harness metadata, is [`docs/evaluation/results/j3-gibc.json`](docs/evaluation/results/j3-gibc.json). The accuracy values above use the conventional normalized score where the task exposes `acc_norm`; both raw and normalized values are preserved in the result file.
 
